@@ -29,9 +29,14 @@ data protocol and baselines are independently reproducible from a clean environm
 
 ## Status
 
-The protocol is frozen and the dataset-independent core is under active development. See
+The protocol is frozen and the first public-data registry and task manifests are available.
+See
 [`docs/project-charter.md`](docs/project-charter.md),
 [`docs/evaluation-protocol.md`](docs/evaluation-protocol.md), and [`ROADMAP.md`](ROADMAP.md).
+
+The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Bench pins 60
+source files and three condition-held-out tasks without redistributing the recordings. See
+the [`HUST v3 data card`](docs/datasets/hust-bearing-v3.md).
 
 ## Development smoke check
 
@@ -43,6 +48,17 @@ uv sync --extra dev
 uv run edgefault-smoke
 uv run pytest
 ```
+
+Download and verify the pinned HUST subset, or start with one recording:
+
+```bash
+uv run edgefault-download-hust --files N400.mat
+uv run edgefault-download-hust --verify-only --files N400.mat
+```
+
+The full selected subset is approximately 414 MB. Every source file is accepted only after
+its byte size and SHA-256 match the committed registry. Downloads use four workers by
+default; `--workers 1` provides a serial fallback.
 
 ## License
 

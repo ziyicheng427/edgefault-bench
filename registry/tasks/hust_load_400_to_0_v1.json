@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "hust-load-400-to-0-v1",
+  "dataset_id": "hust-bearing-v3",
+  "domain_field": "load_w",
+  "evaluation_group_field": "bearing_type",
+  "partitions": {
+    "train": [400],
+    "validation": [200],
+    "test": [0]
+  },
+  "labels": ["N", "I", "O", "IO"],
+  "window": {
+    "length": 4096,
+    "stride": 4096,
+    "normalization": "per_window_zscore"
+  },
+  "seeds": [17, 29, 43],
+  "primary": true,
+  "description": "Train at 400 W, select at 200 W, and evaluate once at unseen 0 W."
+}

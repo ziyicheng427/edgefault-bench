@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "hust-device-6204-6206-to-6208-v1",
+  "dataset_id": "hust-bearing-v3",
+  "domain_field": "bearing_type",
+  "evaluation_group_field": "load_w",
+  "partitions": {
+    "train": ["6204", "6205", "6206"],
+    "validation": ["6207"],
+    "test": ["6208"]
+  },
+  "labels": ["N", "I", "O", "IO"],
+  "window": {
+    "length": 4096,
+    "stride": 4096,
+    "normalization": "per_window_zscore"
+  },
+  "seeds": [17, 29, 43],
+  "primary": true,
+  "description": "Train on bearing devices 6204-6206, select on 6207, and test on unseen 6208."
+}

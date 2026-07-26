@@ -4,8 +4,8 @@
 
 - [x] Define mission, evidence boundaries, and success levels.
 - [x] Define leakage controls and primary metrics.
-- [ ] Select the first dataset after verifying source terms and metadata.
-- [ ] Publish versioned task manifests and a data card.
+- [x] Select the first dataset after verifying source terms and metadata.
+- [x] Publish versioned task manifests and a data card.
 
 ## Milestone 1 — Auditable baseline
 

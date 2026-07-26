@@ -28,6 +28,7 @@ deep-learning = ["torch>=2.2,<3"]
 edgefault-smoke = "edgefault_bench.smoke:main"
 edgefault-download-hust = "edgefault_bench.download:main"
 edgefault-run-features = "edgefault_bench.experiments.features:main"
+edgefault-run-neural = "edgefault_bench.experiments.neural:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/edgefault_bench"]

@@ -13,8 +13,18 @@
     "compact_depthwise_cnn_1d",
     "compact_coral_cnn_1d"
   ],
+  "neural_training": {
+    "epochs_max": 15,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "early_stopping_patience": 4,
+    "coral_weight": 0.1,
+    "selection_metric": "validation_macro_f1"
+  },
   "robustness_tracks": {
     "label_fraction": [1.0, 0.25, 0.1],
+    "minority_label": "IO",
     "minority_fraction": [1.0, 0.5, 0.25],
     "snr_db": [null, 20, 10, 0]
   },

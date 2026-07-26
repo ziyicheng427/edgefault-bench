@@ -60,6 +60,15 @@ The full selected subset is approximately 414 MB. Every source file is accepted 
 its byte size and SHA-256 match the committed registry. Downloads use four workers by
 default; `--workers 1` provides a serial fallback.
 
+Run a frozen neural baseline (three seeds, validation-only early stopping):
+
+```bash
+uv sync --extra dev --extra deep-learning
+uv run edgefault-run-neural \
+  --model compact_depthwise_cnn_1d \
+  --task registry/tasks/hust_load_0_to_400_v1.json
+```
+
 ## License
 
 The code is released under the Apache License 2.0. Dataset files remain under

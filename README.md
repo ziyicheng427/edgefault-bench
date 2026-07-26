@@ -29,11 +29,22 @@ data protocol and baselines are independently reproducible from a clean environm
 
 ## Status
 
-Project design and reproducibility criteria are being established. See
-[`docs/project-charter.md`](docs/project-charter.md) and [`ROADMAP.md`](ROADMAP.md).
+The protocol is frozen and the dataset-independent core is under active development. See
+[`docs/project-charter.md`](docs/project-charter.md),
+[`docs/evaluation-protocol.md`](docs/evaluation-protocol.md), and [`ROADMAP.md`](ROADMAP.md).
+
+## Development smoke check
+
+The smoke check uses generated periodic signals only. It validates the split, feature,
+model, and metric interfaces; its output is not a machinery benchmark result.
+
+```bash
+uv sync --extra dev
+uv run edgefault-smoke
+uv run pytest
+```
 
 ## License
 
-The code is intended for release under the Apache License 2.0. Dataset files remain under
+The code is released under the Apache License 2.0. Dataset files remain under
 their original owners' terms and will not be committed to this repository.
-

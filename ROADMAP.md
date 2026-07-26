@@ -9,7 +9,7 @@
 
 ## Milestone 1 — Auditable baseline
 
-- [ ] Implement package structure, configuration validation, and tests.
+- [x] Implement package structure, configuration validation, and tests.
 - [ ] Implement download/preparation pipeline without committing raw data.
 - [ ] Add signal-feature, standard 1D-CNN, and compact depthwise CNN baselines.
 - [ ] Run condition-held-out experiments for three seeds.
@@ -35,4 +35,3 @@
 - [ ] Define a stable inference interface for time-series sensor windows.
 - [ ] Build a clearly labelled robot/simulator or edge-device demonstration.
 - [ ] Report demonstration constraints separately from benchmark conclusions.
-

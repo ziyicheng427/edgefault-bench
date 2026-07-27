@@ -11,7 +11,10 @@ Latency is batch-one median CPU latency per run; it is not an edge-device claim.
 | hust-load-0-to-400-v1 | compact_depthwise_cnn_1d | 0.8988 ± 0.0184 | 0.6768 ± 0.0080 | 5476 | 37151 | 0.8705 ± 0.0918 | 00549e6 |
 | hust-load-0-to-400-v1 | signal_features_logreg | 0.7730 ± 0.0000 | 0.5428 ± 0.0000 | 44 | 1732 | 0.0819 ± 0.0023 | 10f8b6b |
 | hust-load-0-to-400-v1 | standard_cnn_1d | 0.9715 ± 0.0092 | 0.9167 ± 0.0349 | 77220 | 317351 | 0.7429 ± 0.0579 | 00549e6 |
+| hust-load-400-to-0-v1 | compact_coral_cnn_1d | 0.9383 ± 0.0196 | 0.7609 ± 0.0380 | 5476 | 37151 | 0.7957 ± 0.0795 | 505f5f3 |
+| hust-load-400-to-0-v1 | compact_depthwise_cnn_1d | 0.9434 ± 0.0210 | 0.7809 ± 0.0453 | 5476 | 37151 | 0.8277 ± 0.1319 | 505f5f3 |
 | hust-load-400-to-0-v1 | signal_features_logreg | 0.8827 ± 0.0000 | 0.7018 ± 0.0000 | 44 | 1732 | 0.0817 ± 0.0027 | 10f8b6b |
+| hust-load-400-to-0-v1 | standard_cnn_1d | 0.9221 ± 0.0034 | 0.7191 ± 0.0414 | 77220 | 317351 | 0.7428 ± 0.0506 | 505f5f3 |
 
 ## Recorded execution environments
 

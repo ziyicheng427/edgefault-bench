@@ -38,6 +38,10 @@ The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Benc
 source files and three condition-held-out tasks without redistributing the recordings. See
 the [`HUST v3 data card`](docs/datasets/hust-bearing-v3.md).
 
+Development is AI-assisted and governed by explicit provenance and research-integrity rules.
+See [`docs/research-integrity.md`](docs/research-integrity.md) and
+[`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 ## Development smoke check
 
 The smoke check uses generated periodic signals only. It validates the split, feature,

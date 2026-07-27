@@ -29,6 +29,7 @@ edgefault-smoke = "edgefault_bench.smoke:main"
 edgefault-download-hust = "edgefault_bench.download:main"
 edgefault-run-features = "edgefault_bench.experiments.features:main"
 edgefault-run-neural = "edgefault_bench.experiments.neural:main"
+edgefault-summarize = "edgefault_bench.reporting:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/edgefault_bench"]

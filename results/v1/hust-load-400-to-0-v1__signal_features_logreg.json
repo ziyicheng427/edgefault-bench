@@ -1,0 +1,161 @@
+{
+  "benchmark_id": "edgefault-bench-v1",
+  "created_at": "2026-07-26T16:11:21.115385+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "numpy": "2.2.6",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "scikit_learn": "1.7.2",
+    "scipy": "1.15.3"
+  },
+  "git_commit": "10f8b6be15e0f40c5508d254c0206e6cec0bed8a",
+  "model_id": "signal_features_logreg",
+  "partition_sizes": {
+    "test": 2500,
+    "train": 2500,
+    "validation": 2500
+  },
+  "protocol": {
+    "dataset_manifest": "registry/hust_v3.json",
+    "feature_names": [
+      "mean",
+      "standard_deviation",
+      "root_mean_square",
+      "peak_to_peak",
+      "crest_factor",
+      "skewness",
+      "kurtosis",
+      "spectral_centroid",
+      "spectral_bandwidth",
+      "spectral_entropy"
+    ],
+    "task_manifest": "registry/tasks/hust_load_400_to_0_v1.json",
+    "test_used_for_selection": false
+  },
+  "runs": [
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 196001792,
+        "serialized_size_bytes": 1732,
+        "trainable_parameters": 44
+      },
+      "fit_seconds": 0.07505500000115717,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.0815,
+        "p95_ms": 0.08935899999999998,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.8848,
+        "macro_f1": 0.8826835344424306,
+        "per_condition_macro_f1": {
+          "6204": 0.7459342235771211,
+          "6205": 0.7017588465044704,
+          "6206": 0.9759875056940197,
+          "6207": 0.9800263356036838,
+          "6208": 0.9761133906837052
+        },
+        "worst_condition_macro_f1": 0.7017588465044704
+      },
+      "validation": {
+        "balanced_accuracy": 0.8340000000000001,
+        "macro_f1": 0.8340565818350183,
+        "per_condition_macro_f1": {
+          "6204": 0.7088511385202213,
+          "6205": 0.6466561128700772,
+          "6206": 0.975944576303804,
+          "6207": 0.7509218301755544,
+          "6208": 0.9840903340080972
+        },
+        "worst_condition_macro_f1": 0.6466561128700772
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 196001792,
+        "serialized_size_bytes": 1732,
+        "trainable_parameters": 44
+      },
+      "fit_seconds": 0.02019095799914794,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.0785835,
+        "p95_ms": 0.08250210000000001,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.8848,
+        "macro_f1": 0.8826835344424306,
+        "per_condition_macro_f1": {
+          "6204": 0.7459342235771211,
+          "6205": 0.7017588465044704,
+          "6206": 0.9759875056940197,
+          "6207": 0.9800263356036838,
+          "6208": 0.9761133906837052
+        },
+        "worst_condition_macro_f1": 0.7017588465044704
+      },
+      "validation": {
+        "balanced_accuracy": 0.8340000000000001,
+        "macro_f1": 0.8340565818350183,
+        "per_condition_macro_f1": {
+          "6204": 0.7088511385202213,
+          "6205": 0.6466561128700772,
+          "6206": 0.975944576303804,
+          "6207": 0.7509218301755544,
+          "6208": 0.9840903340080972
+        },
+        "worst_condition_macro_f1": 0.6466561128700772
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 196001792,
+        "serialized_size_bytes": 1732,
+        "trainable_parameters": 44
+      },
+      "fit_seconds": 0.01971133299957728,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.0851045,
+        "p95_ms": 0.1443833,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.8848,
+        "macro_f1": 0.8826835344424306,
+        "per_condition_macro_f1": {
+          "6204": 0.7459342235771211,
+          "6205": 0.7017588465044704,
+          "6206": 0.9759875056940197,
+          "6207": 0.9800263356036838,
+          "6208": 0.9761133906837052
+        },
+        "worst_condition_macro_f1": 0.7017588465044704
+      },
+      "validation": {
+        "balanced_accuracy": 0.8340000000000001,
+        "macro_f1": 0.8340565818350183,
+        "per_condition_macro_f1": {
+          "6204": 0.7088511385202213,
+          "6205": 0.6466561128700772,
+          "6206": 0.975944576303804,
+          "6207": 0.7509218301755544,
+          "6208": 0.9840903340080972
+        },
+        "worst_condition_macro_f1": 0.6466561128700772
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "hust-load-400-to-0-v1"
+}

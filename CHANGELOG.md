@@ -22,6 +22,7 @@ versioning after the first tagged release.
 - Standard 1D CNN, compact depthwise 1D CNN, and compact CORAL completed on the frozen
   device-held-out task, completing the 3-task by 4-model core matrix.
 - Compact-model label-scarcity evaluation completed at 25% and 10% training-label fractions.
+- Compact-model class-imbalance evaluation completed at 50% and 25% `IO` retention.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

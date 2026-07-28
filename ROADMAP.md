@@ -32,6 +32,6 @@
 
 ## Milestone 4 — Inspection integration
 
-- [ ] Define a stable inference interface for time-series sensor windows.
-- [ ] Build a clearly labelled robot/simulator or edge-device demonstration.
-- [ ] Report demonstration constraints separately from benchmark conclusions.
+- [x] Define a stable inference interface for time-series sensor windows.
+- [x] Build a clearly labelled CPU edge-inference demonstration with a trained model asset.
+- [x] Report demonstration constraints separately from benchmark conclusions.

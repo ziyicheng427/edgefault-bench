@@ -28,6 +28,7 @@ versioning after the first tagged release.
   including latency, isolated-process RSS, serialized size, and scoped MAC counts.
 - Generated robustness and hardware tables, a pre-release technical report, and a compact-model
   card with negative results and deployment limitations.
+- Portable seed-17 JSON model asset, SHA-256 verification, and batch-one CPU inference demo.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

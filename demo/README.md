@@ -35,3 +35,10 @@ based on all three seeds in `results/v1`, not on this demonstration checkpoint.
 The trained asset derives from HUST Bearing v3 (DOI `10.17632/cbv7jyx4p9.3`, CC BY 4.0).
 Dataset attribution and limitations in `docs/datasets/hust-bearing-v3.md` continue to apply.
 The demo asset is distributed under CC BY 4.0; project source code remains Apache-2.0.
+
+Verify the deterministic JSON export before inference:
+
+```bash
+cd demo/assets
+shasum -a 256 -c SHA256SUMS
+```

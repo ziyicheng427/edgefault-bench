@@ -27,9 +27,9 @@ rather than accuracy from random within-condition splits.
 - Machine-readable configurations, raw result JSON, generated tables, tests, a model card,
   and a technical report.
 
-The measured pre-release results are public, but v1.0 is not released yet. A tagged release
-will be made only after the edge-inference demonstration and clean-environment reproduction
-audit are complete.
+The measured pre-release results and CPU edge-inference demonstration are public, but v1.0 is
+not released yet. A tagged release will be made only after the clean-environment reproduction
+audit is complete.
 
 ## Status
 
@@ -88,7 +88,8 @@ uv run edgefault-summarize
 ```
 
 The source tables are in [`results/v1`](results/v1). Checkpoints remain local pre-release
-artifacts and are not yet advertised as downloadable models.
+artifacts except for the fixed seed-17 JSON asset in [`demo`](demo), which is provided only for
+the documented inference demonstration.
 
 ## License
 

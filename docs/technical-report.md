@@ -101,7 +101,8 @@ Generated Markdown tables reject missing seed matrices and incomplete robustness
 
 Development assistance and maintainer responsibilities are disclosed in
 `docs/research-integrity.md`. Decision records remain pending until the maintainer personally
-ratifies them. A clean-clone audit, packaged edge demo, tagged release, and archival identifier
+ratifies them. A packaged seed-17 CPU inference demo is available under `demo/`; its synthetic
+input is not benchmark evidence. A clean-clone audit, tagged release, and archival identifier
 remain release gates and are not claimed complete in this report.
 
 ## Limitations

@@ -3,8 +3,8 @@
 ## Status
 
 This is a pre-release model-family card for `compact_depthwise_cnn_1d`. The repository
-publishes architecture code, training protocol, and raw results. It does not yet distribute
-a v1.0 checkpoint; checkpoint packaging is part of the edge-demo and release audit.
+publishes architecture code, training protocol, raw results, and a deterministic JSON demo
+asset for seed 17. The asset is an inference demonstration, not the basis for aggregate claims.
 
 ## Model details
 
@@ -39,7 +39,7 @@ Authoritative values are generated from raw JSON into:
 - Reproducible research on cross-condition machinery fault diagnosis.
 - A compact baseline for studying accuracy-size-latency trade-offs.
 - Educational or engineering evaluation on the pinned tasks.
-- A component in the repository's forthcoming edge-inference demonstration.
+- CPU inference demonstrations that consume the stable 4,096-sample interface.
 
 ## Out-of-scope use
 

@@ -82,5 +82,15 @@ machine-readable histories are committed separately.
 
 - Repeat the ordinary public HTTPS Git clone when connectivity permits; public archive and
   Actions checkout evidence are already complete.
-- Confirm the latest GitHub Actions matrix is green again for the final release candidate.
-- Create the annotated v1.0.0 tag and GitHub release only after that CI check.
+- Connect an eligible maintainer-controlled archival service before claiming a persistent
+  identifier; no such verified account or repository integration was available in this
+  release workflow.
+
+## Release verification
+
+GitHub Actions run
+[`30340220112`](https://github.com/ziyicheng427/edgefault-bench/actions/runs/30340220112)
+passed on Python 3.10 and 3.12 for commit
+`34a1155c5caf3859ff9d0eb0c661206944e11e5c`. Annotated tag `v1.0.0` resolves to that commit.
+The public GitHub release was verified as neither a draft nor a prerelease:
+[`EdgeFault-Bench v1.0.0`](https://github.com/ziyicheng427/edgefault-bench/releases/tag/v1.0.0).

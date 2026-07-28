@@ -28,11 +28,20 @@
 - [x] Set package and citation metadata to `1.0.0` with the actual release date.
 - [x] Convert the changelog's Unreleased section to `1.0.0` without deleting prior history.
 - [x] Run `scripts/clean_audit.sh` on the final release-candidate commit.
-- [ ] Confirm the final GitHub Actions Python 3.10/3.12 matrix is green.
-- [ ] Create an annotated `v1.0.0` tag.
-- [ ] Push the tag and create a non-draft GitHub release using the reviewed notes.
+- [x] Confirm the final GitHub Actions Python 3.10/3.12 matrix is green.
+- [x] Create an annotated `v1.0.0` tag.
+- [x] Push the tag and create a non-draft GitHub release using the reviewed notes.
 - [ ] Archive the release with a persistent identifier when the configured repository/account
   is eligible; otherwise record the exact missing external prerequisite without inventing one.
+
+The final CI run is
+[`30340220112`](https://github.com/ziyicheng427/edgefault-bench/actions/runs/30340220112),
+and the non-draft release is
+[`v1.0.0`](https://github.com/ziyicheng427/edgefault-bench/releases/tag/v1.0.0).
+No persistent identifier is claimed: this workflow has no verified maintainer-controlled
+archival-service account or repository integration capable of minting one. Connecting an
+eligible external archive (for example, a DOI-minting repository integration) is the missing
+external prerequisite.
 
 ## Post-release, not v1.0 completion claims
 

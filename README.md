@@ -28,7 +28,8 @@ rather than accuracy from random within-condition splits.
   and a technical report.
 
 EdgeFault-Bench v1.0.0 publishes the measured results, CPU edge-inference demonstration,
-frozen protocol, and the evidence needed to audit each stated finding.
+frozen protocol, and the evidence needed to audit each stated finding. The reviewed release
+is available at [`v1.0.0`](https://github.com/ziyicheng427/edgefault-bench/releases/tag/v1.0.0).
 
 ## Status
 

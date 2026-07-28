@@ -69,10 +69,24 @@ def _cpu_name() -> str:
     if platform.system() == "Darwin":
         try:
             name = subprocess.check_output(
-                ["sysctl", "-n", "machdep.cpu.brand_string"], text=True
+                ["sysctl", "-n", "machdep.cpu.brand_string"],
+                text=True,
+                stderr=subprocess.DEVNULL,
             ).strip()
             if name:
                 return name
+        except (OSError, subprocess.CalledProcessError):
+            pass
+        try:
+            hardware = subprocess.check_output(
+                ["system_profiler", "SPHardwareDataType"],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+            for line in hardware.splitlines():
+                key, separator, value = line.strip().partition(":")
+                if separator and key == "Chip" and value.strip():
+                    return value.strip()
         except (OSError, subprocess.CalledProcessError):
             pass
     return platform.processor() or "unknown"

@@ -82,10 +82,130 @@ def summarize(paths: list[Path]) -> str:
     return "\n".join(lines)
 
 
+def summarize_robustness(paths: list[Path]) -> str:
+    """Validate completed robustness matrices and render their degradation table."""
+
+    rows: list[tuple[str, ...]] = []
+    for path in sorted(paths):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not payload.get("complete"):
+            raise ValueError(f"{path}: robustness result is incomplete")
+        if payload.get("git_commit") in (None, "unknown"):
+            raise ValueError(f"{path}: robustness result has no Git provenance")
+        experiments = payload.get("experiments", [])
+        seeds = tuple(payload.get("seeds", ()))
+        if seeds != EXPECTED_SEEDS:
+            raise ValueError(f"{path}: unexpected robustness seeds {seeds}")
+        if payload["track"] == "measurement_noise":
+            if tuple(item["seed"] for item in experiments) != EXPECTED_SEEDS:
+                raise ValueError(f"{path}: incomplete measurement-noise seed matrix")
+            for level in ("clean", "20_db", "10_db", "0_db"):
+                metrics = [item["test_by_snr"][level] for item in experiments]
+                rows.append(
+                    (
+                        payload["track"],
+                        level,
+                        "full",
+                        _mean_sd([item["macro_f1"] for item in metrics]),
+                        _mean_sd([item["worst_condition_macro_f1"] for item in metrics]),
+                        payload["git_commit"][:7],
+                    )
+                )
+        else:
+            for level in payload["levels"]:
+                selected = [item for item in experiments if item["level"] == level]
+                if tuple(item["seed"] for item in selected) != EXPECTED_SEEDS:
+                    raise ValueError(f"{path}: incomplete {payload['track']} level {level}")
+                mean_train_samples = round(
+                    statistics.mean(item["train_sample_count"] for item in selected)
+                )
+                rows.append(
+                    (
+                        payload["track"],
+                        f"{float(level):g}",
+                        str(mean_train_samples),
+                        _mean_sd([item["run"]["test"]["macro_f1"] for item in selected]),
+                        _mean_sd(
+                            [
+                                item["run"]["test"]["worst_condition_macro_f1"]
+                                for item in selected
+                            ]
+                        ),
+                        payload["git_commit"][:7],
+                    )
+                )
+    lines = [
+        "# EdgeFault-Bench robustness summary",
+        "",
+        "Generated from completed three-seed robustness JSON files. Values are population",
+        "mean ± standard deviation over seeds 17, 29, and 43.",
+        "",
+        "| Track | Level | Training samples | Test Macro-F1 | "
+        "Worst-condition Macro-F1 | Code commit |",
+        "|---|---:|---:|---:|---:|---|",
+    ]
+    lines.extend("| " + " | ".join(row) + " |" for row in rows)
+    lines.append("")
+    return "\n".join(lines)
+
+
+def summarize_hardware(path: Path) -> str:
+    """Render repeated isolated-process measurements without hiding repetitions."""
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    repeats = int(payload["protocol"]["process_repeats_per_model"])
+    rows = []
+    for model_id in sorted({item["model_id"] for item in payload["measurements"]}):
+        selected = [item for item in payload["measurements"] if item["model_id"] == model_id]
+        if len(selected) != repeats:
+            raise ValueError(f"{path}: expected {repeats} measurements for {model_id}")
+        first = selected[0]
+        median_rss_mib = statistics.median(
+            item["isolated_process_peak_rss_bytes"] for item in selected
+        ) / 2**20
+        rows.append(
+            (
+                model_id,
+                str(first["trainable_parameters"]),
+                str(first["serialized_state_bytes"]),
+                str(first["multiply_accumulates"]),
+                f"{statistics.median(item['latency']['median_ms'] for item in selected):.4f}",
+                f"{statistics.median(item['latency']['p95_ms'] for item in selected):.4f}",
+                f"{median_rss_mib:.1f}",
+            )
+        )
+    environment = payload["environment"]
+    lines = [
+        "# EdgeFault-Bench hardware summary",
+        "",
+        f"Measured on {environment['cpu']} ({environment['machine']}) with "
+        f"PyTorch {environment['torch']}. Values are medians across {repeats} independent ",
+        "processes; each process contains 1,000 timed batch-one calls after warm-up.",
+        "",
+        "| Model | Parameters | Serialized bytes | MACs | Median latency (ms) | "
+        "p95 latency (ms) | Peak process RSS (MiB) |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    lines.extend("| " + " | ".join(row) + " |" for row in rows)
+    lines.extend(
+        [
+            "",
+            "RSS covers the entire isolated Python/PyTorch process. MACs cover Conv1d and",
+            "Linear operations only. See `docs/hardware-benchmark.md` for boundaries.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--results-dir", type=Path, default=Path("results/v1"))
     parser.add_argument("--output", type=Path, default=Path("results/v1/SUMMARY.md"))
+    parser.add_argument(
+        "--robustness-output", type=Path, default=Path("results/v1/ROBUSTNESS.md")
+    )
+    parser.add_argument("--hardware-output", type=Path, default=Path("results/v1/HARDWARE.md"))
     return parser
 
 
@@ -97,6 +217,20 @@ def main(argv: list[str] | None = None) -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(summarize(paths), encoding="utf-8")
     print(args.output)
+    robustness_paths = sorted((args.results_dir / "robustness").glob("*.json"))
+    if robustness_paths:
+        args.robustness_output.write_text(
+            summarize_robustness(robustness_paths), encoding="utf-8"
+        )
+        print(args.robustness_output)
+    hardware_paths = sorted((args.results_dir / "hardware").glob("*.json"))
+    if len(hardware_paths) == 1:
+        args.hardware_output.write_text(
+            summarize_hardware(hardware_paths[0]), encoding="utf-8"
+        )
+        print(args.hardware_output)
+    elif len(hardware_paths) > 1:
+        raise SystemExit("expected at most one v1 hardware JSON file")
 
 
 if __name__ == "__main__":

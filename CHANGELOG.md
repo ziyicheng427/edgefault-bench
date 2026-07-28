@@ -26,6 +26,8 @@ versioning after the first tagged release.
 - Compact-model measurement-noise evaluation completed at clean, 20, 10, and 0 dB.
 - Three-process Apple M1 CPU measurements completed for the standard and compact CNNs,
   including latency, isolated-process RSS, serialized size, and scoped MAC counts.
+- Generated robustness and hardware tables, a pre-release technical report, and a compact-model
+  card with negative results and deployment limitations.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

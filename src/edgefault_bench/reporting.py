@@ -179,7 +179,7 @@ def summarize_hardware(path: Path) -> str:
         "# EdgeFault-Bench hardware summary",
         "",
         f"Measured on {environment['cpu']} ({environment['machine']}) with "
-        f"PyTorch {environment['torch']}. Values are medians across {repeats} independent ",
+        f"PyTorch {environment['torch']}. Values are medians across {repeats} independent",
         "processes; each process contains 1,000 timed batch-one calls after warm-up.",
         "",
         "| Model | Parameters | Serialized bytes | MACs | Median latency (ms) | "

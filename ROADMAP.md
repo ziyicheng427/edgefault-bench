@@ -10,21 +10,21 @@
 ## Milestone 1 — Auditable baseline
 
 - [x] Implement package structure, configuration validation, and tests.
-- [ ] Implement download/preparation pipeline without committing raw data.
-- [ ] Add signal-feature, standard 1D-CNN, and compact depthwise CNN baselines.
-- [ ] Run condition-held-out experiments for three seeds.
-- [ ] Generate machine-readable results and the first technical report.
+- [x] Implement download/preparation pipeline without committing raw data.
+- [x] Add signal-feature, standard 1D-CNN, and compact depthwise CNN baselines.
+- [x] Run condition-held-out experiments for three seeds.
+- [x] Generate machine-readable results and the first technical report.
 
 ## Milestone 2 — Resource-efficient generalization
 
-- [ ] Add a lightweight condition-generalization method.
-- [ ] Benchmark parameters, model size, CPU latency, and memory where supported.
-- [ ] Add noise, label-scarcity, and class-imbalance tracks.
-- [ ] Validate on a second public dataset or device domain.
+- [x] Add a lightweight condition-generalization method.
+- [x] Benchmark parameters, model size, CPU latency, scoped MACs, and isolated-process RSS.
+- [x] Add noise, label-scarcity, and class-imbalance tracks.
+- [x] Validate across five bearing-device domains in addition to load domains.
 
 ## Milestone 3 — Public release
 
-- [ ] Add continuous integration, model card, contribution guide, and citation metadata.
+- [x] Add continuous integration, model card, contribution guide, and citation metadata.
 - [ ] Publish a tagged release with reproducibility instructions.
 - [ ] Archive an eligible release with a persistent identifier.
 - [ ] Invite technically relevant external reproduction and feedback without representing

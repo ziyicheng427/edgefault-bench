@@ -15,24 +15,32 @@ rather than accuracy from random within-condition splits.
    parameter count, memory footprint, and CPU latency?
 3. How robust are these models to limited labels, class imbalance, and measurement noise?
 
-## Planned scope
+## Implemented benchmark scope
 
-- Public rotating-machinery datasets, downloaded by scripts rather than redistributed.
-- Explicit train/validation/test separation by operating condition.
-- Classical, convolutional, and lightweight neural baselines.
-- Three-seed reporting with aggregate and worst-condition metrics.
-- Parameter count, serialized model size, and CPU latency measurements.
-- Reproducible configurations, tests, result tables, and a concise technical report.
+- A checksum-pinned public rotating-machinery dataset, downloaded by scripts rather than
+  redistributed.
+- Three explicit load- or device-held-out tasks with recording-level leakage controls.
+- Signal-feature, standard CNN, compact depthwise CNN, and compact CORAL baselines.
+- Three-seed aggregate, worst-condition, label-scarcity, class-imbalance, and noise results.
+- Parameter count, serialized size, scoped MACs, repeated Apple M1 latency, and isolated
+  process RSS measurements.
+- Machine-readable configurations, raw result JSON, generated tables, tests, a model card,
+  and a technical report.
 
-No benchmark results are claimed yet. The first public release will be made only after the
-data protocol and baselines are independently reproducible from a clean environment.
+The measured pre-release results are public, but v1.0 is not released yet. A tagged release
+will be made only after the edge-inference demonstration and clean-environment reproduction
+audit are complete.
 
 ## Status
 
-The protocol is frozen and the first public-data registry and task manifests are available.
-See
+The core 3-task by 4-model matrix and all three robustness tracks are complete. The strongest
+negative result is severe device-holdout failure despite good load-holdout scores. The compact
+model reduces parameters and MACs substantially but is not faster than the standard CNN on the
+measured Apple M1 CPU. See
 [`docs/project-charter.md`](docs/project-charter.md),
-[`docs/evaluation-protocol.md`](docs/evaluation-protocol.md), and [`ROADMAP.md`](ROADMAP.md).
+[`docs/evaluation-protocol.md`](docs/evaluation-protocol.md),
+[`docs/technical-report.md`](docs/technical-report.md),
+[`docs/model-card.md`](docs/model-card.md), and [`ROADMAP.md`](ROADMAP.md).
 
 The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Bench pins 60
 source files and three condition-held-out tasks without redistributing the recordings. See
@@ -72,6 +80,15 @@ uv run edgefault-run-neural \
   --model compact_depthwise_cnn_1d \
   --task registry/tasks/hust_load_0_to_400_v1.json
 ```
+
+Rebuild the committed core, robustness, and hardware Markdown tables from raw JSON:
+
+```bash
+uv run edgefault-summarize
+```
+
+The source tables are in [`results/v1`](results/v1). Checkpoints remain local pre-release
+artifacts and are not yet advertised as downloadable models.
 
 ## License
 

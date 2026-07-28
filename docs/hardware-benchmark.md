@@ -1,9 +1,10 @@
 # Hardware Benchmark Protocol
 
 The release hardware table is measured on a real CPU with batch size one and a 4,096-sample
-input. Each model runs in a separate process with one PyTorch thread, 50 warm-up calls, and
-1,000 timed calls. The raw JSON records the operating system, architecture, CPU identifier,
-Python version, PyTorch version, Git commit, median latency, and p95 latency.
+input. Each model runs in three independent processes with one PyTorch thread, 50 warm-up
+calls, and 1,000 timed calls per process. The raw JSON records every process repetition plus
+the operating system, architecture, CPU identifier, Python version, PyTorch version, Git
+commit, median latency, and p95 latency.
 
 ## Memory boundary
 

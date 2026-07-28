@@ -1,6 +1,11 @@
+import pytest
 import torch
 
-from edgefault_bench.hardware import multiply_accumulate_count, serialized_state_size
+from edgefault_bench.hardware import (
+    multiply_accumulate_count,
+    run_isolated,
+    serialized_state_size,
+)
 from edgefault_bench.models import build_model
 
 
@@ -16,3 +21,13 @@ def test_compact_model_has_lower_parameter_storage_and_macs():
     assert multiply_accumulate_count(compact, sample) < multiply_accumulate_count(
         standard, sample
     )
+
+
+def test_isolated_benchmark_rejects_zero_process_repeats(tmp_path):
+    with pytest.raises(ValueError, match="process_repeats"):
+        run_isolated(
+            output_path=tmp_path / "hardware.json",
+            warmup=1,
+            repeats=1,
+            process_repeats=0,
+        )

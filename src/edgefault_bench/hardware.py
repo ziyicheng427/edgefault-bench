@@ -66,17 +66,16 @@ def _peak_rss_bytes() -> int:
 
 
 def _cpu_name() -> str:
-    name = platform.processor()
-    if name:
-        return name
     if platform.system() == "Darwin":
         try:
-            return subprocess.check_output(
+            name = subprocess.check_output(
                 ["sysctl", "-n", "machdep.cpu.brand_string"], text=True
             ).strip()
+            if name:
+                return name
         except (OSError, subprocess.CalledProcessError):
             pass
-    return "unknown"
+    return platform.processor() or "unknown"
 
 
 def benchmark_model(
@@ -118,23 +117,30 @@ def benchmark_model(
     }
 
 
-def run_isolated(*, output_path: Path, warmup: int, repeats: int) -> Path:
+def run_isolated(
+    *, output_path: Path, warmup: int, repeats: int, process_repeats: int
+) -> Path:
+    if process_repeats < 1:
+        raise ValueError("process_repeats must be positive")
     measurements = []
     for model_id in MODEL_IDS:
-        command = [
-            sys.executable,
-            "-m",
-            "edgefault_bench.hardware",
-            "--worker",
-            "--model",
-            model_id,
-            "--warmup",
-            str(warmup),
-            "--repeats",
-            str(repeats),
-        ]
-        completed = subprocess.run(command, check=True, capture_output=True, text=True)
-        measurements.append(json.loads(completed.stdout))
+        for process_repeat in range(1, process_repeats + 1):
+            command = [
+                sys.executable,
+                "-m",
+                "edgefault_bench.hardware",
+                "--worker",
+                "--model",
+                model_id,
+                "--warmup",
+                str(warmup),
+                "--repeats",
+                str(repeats),
+            ]
+            completed = subprocess.run(command, check=True, capture_output=True, text=True)
+            measurement = json.loads(completed.stdout)
+            measurement["process_repeat"] = process_repeat
+            measurements.append(measurement)
     payload = {
         "schema_version": 1,
         "benchmark_id": "edgefault-bench-v1",
@@ -142,6 +148,7 @@ def run_isolated(*, output_path: Path, warmup: int, repeats: int) -> Path:
         "git_commit": _git_commit(),
         "protocol": {
             "independent_process_per_model": True,
+            "process_repeats_per_model": process_repeats,
             "synthetic_input": "deterministic linear ramp",
             "trained_weights_required": False,
             "operator_scope": (
@@ -168,6 +175,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, default=Path("results/v1/hardware/cpu.json"))
     parser.add_argument("--warmup", type=int, default=50)
     parser.add_argument("--repeats", type=int, default=1000)
+    parser.add_argument("--process-repeats", type=int, default=3)
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--model", choices=MODEL_IDS, help=argparse.SUPPRESS)
     return parser
@@ -180,7 +188,14 @@ def main(argv: list[str] | None = None) -> None:
             raise SystemExit("--worker requires --model")
         print(json.dumps(benchmark_model(args.model, warmup=args.warmup, repeats=args.repeats)))
         return
-    print(run_isolated(output_path=args.output, warmup=args.warmup, repeats=args.repeats))
+    print(
+        run_isolated(
+            output_path=args.output,
+            warmup=args.warmup,
+            repeats=args.repeats,
+            process_repeats=args.process_repeats,
+        )
+    )
 
 
 if __name__ == "__main__":

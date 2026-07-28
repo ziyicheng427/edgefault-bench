@@ -12,8 +12,11 @@ training checkpoints, or ignored artifacts. It does not claim external independe
 - Clean directory: a newly created temporary directory outside the project workspace.
 - Transfer source: `git clone --no-local` from the clean, fully pushed local Git history.
 - Confirmed absent before installation: `.venv`, `data/raw`, and `artifacts`.
-- Public HTTPS clone attempts: two attempts failed before checkout because GitHub returned an
-  empty response or connection timeout. A public-URL clone remains a release audit item.
+- Public HTTPS clone attempts: three attempts failed before checkout because GitHub returned an
+  empty response, connection timeout, or incomplete packfile.
+- Public archive source: GitHub's official archive API successfully downloaded commit
+  `fd86e4c8a8515bf1c260cbe81086495abf40f2b1` into a separate new directory. The full audit
+  below also passed in that public-source snapshot.
 
 ## Environment construction
 
@@ -47,6 +50,14 @@ Observed outcomes:
 The audit script also supports a GitHub source archive, where `.git` metadata is absent; Git
 status is reported only when available.
 
+## Public CI evidence
+
+GitHub Actions run
+[`30338096350`](https://github.com/ziyicheng427/edgefault-bench/actions/runs/30338096350)
+checked out commit `fd86e4c8a8515bf1c260cbe81086495abf40f2b1`, installed dependencies, ran
+ruff, and passed the complete tests on Python 3.10 and 3.12. Both matrix jobs completed
+successfully on 2026-07-28.
+
 The synthetic demo predicted `N` with high confidence. That prediction is explicitly not
 benchmark evidence and is recorded only to establish execution of the public interface.
 
@@ -60,7 +71,8 @@ machine-readable histories are committed separately.
 
 ## Remaining release checks
 
-- Repeat this audit from the public HTTPS clone when GitHub connectivity permits.
-- Confirm the latest GitHub Actions matrix is green for the release candidate.
+- Repeat the ordinary public HTTPS Git clone when connectivity permits; public archive and
+  Actions checkout evidence are already complete.
+- Confirm the latest GitHub Actions matrix is green again for the final release candidate.
 - Record maintainer ratification of Decisions 0001 and 0002.
 - Create the signed or annotated v1.0 tag and GitHub release only after those checks.

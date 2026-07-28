@@ -42,6 +42,10 @@ measured Apple M1 CPU. See
 [`docs/technical-report.md`](docs/technical-report.md),
 [`docs/model-card.md`](docs/model-card.md), and [`ROADMAP.md`](ROADMAP.md).
 
+The v1.0 release candidate is tracked in
+[`docs/release-checklist-v1.0.0.md`](docs/release-checklist-v1.0.0.md). No tag or release is
+claimed until its maintainer-only and final mechanical gates are complete.
+
 The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Bench pins 60
 source files and three condition-held-out tasks without redistributing the recordings. See
 the [`HUST v3 data card`](docs/datasets/hust-bearing-v3.md).

@@ -24,6 +24,8 @@ versioning after the first tagged release.
 - Compact-model label-scarcity evaluation completed at 25% and 10% training-label fractions.
 - Compact-model class-imbalance evaluation completed at 50% and 25% `IO` retention.
 - Compact-model measurement-noise evaluation completed at clean, 20, 10, and 0 dB.
+- Three-process Apple M1 CPU measurements completed for the standard and compact CNNs,
+  including latency, isolated-process RSS, serialized size, and scoped MAC counts.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

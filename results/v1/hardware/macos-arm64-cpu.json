@@ -1,0 +1,161 @@
+{
+  "benchmark_id": "edgefault-bench-v1",
+  "created_at": "2026-07-28T06:52:35.736442+00:00",
+  "environment": {
+    "cpu": "Apple M1",
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "torch": "2.13.0"
+  },
+  "git_commit": "8bb4ffafec5637e0b0e34f90683911da13adc11e",
+  "measurements": [
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 219480064,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.4943955,
+        "p95_ms": 0.666833,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "standard_cnn_1d",
+      "multiply_accumulates": 17760768,
+      "process_repeat": 1,
+      "serialized_state_bytes": 317351,
+      "trainable_parameters": 77220
+    },
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 263602176,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.5792295000000001,
+        "p95_ms": 0.895917,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "standard_cnn_1d",
+      "multiply_accumulates": 17760768,
+      "process_repeat": 2,
+      "serialized_state_bytes": 317351,
+      "trainable_parameters": 77220
+    },
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 257474560,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.5129790000000001,
+        "p95_ms": 0.666708,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "standard_cnn_1d",
+      "multiply_accumulates": 17760768,
+      "process_repeat": 3,
+      "serialized_state_bytes": 317351,
+      "trainable_parameters": 77220
+    },
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 252297216,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.6063544999999999,
+        "p95_ms": 0.80725,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "compact_depthwise_cnn_1d",
+      "multiply_accumulates": 1240320,
+      "process_repeat": 1,
+      "serialized_state_bytes": 37151,
+      "trainable_parameters": 5476
+    },
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 250249216,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.697687,
+        "p95_ms": 0.845583,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "compact_depthwise_cnn_1d",
+      "multiply_accumulates": 1240320,
+      "process_repeat": 2,
+      "serialized_state_bytes": 37151,
+      "trainable_parameters": 5476
+    },
+    {
+      "input_shape": [
+        1,
+        1,
+        4096
+      ],
+      "isolated_process_peak_rss_bytes": 253263872,
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.5832915000000001,
+        "p95_ms": 0.64625,
+        "repeats": 1000,
+        "threads": 1,
+        "warmup": 50
+      },
+      "memory_scope": "entire isolated Python/PyTorch inference process",
+      "model_id": "compact_depthwise_cnn_1d",
+      "multiply_accumulates": 1240320,
+      "process_repeat": 3,
+      "serialized_state_bytes": 37151,
+      "trainable_parameters": 5476
+    }
+  ],
+  "protocol": {
+    "independent_process_per_model": true,
+    "operator_scope": "Conv1d and Linear MACs; pooling, normalization, activations excluded",
+    "process_repeats_per_model": 3,
+    "synthetic_input": "deterministic linear ramp",
+    "trained_weights_required": false
+  },
+  "schema_version": 1
+}

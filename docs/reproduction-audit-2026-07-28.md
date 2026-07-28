@@ -27,8 +27,10 @@ scikit-learn 1.7.2, pytest 8.4.2, and ruff 0.16.0.
 uv sync --frozen --extra dev --extra deep-learning
 uv run --frozen ruff check .
 uv run --frozen pytest
-uv run --frozen edgefault-summarize
-git diff --exit-code -- results/v1/SUMMARY.md results/v1/ROBUSTNESS.md results/v1/HARDWARE.md
+uv run --frozen edgefault-summarize --results-dir results/v1 --output outputs/clean-audit/SUMMARY.md --robustness-output outputs/clean-audit/ROBUSTNESS.md --hardware-output outputs/clean-audit/HARDWARE.md
+cmp -s results/v1/SUMMARY.md outputs/clean-audit/SUMMARY.md
+cmp -s results/v1/ROBUSTNESS.md outputs/clean-audit/ROBUSTNESS.md
+cmp -s results/v1/HARDWARE.md outputs/clean-audit/HARDWARE.md
 uv run --frozen edgefault-verify-demo
 uv run --frozen edgefault-infer --warmup 2 --repeats 5
 ```
@@ -37,10 +39,13 @@ Observed outcomes:
 
 - lint: passed;
 - tests: 36 passed;
-- generated core, robustness, and hardware tables: byte-for-byte unchanged in Git;
+- generated core, robustness, and hardware tables: byte-for-byte equal to the committed files;
 - demo asset SHA-256: passed;
 - installed inference CLI: returned four probabilities, asset hash, label, and CPU latency;
 - final clean-checkout Git status: clean.
+
+The audit script also supports a GitHub source archive, where `.git` metadata is absent; Git
+status is reported only when available.
 
 The synthetic demo predicted `N` with high confidence. That prediction is explicitly not
 benchmark evidence and is recorded only to establish execution of the public interface.

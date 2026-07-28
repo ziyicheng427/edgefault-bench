@@ -1,6 +1,6 @@
-# EdgeFault-Bench v1.0.0 Release Notes (Draft)
+# EdgeFault-Bench v1.0.0 Release Notes
 
-Status: release-candidate draft; not yet released or tagged.
+Release date: 2026-07-28.
 
 ## What v1.0 provides
 

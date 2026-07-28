@@ -25,8 +25,8 @@
 
 ## Final mechanical gates
 
-- [ ] Set package and citation metadata to `1.0.0` with the actual release date.
-- [ ] Convert the changelog's Unreleased section to `1.0.0` without deleting prior history.
+- [x] Set package and citation metadata to `1.0.0` with the actual release date.
+- [x] Convert the changelog's Unreleased section to `1.0.0` without deleting prior history.
 - [ ] Run `scripts/clean_audit.sh` on the final release-candidate commit.
 - [ ] Confirm the final GitHub Actions Python 3.10/3.12 matrix is green.
 - [ ] Create an annotated `v1.0.0` tag.

@@ -1,9 +1,9 @@
-# EdgeFault-Bench v1.0 Pre-release Technical Report
+# EdgeFault-Bench v1.0.0 Technical Report
 
 ## Abstract
 
 EdgeFault-Bench evaluates rotating-machinery fault classifiers under unseen loads and devices
-while reporting worst-condition reliability and deployment cost. The pre-release study pins
+while reporting worst-condition reliability and deployment cost. The v1.0.0 study pins
 60 CC BY 4.0 HUST Bearing v3 recordings, three leakage-resistant tasks, four baseline model
 families, and seeds 17, 29, and 43. It additionally evaluates label scarcity, controlled class
 imbalance, and additive measurement noise. Results show high load-held-out performance can
@@ -100,10 +100,11 @@ Git commit, environment, seed, per-epoch history, condition metrics, and resourc
 Generated Markdown tables reject missing seed matrices and incomplete robustness files.
 
 Development assistance and maintainer responsibilities are disclosed in
-`docs/research-integrity.md`. Decision records remain pending until the maintainer personally
-ratifies them. A packaged seed-17 CPU inference demo is available under `demo/`; its synthetic
-input is not benchmark evidence. A clean-clone audit, tagged release, and archival identifier
-remain release gates and are not claimed complete in this report.
+`docs/research-integrity.md`. The maintainer ratified the frozen protocol and release claims in
+Decision 0001 and Decision 0002 on 2026-07-28. A packaged seed-17 CPU inference demo is
+available under `demo/`; its synthetic input is not benchmark evidence. Clean local-clone and
+GitHub-archive audits were completed before release. A persistent archival identifier is not
+claimed unless an eligible external archive is configured and verified.
 
 ## Limitations
 

@@ -5,6 +5,10 @@ versioning after the first tagged release.
 
 ## Unreleased
 
+No changes yet.
+
+## 1.0.0 - 2026-07-28
+
 ### Added
 
 - Pinned HUST bearing v3 registry with 60 SHA-256-verified CC BY 4.0 source files.
@@ -14,7 +18,7 @@ versioning after the first tagged release.
 - Standard 1D CNN, compact depthwise 1D CNN, and compact CORAL model definitions.
 - Automated tests on Python 3.10 and 3.12.
 
-### Measured, not yet released
+### Measured
 
 - Signal-feature baseline completed on all three frozen HUST tasks.
 - Standard 1D CNN, compact depthwise 1D CNN, and compact CORAL completed on both frozen
@@ -26,12 +30,9 @@ versioning after the first tagged release.
 - Compact-model measurement-noise evaluation completed at clean, 20, 10, and 0 dB.
 - Three-process Apple M1 CPU measurements completed for the standard and compact CNNs,
   including latency, isolated-process RSS, serialized size, and scoped MAC counts.
-- Generated robustness and hardware tables, a pre-release technical report, and a compact-model
+- Generated robustness and hardware tables, a technical report, and a compact-model
   card with negative results and deployment limitations.
 - Portable seed-17 JSON model asset, SHA-256 verification, and batch-one CPU inference demo.
 - One-command clean audit, full-data reproduction runner, and documented new-directory audit.
-- Draft v1.0.0 release notes and an explicit evidence/mechanical release checklist.
+- v1.0.0 release notes and an explicit evidence/mechanical release checklist.
 - Maintainer ratification of the frozen core and robustness protocols and release claims.
-
-No v1.0 performance claim is final until the complete experiment matrix and release audit
-are published.

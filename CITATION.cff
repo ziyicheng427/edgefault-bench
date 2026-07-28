@@ -1,7 +1,9 @@
 cff-version: 1.2.0
-message: "If you use EdgeFault-Bench, please cite the repository; release metadata will be added at v1.0."
+message: "If you use EdgeFault-Bench v1.0.0, please cite this software release."
 title: "EdgeFault-Bench: A Reproducible Benchmark for Cross-Condition and Resource-Efficient Fault Diagnosis"
 type: software
+version: 1.0.0
+date-released: 2026-07-28
 authors:
   - family-names: Cheng
     given-names: Ziyi

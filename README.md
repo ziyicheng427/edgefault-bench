@@ -27,9 +27,8 @@ rather than accuracy from random within-condition splits.
 - Machine-readable configurations, raw result JSON, generated tables, tests, a model card,
   and a technical report.
 
-The measured pre-release results and CPU edge-inference demonstration are public, but v1.0 is
-not released yet. A tagged release will be made only after the clean-environment reproduction
-audit is complete.
+EdgeFault-Bench v1.0.0 publishes the measured results, CPU edge-inference demonstration,
+frozen protocol, and the evidence needed to audit each stated finding.
 
 ## Status
 
@@ -42,9 +41,9 @@ measured Apple M1 CPU. See
 [`docs/technical-report.md`](docs/technical-report.md),
 [`docs/model-card.md`](docs/model-card.md), and [`ROADMAP.md`](ROADMAP.md).
 
-The v1.0 release candidate is tracked in
-[`docs/release-checklist-v1.0.0.md`](docs/release-checklist-v1.0.0.md). No tag or release is
-claimed until its maintainer-only and final mechanical gates are complete.
+The v1.0 release process is tracked in
+[`docs/release-checklist-v1.0.0.md`](docs/release-checklist-v1.0.0.md). Its mechanical gates
+distinguish completed evidence from distribution and archival steps.
 
 The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Bench pins 60
 source files and three condition-held-out tasks without redistributing the recordings. See
@@ -102,9 +101,9 @@ output directory:
 The full reproduction downloads approximately 414 MB and runs every predefined training job;
 it is substantially slower than the clean audit.
 
-The source tables are in [`results/v1`](results/v1). Checkpoints remain local pre-release
-artifacts except for the fixed seed-17 JSON asset in [`demo`](demo), which is provided only for
-the documented inference demonstration.
+The source tables are in [`results/v1`](results/v1). Training checkpoints are not distributed;
+the fixed seed-17 JSON asset in [`demo`](demo) is provided only for the documented inference
+demonstration.
 
 ## License
 

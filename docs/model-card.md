@@ -2,7 +2,7 @@
 
 ## Status
 
-This is a pre-release model-family card for `compact_depthwise_cnn_1d`. The repository
+This v1.0.0 model-family card covers `compact_depthwise_cnn_1d`. The repository
 publishes architecture code, training protocol, raw results, and a deterministic JSON demo
 asset for seed 17. The asset is an inference demonstration, not the basis for aggregate claims.
 

@@ -27,6 +27,7 @@
 - [x] Add continuous integration, model card, contribution guide, and citation metadata.
 - [ ] Publish a tagged release with reproducibility instructions.
 - [ ] Archive an eligible release with a persistent identifier.
+- [x] Pass a new-directory, locked-environment maintainer reproduction audit.
 - [ ] Invite technically relevant external reproduction and feedback without representing
       unanswered outreach as endorsement or collaboration.
 

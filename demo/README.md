@@ -39,6 +39,5 @@ The demo asset is distributed under CC BY 4.0; project source code remains Apach
 Verify the deterministic JSON export before inference:
 
 ```bash
-cd demo/assets
-shasum -a 256 -c SHA256SUMS
+uv run edgefault-verify-demo
 ```

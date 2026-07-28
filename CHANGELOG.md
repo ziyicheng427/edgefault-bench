@@ -29,6 +29,7 @@ versioning after the first tagged release.
 - Generated robustness and hardware tables, a pre-release technical report, and a compact-model
   card with negative results and deployment limitations.
 - Portable seed-17 JSON model asset, SHA-256 verification, and batch-one CPU inference demo.
+- One-command clean audit, full-data reproduction runner, and documented new-directory audit.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

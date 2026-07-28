@@ -87,6 +87,17 @@ Rebuild the committed core, robustness, and hardware Markdown tables from raw JS
 uv run edgefault-summarize
 ```
 
+Run the clean-checkout audit, or launch the long-form full-data reproduction into an ignored
+output directory:
+
+```bash
+./scripts/clean_audit.sh
+./scripts/reproduce_v1.sh
+```
+
+The full reproduction downloads approximately 414 MB and runs every predefined training job;
+it is substantially slower than the clean audit.
+
 The source tables are in [`results/v1`](results/v1). Checkpoints remain local pre-release
 artifacts except for the fixed seed-17 JSON asset in [`demo`](demo), which is provided only for
 the documented inference demonstration.

@@ -33,6 +33,7 @@ edgefault-run-robustness = "edgefault_bench.experiments.robustness:main"
 edgefault-benchmark-hardware = "edgefault_bench.hardware:main"
 edgefault-export-demo = "edgefault_bench.demo:export_main"
 edgefault-infer = "edgefault_bench.demo:infer_main"
+edgefault-verify-demo = "edgefault_bench.demo:verify_main"
 edgefault-summarize = "edgefault_bench.reporting:main"
 
 [tool.hatch.build.targets.wheel]

@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from edgefault_bench.demo import (
     _state_to_json,
     infer,
     normalize_window,
+    verify_asset,
 )
 from edgefault_bench.models import build_model
 from edgefault_bench.torch_data import LABELS
@@ -46,3 +48,16 @@ def test_synthetic_inference_returns_probabilities(tmp_path: Path):
     assert result["input_is_benchmark_evidence"] is False
     assert set(result["probabilities"]) == set(LABELS)
     assert sum(result["probabilities"].values()) == pytest.approx(1.0)
+
+
+def test_asset_verifier_accepts_matching_hash_and_rejects_change(tmp_path: Path):
+    asset = tmp_path / "model.json"
+    asset.write_text("model", encoding="utf-8")
+    digest = hashlib.sha256(asset.read_bytes()).hexdigest()
+    checksums = tmp_path / "SHA256SUMS"
+    checksums.write_text(f"{digest}  model.json\n", encoding="utf-8")
+
+    assert verify_asset(asset_path=asset, checksum_path=checksums) == digest
+    asset.write_text("changed", encoding="utf-8")
+    with pytest.raises(ValueError, match="mismatch"):
+        verify_asset(asset_path=asset, checksum_path=checksums)

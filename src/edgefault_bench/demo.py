@@ -162,6 +162,18 @@ def infer(
     }
 
 
+def verify_asset(*, asset_path: Path, checksum_path: Path) -> str:
+    """Verify the single released demo asset against its committed SHA-256 record."""
+
+    fields = checksum_path.read_text(encoding="utf-8").strip().split()
+    if len(fields) != 2 or fields[1] != asset_path.name:
+        raise ValueError("checksum record does not identify the requested asset")
+    actual = hashlib.sha256(asset_path.read_bytes()).hexdigest()
+    if actual != fields[0]:
+        raise ValueError("demo asset SHA-256 mismatch")
+    return actual
+
+
 def export_main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Export the fixed seed-17 demo asset")
     parser.add_argument("--source-checkpoint", required=True, type=Path)
@@ -196,3 +208,14 @@ def infer_main(argv: list[str] | None = None) -> None:
             sort_keys=True,
         )
     )
+
+
+def verify_main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Verify the released demo model asset")
+    parser.add_argument("--asset", type=Path, default=DEFAULT_ASSET)
+    parser.add_argument(
+        "--checksums", type=Path, default=Path("demo/assets/SHA256SUMS")
+    )
+    args = parser.parse_args(argv)
+    digest = verify_asset(asset_path=args.asset, checksum_path=args.checksums)
+    print(f"{args.asset}: OK ({digest})")

@@ -19,6 +19,8 @@ versioning after the first tagged release.
 - Signal-feature baseline completed on all three frozen HUST tasks.
 - Standard 1D CNN, compact depthwise 1D CNN, and compact CORAL completed on both frozen
   load-held-out tasks.
+- Standard 1D CNN, compact depthwise 1D CNN, and compact CORAL completed on the frozen
+  device-held-out task, completing the 3-task by 4-model core matrix.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

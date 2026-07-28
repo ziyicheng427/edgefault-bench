@@ -1,0 +1,262 @@
+{
+  "benchmark_id": "edgefault-bench-v1",
+  "created_at": "2026-07-27T06:46:01.448705+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "torch": "2.13.0"
+  },
+  "git_commit": "c4d669d07f5db13bfac478218e83c8e57c04fb97",
+  "model_id": "standard_cnn_1d",
+  "partition_sizes": {
+    "test": 1500,
+    "train": 4500,
+    "validation": 1500
+  },
+  "protocol": {
+    "dataset_manifest": "registry/hust_v3.json",
+    "source_alignment_field": null,
+    "task_manifest": "registry/tasks/hust_device_6204_6206_to_6208_v1.json",
+    "test_used_for_selection": false
+  },
+  "runs": [
+    {
+      "best_epoch": 1,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__standard_cnn_1d__seed17.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 390316032,
+        "serialized_size_bytes": 317351,
+        "trainable_parameters": 77220
+      },
+      "epochs_ran": 5,
+      "fit_seconds": 59.29550074999861,
+      "history": [
+        {
+          "classification_loss": 0.40707718984948266,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.38905799153064813
+        },
+        {
+          "classification_loss": 0.04970291189021534,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.1865282421398886
+        },
+        {
+          "classification_loss": 0.01883786764409807,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.07061453350430369
+        },
+        {
+          "classification_loss": 0.009567469913098547,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.14984341027038178
+        },
+        {
+          "classification_loss": 0.005481496319174766,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.16621038088391987
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.803625,
+        "p95_ms": 1.830343749999994,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.15666666666666668,
+        "macro_f1": 0.14069591626415723,
+        "per_condition_macro_f1": {
+          "0": 0.08760330578512397,
+          "200": 0.1860847018150389,
+          "400": 0.09999883911261769
+        },
+        "worst_condition_macro_f1": 0.08760330578512397
+      },
+      "validation": {
+        "balanced_accuracy": 0.3686666666666667,
+        "macro_f1": 0.38905799153064813,
+        "per_condition_macro_f1": {
+          "0": 0.3594303135364575,
+          "200": 0.27582184168627544,
+          "400": 0.42830726004804104
+        },
+        "worst_condition_macro_f1": 0.27582184168627544
+      }
+    },
+    {
+      "best_epoch": 2,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__standard_cnn_1d__seed29.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 441008128,
+        "serialized_size_bytes": 317351,
+        "trainable_parameters": 77220
+      },
+      "epochs_ran": 6,
+      "fit_seconds": 82.27554354201129,
+      "history": [
+        {
+          "classification_loss": 0.43887846003638376,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.2978789935198861
+        },
+        {
+          "classification_loss": 0.05914112638102637,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.4186017080193096
+        },
+        {
+          "classification_loss": 0.023628576586643853,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.24830004261414465
+        },
+        {
+          "classification_loss": 0.010237459301948547,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.24529125581454925
+        },
+        {
+          "classification_loss": 0.0059528950351393885,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.2902451234888378
+        },
+        {
+          "classification_loss": 0.004896701794117689,
+          "coral_loss": 0.0,
+          "epoch": 6,
+          "validation_macro_f1": 0.26523709571753673
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 1.198604,
+        "p95_ms": 3.681802099999995,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.33199999999999996,
+        "macro_f1": 0.2966806554220044,
+        "per_condition_macro_f1": {
+          "0": 0.310876477766887,
+          "200": 0.35004136789851076,
+          "400": 0.17784153830665458
+        },
+        "worst_condition_macro_f1": 0.17784153830665458
+      },
+      "validation": {
+        "balanced_accuracy": 0.41000000000000003,
+        "macro_f1": 0.4186017080193096,
+        "per_condition_macro_f1": {
+          "0": 0.3498611215374221,
+          "200": 0.30511189349170414,
+          "400": 0.4854082333659341
+        },
+        "worst_condition_macro_f1": 0.30511189349170414
+      }
+    },
+    {
+      "best_epoch": 1,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__standard_cnn_1d__seed43.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 441008128,
+        "serialized_size_bytes": 317351,
+        "trainable_parameters": 77220
+      },
+      "epochs_ran": 5,
+      "fit_seconds": 74.72653600000194,
+      "history": [
+        {
+          "classification_loss": 0.387707851462894,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.31232742575286404
+        },
+        {
+          "classification_loss": 0.054368989055355386,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.12097313932713902
+        },
+        {
+          "classification_loss": 0.019574627789358298,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.22985066082846264
+        },
+        {
+          "classification_loss": 0.0106067097534736,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.18386732347587265
+        },
+        {
+          "classification_loss": 0.005428471710946825,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.19351046240581124
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.7947295,
+        "p95_ms": 1.4201493999999992,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.15866666666666668,
+        "macro_f1": 0.17581171938789464,
+        "per_condition_macro_f1": {
+          "0": 0.02915584023203819,
+          "200": 0.24609375,
+          "400": 0.1810344827586207
+        },
+        "worst_condition_macro_f1": 0.02915584023203819
+      },
+      "validation": {
+        "balanced_accuracy": 0.2806666666666667,
+        "macro_f1": 0.31232742575286404,
+        "per_condition_macro_f1": {
+          "0": 0.31149164762992576,
+          "200": 0.1126078667469396,
+          "400": 0.4029433681073025
+        },
+        "worst_condition_macro_f1": 0.1126078667469396
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "hust-device-6204-6206-to-6208-v1",
+  "training": {
+    "batch_size": 64,
+    "coral_weight": 0.0,
+    "device": "cpu",
+    "epochs_max": 15,
+    "learning_rate": 0.001,
+    "patience": 4,
+    "weight_decay": 0.0001
+  }
+}

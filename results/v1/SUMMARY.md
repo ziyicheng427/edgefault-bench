@@ -6,7 +6,10 @@ Latency is batch-one median CPU latency per run; it is not an edge-device claim.
 
 | Task | Model | Test Macro-F1 | Worst-condition Macro-F1 | Parameters | Serialized bytes | Median latency (ms) | Code commit |
 |---|---|---:|---:|---:|---:|---:|---|
+| hust-device-6204-6206-to-6208-v1 | compact_coral_cnn_1d | 0.3052 ± 0.0755 | 0.2477 ± 0.0141 | 5476 | 37151 | 0.8332 ± 0.1153 | c4d669d |
+| hust-device-6204-6206-to-6208-v1 | compact_depthwise_cnn_1d | 0.3058 ± 0.0763 | 0.2477 ± 0.0141 | 5476 | 37151 | 0.9887 ± 0.1260 | c4d669d |
 | hust-device-6204-6206-to-6208-v1 | signal_features_logreg | 0.3460 ± 0.0000 | 0.3328 ± 0.0000 | 44 | 1732 | 0.0817 ± 0.0033 | 10f8b6b |
+| hust-device-6204-6206-to-6208-v1 | standard_cnn_1d | 0.2044 ± 0.0668 | 0.0982 ± 0.0612 | 77220 | 317351 | 0.9323 ± 0.1883 | c4d669d |
 | hust-load-0-to-400-v1 | compact_coral_cnn_1d | 0.9044 ± 0.0105 | 0.6739 ± 0.0073 | 5476 | 37151 | 0.8656 ± 0.0092 | 00549e6 |
 | hust-load-0-to-400-v1 | compact_depthwise_cnn_1d | 0.8988 ± 0.0184 | 0.6768 ± 0.0080 | 5476 | 37151 | 0.8705 ± 0.0918 | 00549e6 |
 | hust-load-0-to-400-v1 | signal_features_logreg | 0.7730 ± 0.0000 | 0.5428 ± 0.0000 | 44 | 1732 | 0.0819 ± 0.0023 | 10f8b6b |

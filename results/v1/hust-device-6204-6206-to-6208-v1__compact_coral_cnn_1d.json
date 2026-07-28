@@ -1,0 +1,262 @@
+{
+  "benchmark_id": "edgefault-bench-v1",
+  "created_at": "2026-07-28T05:44:54.938513+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "torch": "2.13.0"
+  },
+  "git_commit": "c4d669d07f5db13bfac478218e83c8e57c04fb97",
+  "model_id": "compact_coral_cnn_1d",
+  "partition_sizes": {
+    "test": 1500,
+    "train": 4500,
+    "validation": 1500
+  },
+  "protocol": {
+    "dataset_manifest": "registry/hust_v3.json",
+    "source_alignment_field": "load_w",
+    "task_manifest": "registry/tasks/hust_device_6204_6206_to_6208_v1.json",
+    "test_used_for_selection": false
+  },
+  "runs": [
+    {
+      "best_epoch": 1,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__compact_coral_cnn_1d__seed17.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 522420224,
+        "serialized_size_bytes": 37151,
+        "trainable_parameters": 5476
+      },
+      "epochs_ran": 5,
+      "fit_seconds": 89.33697687499807,
+      "history": [
+        {
+          "classification_loss": 0.8749176707267762,
+          "coral_loss": 0.0003358594099716154,
+          "epoch": 1,
+          "validation_macro_f1": 0.2960978654990764
+        },
+        {
+          "classification_loss": 0.2241658488512039,
+          "coral_loss": 0.001511742187043031,
+          "epoch": 2,
+          "validation_macro_f1": 0.2832801573426573
+        },
+        {
+          "classification_loss": 0.06835323745012284,
+          "coral_loss": 0.00245364231036769,
+          "epoch": 3,
+          "validation_macro_f1": 0.29541447527295805
+        },
+        {
+          "classification_loss": 0.0342833423399263,
+          "coral_loss": 0.0031597562920716075,
+          "epoch": 4,
+          "validation_macro_f1": 0.27639138300057653
+        },
+        {
+          "classification_loss": 0.019542939404646555,
+          "coral_loss": 0.0035261000924640233,
+          "epoch": 5,
+          "validation_macro_f1": 0.28188334909403157
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.7039165000000001,
+        "p95_ms": 0.8039871999999999,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.23533333333333334,
+        "macro_f1": 0.24358155034752083,
+        "per_condition_macro_f1": {
+          "0": 0.22815480034064214,
+          "200": 0.25440138934114837,
+          "400": 0.24674572233051767
+        },
+        "worst_condition_macro_f1": 0.22815480034064214
+      },
+      "validation": {
+        "balanced_accuracy": 0.32799999999999996,
+        "macro_f1": 0.2960978654990764,
+        "per_condition_macro_f1": {
+          "0": 0.36498973305954824,
+          "200": 0.250969735832396,
+          "400": 0.252972238031999
+        },
+        "worst_condition_macro_f1": 0.250969735832396
+      }
+    },
+    {
+      "best_epoch": 1,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__compact_coral_cnn_1d__seed29.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 522420224,
+        "serialized_size_bytes": 37151,
+        "trainable_parameters": 5476
+      },
+      "epochs_ran": 5,
+      "fit_seconds": 98.07105674999184,
+      "history": [
+        {
+          "classification_loss": 0.9167235573662652,
+          "coral_loss": 0.0004769452371401712,
+          "epoch": 1,
+          "validation_macro_f1": 0.5391959243557569
+        },
+        {
+          "classification_loss": 0.31772794490390355,
+          "coral_loss": 0.002032533161342144,
+          "epoch": 2,
+          "validation_macro_f1": 0.522396618175715
+        },
+        {
+          "classification_loss": 0.10763640709718068,
+          "coral_loss": 0.0025715115269025167,
+          "epoch": 3,
+          "validation_macro_f1": 0.27534536830646417
+        },
+        {
+          "classification_loss": 0.03969246308836672,
+          "coral_loss": 0.002659481070107884,
+          "epoch": 4,
+          "validation_macro_f1": 0.34386281588447654
+        },
+        {
+          "classification_loss": 0.020255861445433565,
+          "coral_loss": 0.003161093308693833,
+          "epoch": 5,
+          "validation_macro_f1": 0.35106382978723405
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.811833,
+        "p95_ms": 1.1384021,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.38666666666666666,
+        "macro_f1": 0.41153779470344026,
+        "per_condition_macro_f1": {
+          "0": 0.46380669149221304,
+          "200": 0.45260333863275043,
+          "400": 0.26097255333455593
+        },
+        "worst_condition_macro_f1": 0.26097255333455593
+      },
+      "validation": {
+        "balanced_accuracy": 0.5800000000000001,
+        "macro_f1": 0.5391959243557569,
+        "per_condition_macro_f1": {
+          "0": 0.6510840535823187,
+          "200": 0.44832836429426903,
+          "400": 0.446291903848674
+        },
+        "worst_condition_macro_f1": 0.446291903848674
+      }
+    },
+    {
+      "best_epoch": 2,
+      "checkpoint": "artifacts/checkpoints/hust-device-6204-6206-to-6208-v1__compact_coral_cnn_1d__seed43.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 522420224,
+        "serialized_size_bytes": 37151,
+        "trainable_parameters": 5476
+      },
+      "epochs_ran": 6,
+      "fit_seconds": 130.5673110409989,
+      "history": [
+        {
+          "classification_loss": 0.9071938012970818,
+          "coral_loss": 0.0005889875599726414,
+          "epoch": 1,
+          "validation_macro_f1": 0.4213302544598388
+        },
+        {
+          "classification_loss": 0.36334988951683045,
+          "coral_loss": 0.0016221593005789651,
+          "epoch": 2,
+          "validation_macro_f1": 0.5669699611347209
+        },
+        {
+          "classification_loss": 0.13948924550745223,
+          "coral_loss": 0.002671394802629948,
+          "epoch": 3,
+          "validation_macro_f1": 0.30035971223021585
+        },
+        {
+          "classification_loss": 0.049705051845974395,
+          "coral_loss": 0.0026643622873557937,
+          "epoch": 4,
+          "validation_macro_f1": 0.34446224772248635
+        },
+        {
+          "classification_loss": 0.02388834044502841,
+          "coral_loss": 0.0034589902377790875,
+          "epoch": 5,
+          "validation_macro_f1": 0.35855640754855594
+        },
+        {
+          "classification_loss": 0.014635000692473518,
+          "coral_loss": 0.0035298292024268044,
+          "epoch": 6,
+          "validation_macro_f1": 0.3652030624419154
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.983854,
+        "p95_ms": 1.9722746999999996,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.258,
+        "macro_f1": 0.26048211625145457,
+        "per_condition_macro_f1": {
+          "0": 0.26462389091248717,
+          "200": 0.2630399012751954,
+          "400": 0.25399279871516645
+        },
+        "worst_condition_macro_f1": 0.25399279871516645
+      },
+      "validation": {
+        "balanced_accuracy": 0.5826666666666667,
+        "macro_f1": 0.5669699611347209,
+        "per_condition_macro_f1": {
+          "0": 0.6553872374661247,
+          "200": 0.49906629318394025,
+          "400": 0.5049328378186857
+        },
+        "worst_condition_macro_f1": 0.49906629318394025
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "hust-device-6204-6206-to-6208-v1",
+  "training": {
+    "batch_size": 64,
+    "coral_weight": 0.1,
+    "device": "cpu",
+    "epochs_max": 15,
+    "learning_rate": 0.001,
+    "patience": 4,
+    "weight_decay": 0.0001
+  }
+}

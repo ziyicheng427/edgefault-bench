@@ -18,10 +18,10 @@
 
 ## Maintainer-only gates
 
-- [ ] Personally review and accept or modify Decision 0001.
-- [ ] Personally review and accept or modify Decision 0002.
-- [ ] Confirm the technical report accurately states the intended project claims.
-- [ ] Confirm release notes do not overstate external use, field validation, or authorship.
+- [x] Personally review and accept or modify Decision 0001.
+- [x] Personally review and accept or modify Decision 0002.
+- [x] Confirm the technical report accurately states the intended project claims.
+- [x] Confirm release notes do not overstate external use, field validation, or authorship.
 
 ## Final mechanical gates
 

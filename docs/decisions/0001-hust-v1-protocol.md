@@ -1,7 +1,8 @@
 # Decision 0001: HUST v1 Protocol
 
-- Status: Proposed for maintainer ratification
+- Status: Accepted
 - Proposed: 2026-07-26
+- Accepted: 2026-07-28
 - Scope: EdgeFault-Bench v1.0 primary benchmark
 
 ## Decision
@@ -47,7 +48,6 @@ worst-load Macro-F1.
 
 ## Ratification record
 
-The maintainer should change the status to `Accepted`, add the review date, and state any
-requested modifications only after personally reviewing this decision and the linked data
-card. This record must not be marked accepted solely by automated tooling.
-
+Ziyi Cheng explicitly accepted Decision 0001 on 2026-07-28 after reviewing the decision and
+linked project materials. No modifications were requested. This entry records the maintainer's
+stated decision; automated tooling did not infer approval.

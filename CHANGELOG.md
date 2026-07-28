@@ -31,6 +31,7 @@ versioning after the first tagged release.
 - Portable seed-17 JSON model asset, SHA-256 verification, and batch-one CPU inference demo.
 - One-command clean audit, full-data reproduction runner, and documented new-directory audit.
 - Draft v1.0.0 release notes and an explicit evidence/mechanical release checklist.
+- Maintainer ratification of the frozen core and robustness protocols and release claims.
 
 No v1.0 performance claim is final until the complete experiment matrix and release audit
 are published.

@@ -1,7 +1,8 @@
 # Decision 0002: V1 Robustness Tracks
 
-- Status: Proposed for maintainer ratification
+- Status: Accepted
 - Proposed: 2026-07-28
+- Accepted: 2026-07-28
 - Scope: EdgeFault-Bench v1.0 robustness evaluation
 
 ## Decision
@@ -41,6 +42,6 @@ clean, and no robustness transformation is used to choose a test-specific checkp
 
 ## Ratification record
 
-The maintainer should mark this decision accepted only after personally reviewing the task,
-levels, and stated limitations. Automated tooling must not record acceptance on the
-maintainer's behalf.
+Ziyi Cheng explicitly accepted Decision 0002 on 2026-07-28 after reviewing the decision and
+linked project materials. No modifications were requested. This entry records the maintainer's
+stated decision; automated tooling did not infer approval.

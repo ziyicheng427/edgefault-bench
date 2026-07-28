@@ -61,6 +61,15 @@ successfully on 2026-07-28.
 The synthetic demo predicted `N` with high confidence. That prediction is explicitly not
 benchmark evidence and is recorded only to establish execution of the public interface.
 
+## Final v1.0.0 candidate audit
+
+After maintainer ratification and the version-metadata update, the same locked audit script
+was rerun on commit `1c3feea31052a49a51b5350d97009b3b0e1510f4`. The environment installed
+`edgefault-bench==1.0.0`; ruff passed; all 37 tests passed; all three generated tables remained
+byte-for-byte equal; and asset verification plus installed-CLI inference passed. This is the
+final local release-candidate audit. The final GitHub Actions run and distribution steps are
+tracked separately because they require the pushed commit.
+
 ## Full experimental reproduction
 
 `scripts/reproduce_v1.sh` provides the long-form path that downloads and verifies all 60 HUST
@@ -74,5 +83,4 @@ machine-readable histories are committed separately.
 - Repeat the ordinary public HTTPS Git clone when connectivity permits; public archive and
   Actions checkout evidence are already complete.
 - Confirm the latest GitHub Actions matrix is green again for the final release candidate.
-- Record maintainer ratification of Decisions 0001 and 0002.
-- Create the signed or annotated v1.0 tag and GitHub release only after those checks.
+- Create the annotated v1.0.0 tag and GitHub release only after that CI check.

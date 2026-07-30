@@ -8,6 +8,14 @@ from edgefault_bench.datasets.hust import (
     load_hust_signal,
     parse_hust_filename,
 )
+from edgefault_bench.datasets.mehran import (
+    MehranFile,
+    MehranV2Adapter,
+    load_mehran_manifest,
+    load_mehran_signal,
+    parse_mehran_filename,
+    verify_mehran_file,
+)
 
 __all__ = [
     "HustFile",
@@ -15,5 +23,11 @@ __all__ = [
     "WindowRecord",
     "build_window_records",
     "load_hust_signal",
+    "MehranFile",
+    "MehranV2Adapter",
+    "load_mehran_manifest",
+    "load_mehran_signal",
+    "parse_mehran_filename",
     "parse_hust_filename",
+    "verify_mehran_file",
 ]

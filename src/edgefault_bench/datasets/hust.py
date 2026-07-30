@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from dataclasses import dataclass
@@ -14,6 +13,7 @@ from numpy.typing import NDArray
 from scipy.io import loadmat
 
 from edgefault_bench.contracts import DatasetMetadata, Recording
+from edgefault_bench.datasets.checksums import sha256_file
 
 _FILENAME_PATTERN = re.compile(
     r"^(?P<label>IO|IB|OB|N|I|O|B)(?P<bearing>[4-8])(?P<load>00|02|04)\.mat$"
@@ -134,14 +134,6 @@ def load_hust_manifest(path: str | Path) -> tuple[dict[str, Any], tuple[HustFile
     if len(files) != 60 or len({item.filename for item in files}) != len(files):
         raise ValueError("the v1 HUST registry must contain exactly 60 unique MAT files")
     return payload, tuple(files)
-
-
-def sha256_file(path: str | Path, *, chunk_size: int = 1024 * 1024) -> str:
-    digest = hashlib.sha256()
-    with Path(path).open("rb") as stream:
-        while chunk := stream.read(chunk_size):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def verify_hust_file(path: str | Path, specification: HustFile) -> None:

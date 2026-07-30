@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "mehran-load-100-to-300-v1",
+  "dataset_id": "mehran-triaxial-bearing-v2",
+  "domain_field": "load_w",
+  "evaluation_group_field": "defect_size_mm",
+  "partitions": {
+    "train": [100],
+    "validation": [200],
+    "test": [300]
+  },
+  "labels": ["inner_race", "outer_race"],
+  "window": {
+    "length": 4096,
+    "stride": 4096,
+    "normalization": "per_window_channel_zscore"
+  },
+  "seeds": [17, 29, 43],
+  "protocol_status": "provisional",
+  "description": "Provisional task: train at 100 W, validate at 200 W, and test at 300 W."
+}

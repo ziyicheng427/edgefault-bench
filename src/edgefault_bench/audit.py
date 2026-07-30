@@ -195,14 +195,17 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """Run the registered adapter for a task and emit its structured audit report."""
 
-    from edgefault_bench.datasets import HustV3Adapter
+    from edgefault_bench.datasets import HustV3Adapter, MehranV2Adapter
     from edgefault_bench.tasks import load_task_spec
 
     args = build_parser().parse_args(argv)
     task = load_task_spec(args.task)
-    if task.dataset_id != "hust-bearing-v3":
+    if task.dataset_id == "hust-bearing-v3":
+        adapter = HustV3Adapter(args.dataset_manifest)
+    elif task.dataset_id == "mehran-triaxial-bearing-v2":
+        adapter = MehranV2Adapter(args.dataset_manifest)
+    else:
         raise ValueError(f"no dataset adapter is registered for {task.dataset_id!r}")
-    adapter = HustV3Adapter(args.dataset_manifest)
     report = audit_recordings(adapter.recordings(), task)
     rendered = json.dumps(report.to_dict(), indent=2, sort_keys=True)
     if args.output:

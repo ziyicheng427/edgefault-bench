@@ -7,6 +7,7 @@
   "api_url": "https://data.mendeley.com/public-api/datasets/fm6xzxnf36",
   "doi": "10.17632/fm6xzxnf36.2",
   "version": 2,
+  "protocol_status": "proposed",
   "published": "2022-01-10T17:15:50.402Z",
   "license": {
     "spdx": "CC-BY-4.0",

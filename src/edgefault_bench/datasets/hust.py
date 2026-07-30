@@ -13,7 +13,7 @@ from numpy.typing import NDArray
 from scipy.io import loadmat
 
 from edgefault_bench.contracts import DatasetMetadata, Recording
-from edgefault_bench.datasets.checksums import sha256_file
+from edgefault_bench.datasets.checksums import verify_registered_file
 
 _FILENAME_PATTERN = re.compile(
     r"^(?P<label>IO|IB|OB|N|I|O|B)(?P<bearing>[4-8])(?P<load>00|02|04)\.mat$"
@@ -137,21 +137,7 @@ def load_hust_manifest(path: str | Path) -> tuple[dict[str, Any], tuple[HustFile
 
 
 def verify_hust_file(path: str | Path, specification: HustFile) -> None:
-    file_path = Path(path)
-    if not file_path.is_file():
-        raise FileNotFoundError(file_path)
-    actual_size = file_path.stat().st_size
-    if actual_size != specification.size_bytes:
-        raise ValueError(
-            f"size mismatch for {specification.filename}: "
-            f"expected {specification.size_bytes}, got {actual_size}"
-        )
-    actual_sha256 = sha256_file(file_path)
-    if actual_sha256 != specification.sha256:
-        raise ValueError(
-            f"SHA-256 mismatch for {specification.filename}: "
-            f"expected {specification.sha256}, got {actual_sha256}"
-        )
+    verify_registered_file(path, specification)
 
 
 def load_hust_signal(path: str | Path) -> tuple[NDArray[np.float64], float]:

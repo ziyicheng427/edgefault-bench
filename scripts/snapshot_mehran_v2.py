@@ -75,6 +75,7 @@ def build_registry(payload: dict[str, Any]) -> dict[str, Any]:
         "api_url": API_URL,
         "doi": payload["doi"]["id"],
         "version": 2,
+        "protocol_status": "proposed",
         "published": payload["publish_date"],
         "license": {
             "spdx": "CC-BY-4.0",

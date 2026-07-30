@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from edgefault_bench.datasets.checksums import verify_registered_file
 from edgefault_bench.datasets.hust import HustFile
 from edgefault_bench.download import download_file, select_files
 
@@ -26,6 +27,14 @@ def test_existing_valid_file_is_not_downloaded(tmp_path: Path) -> None:
     specification = make_specification(payload)
     (tmp_path / specification.filename).write_bytes(payload)
     assert download_file(specification, tmp_path) == "verified"
+
+
+def test_shared_registry_verifier_rejects_checksum_mismatch(tmp_path: Path) -> None:
+    specification = make_specification(b"expected")
+    path = tmp_path / specification.filename
+    path.write_bytes(b"tampered")
+    with pytest.raises(ValueError, match="SHA-256 mismatch"):
+        verify_registered_file(path, specification)
 
 
 def test_existing_invalid_file_fails_closed(tmp_path: Path) -> None:

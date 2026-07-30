@@ -9,11 +9,17 @@ import urllib.request
 from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+from typing import TypeVar
 
-from edgefault_bench.datasets.hust import HustFile, load_hust_manifest, verify_hust_file
+from edgefault_bench.datasets.checksums import RegisteredFile, verify_registered_file
+from edgefault_bench.datasets.hust import load_hust_manifest, verify_hust_file
+
+FileSpecification = TypeVar("FileSpecification", bound=RegisteredFile)
 
 
-def select_files(files: tuple[HustFile, ...], names: Iterable[str] | None) -> tuple[HustFile, ...]:
+def select_files(
+    files: tuple[FileSpecification, ...], names: Iterable[str] | None
+) -> tuple[FileSpecification, ...]:
     if names is None:
         return files
     requested = set(names)
@@ -24,7 +30,9 @@ def select_files(files: tuple[HustFile, ...], names: Iterable[str] | None) -> tu
     return tuple(item for item in files if item.filename in requested)
 
 
-def _download_once(specification: HustFile, destination: Path, *, timeout: float) -> None:
+def _download_once(
+    specification: RegisteredFile, destination: Path, *, timeout: float
+) -> None:
     partial = destination.with_suffix(destination.suffix + ".part")
     existing = partial.stat().st_size if partial.exists() else 0
     headers = {"User-Agent": "EdgeFault-Bench/0.1 (+https://github.com/ziyicheng427/edgefault-bench)"}
@@ -38,12 +46,12 @@ def _download_once(specification: HustFile, destination: Path, *, timeout: float
         with partial.open(mode) as stream:
             while chunk := response.read(1024 * 1024):
                 stream.write(chunk)
-    verify_hust_file(partial, specification)
+    verify_registered_file(partial, specification)
     partial.replace(destination)
 
 
 def download_file(
-    specification: HustFile,
+    specification: RegisteredFile,
     raw_dir: str | Path,
     *,
     repair: bool = False,
@@ -57,7 +65,7 @@ def download_file(
     destination = directory / specification.filename
     if destination.exists():
         try:
-            verify_hust_file(destination, specification)
+            verify_registered_file(destination, specification)
             return "verified"
         except ValueError:
             if not repair:

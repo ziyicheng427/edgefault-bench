@@ -13,7 +13,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from edgefault_bench.contracts import DatasetMetadata, Recording
-from edgefault_bench.datasets.checksums import sha256_file
+from edgefault_bench.datasets.checksums import verify_registered_file
 
 _FILENAME_PATTERN = re.compile(
     r"^(?P<size>0\.7|0\.9|1\.1|1\.3|1\.5|1\.7)"
@@ -58,6 +58,8 @@ def load_mehran_manifest(path: str | Path) -> tuple[dict[str, Any], tuple[Mehran
         raise ValueError("expected the pinned Mehran triaxial bearing v2 registry")
     if payload.get("doi") != "10.17632/fm6xzxnf36.2":
         raise ValueError("unexpected Mehran dataset DOI")
+    if payload.get("protocol_status") != "proposed":
+        raise ValueError("Mehran protocol must remain proposed until Decision 0004 is accepted")
     if payload.get("license", {}).get("spdx") != "CC-BY-4.0":
         raise ValueError("Mehran registry must retain the official CC-BY-4.0 license")
 
@@ -106,21 +108,7 @@ def load_mehran_manifest(path: str | Path) -> tuple[dict[str, Any], tuple[Mehran
 
 
 def verify_mehran_file(path: str | Path, specification: MehranFile) -> None:
-    file_path = Path(path)
-    if not file_path.is_file():
-        raise FileNotFoundError(file_path)
-    actual_size = file_path.stat().st_size
-    if actual_size != specification.size_bytes:
-        raise ValueError(
-            f"size mismatch for {specification.filename}: "
-            f"expected {specification.size_bytes}, got {actual_size}"
-        )
-    actual_sha256 = sha256_file(file_path)
-    if actual_sha256 != specification.sha256:
-        raise ValueError(
-            f"SHA-256 mismatch for {specification.filename}: "
-            f"expected {specification.sha256}, got {actual_sha256}"
-        )
+    verify_registered_file(path, specification)
 
 
 def load_mehran_signal(

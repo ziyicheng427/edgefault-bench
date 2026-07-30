@@ -21,6 +21,7 @@ def test_mehran_registry_retains_complete_selected_grid() -> None:
     payload, files = load_mehran_manifest(ROOT / "registry/mehran_v2.json")
 
     assert payload["license"]["spdx"] == "CC-BY-4.0"
+    assert payload["protocol_status"] == "proposed"
     assert payload["selection"] == {
         "selected_count": 36,
         "excluded_count": 2,

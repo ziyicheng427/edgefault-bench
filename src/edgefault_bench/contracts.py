@@ -216,6 +216,24 @@ class TaskSpec:
                 return name
         return None
 
+    @property
+    def window_length(self) -> int:
+        """Compatibility accessor for v1 task consumers."""
+
+        return self.window.length
+
+    @property
+    def stride(self) -> int:
+        """Compatibility accessor for v1 task consumers."""
+
+        return self.window.stride
+
+    @property
+    def normalization(self) -> str:
+        """Compatibility accessor for v1 task consumers."""
+
+        return self.window.normalization
+
     def to_dict(self) -> dict[str, object]:
         return {
             "task_id": self.task_id,

@@ -1,78 +1,90 @@
-"""Versioned task manifests and deterministic partition assignment."""
+"""Versioned task specifications and deterministic partition assignment."""
 
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from edgefault_bench.contracts import TaskSpec, WindowSpec
 from edgefault_bench.data import SampleIndex, make_condition_split
 from edgefault_bench.datasets.hust import WindowRecord
 
+TaskManifest = TaskSpec
 
-@dataclass(frozen=True)
-class TaskManifest:
-    task_id: str
-    dataset_id: str
-    domain_field: str
-    evaluation_group_field: str
-    partitions: dict[str, tuple[str | int, ...]]
-    labels: tuple[str, ...]
-    window_length: int
-    stride: int
-    normalization: str
-    seeds: tuple[int, ...]
-    description: str
+_FROZEN_HUST_V1_TASKS = {
+    "hust-load-0-to-400-v1",
+    "hust-load-400-to-0-v1",
+    "hust-device-6204-6206-to-6208-v1",
+}
 
 
-def load_task_manifest(path: str | Path) -> TaskManifest:
+def load_task_spec(path: str | Path) -> TaskSpec:
+    """Load a dataset-independent task while enforcing known frozen profiles."""
+
     payload: dict[str, Any] = json.loads(Path(path).read_text(encoding="utf-8"))
-    partitions = {
-        name: tuple(payload["partitions"][name]) for name in ("train", "validation", "test")
-    }
-    manifest = TaskManifest(
+    manifest = TaskSpec(
         task_id=payload["task_id"],
         dataset_id=payload["dataset_id"],
         domain_field=payload["domain_field"],
         evaluation_group_field=payload["evaluation_group_field"],
-        partitions=partitions,
+        partitions={
+            name: tuple(payload["partitions"][name])
+            for name in ("train", "validation", "test")
+        },
         labels=tuple(payload["labels"]),
-        window_length=int(payload["window"]["length"]),
-        stride=int(payload["window"]["stride"]),
-        normalization=payload["window"]["normalization"],
+        window=WindowSpec(
+            length=int(payload["window"]["length"]),
+            stride=int(payload["window"]["stride"]),
+            normalization=payload["window"]["normalization"],
+        ),
         seeds=tuple(int(seed) for seed in payload["seeds"]),
         description=payload["description"],
+        metadata={
+            key: value
+            for key, value in payload.items()
+            if key
+            not in {
+                "task_id",
+                "dataset_id",
+                "domain_field",
+                "evaluation_group_field",
+                "partitions",
+                "labels",
+                "window",
+                "seeds",
+                "description",
+            }
+        },
     )
-    _validate_task_manifest(manifest)
+    _validate_frozen_profile(manifest)
     return manifest
 
 
-def _validate_task_manifest(manifest: TaskManifest) -> None:
+def load_task_manifest(path: str | Path) -> TaskManifest:
+    """Backward-compatible name for :func:`load_task_spec`."""
+
+    return load_task_spec(path)
+
+
+def _validate_frozen_profile(manifest: TaskSpec) -> None:
+    if manifest.task_id not in _FROZEN_HUST_V1_TASKS:
+        return
     if manifest.dataset_id != "hust-bearing-v3":
-        raise ValueError("v1 task manifests must reference the pinned HUST v3 dataset")
+        raise ValueError("frozen HUST v1 tasks must reference the pinned HUST v3 dataset")
     if manifest.domain_field not in {"load_w", "bearing_type"}:
-        raise ValueError(f"unsupported domain field: {manifest.domain_field!r}")
+        raise ValueError(f"unsupported HUST v1 domain field: {manifest.domain_field!r}")
     if manifest.evaluation_group_field not in {"load_w", "bearing_type"}:
-        raise ValueError(f"unsupported evaluation group: {manifest.evaluation_group_field!r}")
-    if manifest.evaluation_group_field == manifest.domain_field:
-        raise ValueError("evaluation group must expose variation inside the held-out domain")
+        raise ValueError(
+            f"unsupported HUST v1 evaluation group: {manifest.evaluation_group_field!r}"
+        )
     if manifest.seeds != (17, 29, 43):
         raise ValueError("v1 benchmark seeds are frozen as 17, 29, and 43")
     if manifest.normalization != "per_window_zscore":
         raise ValueError("v1 HUST tasks require per-window z-score normalization")
-    domains = {name: set(values) for name, values in manifest.partitions.items()}
-    if any(not values for values in domains.values()):
-        raise ValueError("every task partition must contain at least one domain")
-    if domains["train"] & domains["validation"]:
-        raise ValueError("train and validation domains overlap")
-    if domains["train"] & domains["test"]:
-        raise ValueError("train and test domains overlap")
-    if domains["validation"] & domains["test"]:
-        raise ValueError("validation and test domains overlap")
 
 
-def split_window_records(records: tuple[WindowRecord, ...], manifest: TaskManifest):
+def split_window_records(records: tuple[WindowRecord, ...], manifest: TaskSpec):
     """Return a validated split whose recording identifiers cannot cross partitions."""
 
     allowed_labels = set(manifest.labels)

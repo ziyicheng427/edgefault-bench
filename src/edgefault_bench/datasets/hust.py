@@ -13,6 +13,8 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.io import loadmat
 
+from edgefault_bench.contracts import DatasetMetadata, Recording
+
 _FILENAME_PATTERN = re.compile(
     r"^(?P<label>IO|IB|OB|N|I|O|B)(?P<bearing>[4-8])(?P<load>00|02|04)\.mat$"
 )
@@ -47,6 +49,43 @@ class WindowRecord:
         if field == "bearing_type":
             return self.bearing_type
         raise ValueError(f"unsupported HUST domain field: {field!r}")
+
+
+class HustV3Adapter:
+    """Expose the pinned HUST v3 registry through the generic dataset contract."""
+
+    def __init__(self, manifest_path: str | Path) -> None:
+        payload, files = load_hust_manifest(manifest_path)
+        self._files = files
+        self._metadata = DatasetMetadata(
+            dataset_id=payload["dataset_id"],
+            version=str(payload["version"]),
+            title=payload["title"],
+            license_spdx=payload["license"]["spdx"],
+            source_url=payload["landing_page"],
+            domain_fields=("bearing_type", "load_w"),
+            doi=payload["doi"],
+        )
+        self._sample_rate_hz = float(payload["sampling_rate_hz"])
+
+    @property
+    def metadata(self) -> DatasetMetadata:
+        return self._metadata
+
+    def recordings(self) -> tuple[Recording, ...]:
+        return tuple(
+            Recording(
+                dataset_id=self.metadata.dataset_id,
+                recording_id=item.filename,
+                source_file=item.filename,
+                label=item.label,
+                domains={"bearing_type": item.bearing_type, "load_w": item.load_w},
+                sample_rate_hz=self._sample_rate_hz,
+                sample_count=512_000,
+                sha256=item.sha256,
+            )
+            for item in self._files
+        )
 
 
 def parse_hust_filename(filename: str) -> tuple[str, str, int]:

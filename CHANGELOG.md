@@ -11,6 +11,8 @@ versioning after the first tagged release.
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,
   an audit CLI, and contributor documentation for future dataset integrations.
+- Published a source, license, domain, and auditability review proposing the CC BY 4.0 Mehran
+  triaxial bearing v2 dataset as the second independent integration.
 
 ## 1.0.0 - 2026-07-28
 

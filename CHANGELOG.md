@@ -9,6 +9,8 @@ versioning after the first tagged release.
 
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
+- Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,
+  an audit CLI, and contributor documentation for future dataset integrations.
 
 ## 1.0.0 - 2026-07-28
 

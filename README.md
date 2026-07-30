@@ -91,6 +91,18 @@ Rebuild the committed core, robustness, and hardware Markdown tables from raw JS
 uv run edgefault-summarize
 ```
 
+Audit a task's canonical recording metadata before window extraction or training:
+
+```bash
+uv run edgefault-audit-task \
+  --task registry/tasks/hust_load_0_to_400_v1.json \
+  --dataset-manifest registry/hust_v3.json
+```
+
+The command emits a machine-readable leakage report and fails closed when recordings are
+unassigned, duplicated, or shared across partitions. Dataset contributors should follow the
+[`Dataset Adapter Guide`](docs/dataset-adapters.md).
+
 Run the clean-checkout audit, or launch the long-form full-data reproduction into an ignored
 output directory:
 

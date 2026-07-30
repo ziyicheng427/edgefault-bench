@@ -40,10 +40,10 @@
 ## Milestone 5 — Extensible benchmark kernel
 
 - [x] Ratify the dataset, task, leakage-audit, and artifact-boundary architecture.
-- [ ] Add dataset-agnostic recording and adapter interfaces.
-- [ ] Add a serializable leakage audit without changing frozen v1 results.
-- [ ] Adapt HUST metadata and tasks through the generic interfaces.
-- [ ] Publish contributor documentation for adding a dataset adapter.
+- [x] Add dataset-agnostic recording and adapter interfaces.
+- [x] Add a serializable leakage audit without changing frozen v1 results.
+- [x] Adapt HUST metadata and tasks through the generic interfaces.
+- [x] Publish contributor documentation for adding a dataset adapter.
 - [ ] Select a second public dataset only after license and source verification.
 
 ## Milestone 6 — Research-software maturity

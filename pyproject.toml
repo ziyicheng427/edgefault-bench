@@ -35,6 +35,7 @@ edgefault-export-demo = "edgefault_bench.demo:export_main"
 edgefault-infer = "edgefault_bench.demo:infer_main"
 edgefault-verify-demo = "edgefault_bench.demo:verify_main"
 edgefault-summarize = "edgefault_bench.reporting:main"
+edgefault-audit-task = "edgefault_bench.audit:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/edgefault_bench"]

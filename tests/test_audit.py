@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from edgefault_bench.audit import audit_recordings
+from edgefault_bench.audit import audit_recordings, main
 from edgefault_bench.contracts import DatasetAdapter, Recording, TaskSpec
 from edgefault_bench.datasets import HustV3Adapter
 from edgefault_bench.tasks import load_task_spec
@@ -85,3 +85,25 @@ def test_generic_task_loader_does_not_apply_hust_seed_freeze(tmp_path: Path) -> 
 
     assert isinstance(task, TaskSpec)
     assert task.seeds == (1, 2, 3, 4, 5)
+
+
+def test_audit_cli_writes_machine_readable_report(tmp_path: Path, capsys) -> None:
+    output = tmp_path / "audit.json"
+    exit_code = main(
+        [
+            "--task",
+            str(ROOT / "registry/tasks/hust_load_0_to_400_v1.json"),
+            "--dataset-manifest",
+            str(ROOT / "registry/hust_v3.json"),
+            "--output",
+            str(output),
+        ]
+    )
+
+    assert exit_code == 0
+    assert json.loads(output.read_text(encoding="utf-8"))["passed"] is True
+    assert json.loads(capsys.readouterr().out)["partition_counts"] == {
+        "test": 20,
+        "train": 20,
+        "validation": 20,
+    }

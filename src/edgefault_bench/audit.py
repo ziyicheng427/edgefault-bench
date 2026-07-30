@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import argparse
+import json
 from collections import Counter
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from pathlib import Path
 from types import MappingProxyType
 
 from edgefault_bench.contracts import Recording, TaskSpec
@@ -177,3 +180,38 @@ def audit_recordings(records: Sequence[Recording], task: TaskSpec) -> LeakageRep
         partition_counts={name: partition_counts[name] for name in ("train", "validation", "test")},
         checks=checks,
     )
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Audit canonical recording metadata before window extraction or training."
+    )
+    parser.add_argument("--task", required=True, help="Versioned task JSON")
+    parser.add_argument("--dataset-manifest", required=True, help="Pinned dataset registry JSON")
+    parser.add_argument("--output", help="Optional path for the JSON audit report")
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Run the registered adapter for a task and emit its structured audit report."""
+
+    from edgefault_bench.datasets import HustV3Adapter
+    from edgefault_bench.tasks import load_task_spec
+
+    args = build_parser().parse_args(argv)
+    task = load_task_spec(args.task)
+    if task.dataset_id != "hust-bearing-v3":
+        raise ValueError(f"no dataset adapter is registered for {task.dataset_id!r}")
+    adapter = HustV3Adapter(args.dataset_manifest)
+    report = audit_recordings(adapter.recordings(), task)
+    rendered = json.dumps(report.to_dict(), indent=2, sort_keys=True)
+    if args.output:
+        output_path = Path(args.output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(rendered + "\n", encoding="utf-8")
+    print(rendered)
+    return 0 if report.passed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

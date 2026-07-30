@@ -44,7 +44,7 @@
 - [x] Add a serializable leakage audit without changing frozen v1 results.
 - [x] Adapt HUST metadata and tasks through the generic interfaces.
 - [x] Publish contributor documentation for adding a dataset adapter.
-- [ ] Select a second public dataset only after license and source verification.
+- [x] Select a second public dataset only after license and source verification.
 
 ## Milestone 6 — Research-software maturity
 

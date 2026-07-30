@@ -1,10 +1,11 @@
 # Decision 0004: Mehran v2 as the Second Dataset
 
-- Status: Proposed
+- Status: Accepted
 - Proposed: 2026-07-30
+- Accepted: 2026-07-30
 - Scope: EdgeFault-Bench v1.1 second-dataset integration
 
-## Proposed decision
+## Decision
 
 Integrate version 2 of the *Triaxial Bearing Vibration Dataset of Induction Motor under Varying
 Load Conditions*, DOI `10.17632/fm6xzxnf36.2`, as the second independent EdgeFault-Bench data
@@ -33,16 +34,17 @@ as though the sensors, labels, sampling process, and fault construction were ide
 - Paderborn provides rich operating conditions but its CC BY-NC license limits broad reuse.
 - Ferrara is CC BY 4.0 but has only outer-race faults and bundles signals in a RAR archive.
 
-## Required validation before acceptance
+## Completed validation
 
-- Snapshot and validate all 38 v2 API file entries, retaining the reason for selecting 36.
-- Download at least one file from every fault location and verify size and SHA-256.
-- Validate CSV columns, finite samples, channel count, and minimum usable recording length.
-- Demonstrate that every selected recording maps exactly once to both proposed tasks.
-- Confirm that the HUST v1 tasks, tests, and result tables remain unchanged.
+- [x] Snapshot and validate all 38 v2 API file entries, retaining the reason for selecting 36.
+- [x] Download at least one file from every fault location and verify size and SHA-256.
+- [x] Validate CSV columns, finite samples, channel count, and minimum usable recording length.
+- [x] Demonstrate that every selected recording maps exactly once to both proposed tasks.
+- [x] Confirm that the HUST v1 tasks, tests, and result tables remain unchanged.
 
 ## Ratification
 
-This decision remains proposed until the maintainer explicitly accepts or modifies the dataset,
-exclusion, labels, and task directions. Implementation work before ratification is provisional
-and must not be represented as a frozen benchmark protocol.
+Ziyi Cheng explicitly confirmed this decision on 2026-07-30 after reviewing the proposed
+dataset, exclusion of the two load-unassigned healthy recordings, `inner_race`/`outer_race`
+labels, and forward/reverse task directions. This records a maintainer decision; it does not
+constitute external scientific review or validate future model results.

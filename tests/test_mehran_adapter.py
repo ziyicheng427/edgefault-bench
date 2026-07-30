@@ -21,7 +21,7 @@ def test_mehran_registry_retains_complete_selected_grid() -> None:
     payload, files = load_mehran_manifest(ROOT / "registry/mehran_v2.json")
 
     assert payload["license"]["spdx"] == "CC-BY-4.0"
-    assert payload["protocol_status"] == "proposed"
+    assert payload["protocol_status"] == "accepted"
     assert payload["selection"] == {
         "selected_count": 36,
         "excluded_count": 2,
@@ -51,13 +51,13 @@ def test_mehran_filename_parser_handles_source_suffixes() -> None:
     "task_name",
     ["mehran_load_100_to_300_v1.json", "mehran_load_300_to_100_v1.json"],
 )
-def test_provisional_tasks_pass_generic_recording_audit(task_name: str) -> None:
+def test_frozen_tasks_pass_generic_recording_audit(task_name: str) -> None:
     adapter = MehranV2Adapter(ROOT / "registry/mehran_v2.json")
     task = load_task_spec(ROOT / "registry/tasks" / task_name)
     report = audit_recordings(adapter.recordings(), task)
 
     assert isinstance(adapter, DatasetAdapter)
-    assert task.metadata["protocol_status"] == "provisional"
+    assert task.metadata["protocol_status"] == "frozen"
     assert report.passed
     assert report.partition_counts == {"train": 12, "validation": 12, "test": 12}
 

@@ -16,6 +16,6 @@
     "normalization": "per_window_channel_zscore"
   },
   "seeds": [17, 29, 43],
-  "protocol_status": "provisional",
-  "description": "Provisional task: train at 300 W, validate at 200 W, and test at 100 W."
+  "protocol_status": "frozen",
+  "description": "Train at 300 W, validate at 200 W, and test at unseen 100 W."
 }

@@ -1,4 +1,4 @@
-"""Checksum-enforced download command for the proposed Mehran v2 selection."""
+"""Checksum-enforced download command for the accepted Mehran v2 selection."""
 
 from __future__ import annotations
 

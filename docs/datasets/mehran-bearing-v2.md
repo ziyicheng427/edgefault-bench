@@ -2,8 +2,9 @@
 
 ## Status
 
-This adapter and its two task manifests are **provisional**. Decision 0004 must be accepted
-before the protocol is frozen or any resulting score is presented as a benchmark result.
+Decision 0004 was accepted by the maintainer on 2026-07-30. The selected recordings, labels,
+partitions, window settings, and seeds in the two v1 task manifests are frozen. Acceptance of
+the protocol does not validate a future model score or scientific claim.
 
 ## Source and rights
 
@@ -25,19 +26,19 @@ file IDs, byte sizes, SHA-256 digests, and stable download URLs. The snapshot to
 159,324,234 bytes. It can be independently regenerated from the official public API with
 `scripts/snapshot_mehran_v2.py`.
 
-The proposed benchmark selection contains 36 recordings in a complete factorial grid:
+The frozen benchmark selection contains 36 recordings in a complete factorial grid:
 
 - fault location: inner race or outer race;
 - defect size: 0.7, 0.9, 1.1, 1.3, 1.5, or 1.7 mm;
 - motor load: 100, 200, or 300 W;
 - channels: X, Y, and Z acceleration at the source-reported 10 kHz rate.
 
-The two healthy recordings are retained in the registry but excluded from the proposed tasks.
+The two healthy recordings are retained in the registry but excluded from the frozen tasks.
 Their names distinguish pulley state, not a 100/200/300 W load, so assigning them to a load
 would create unsupported metadata. This initial task therefore diagnoses fault location among
 faulted recordings; it is not a healthy-versus-fault detector.
 
-## Proposed tasks
+## Frozen tasks
 
 | Manifest | Train | Validation | Test | Labels |
 |---|---:|---:|---:|---|

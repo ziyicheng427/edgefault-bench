@@ -1,4 +1,4 @@
-"""Adapter for the proposed CC BY 4.0 Mehran triaxial bearing dataset, version 2."""
+"""Adapter for the accepted CC BY 4.0 Mehran triaxial bearing dataset, version 2."""
 
 from __future__ import annotations
 
@@ -51,15 +51,15 @@ def parse_mehran_filename(filename: str) -> tuple[str, float, int]:
 
 
 def load_mehran_manifest(path: str | Path) -> tuple[dict[str, Any], tuple[MehranFile, ...]]:
-    """Load and validate the proposed immutable Mehran v2 registry snapshot."""
+    """Load and validate the accepted immutable Mehran v2 registry snapshot."""
 
     payload: dict[str, Any] = json.loads(Path(path).read_text(encoding="utf-8"))
     if payload.get("dataset_id") != "mehran-triaxial-bearing-v2" or payload.get("version") != 2:
         raise ValueError("expected the pinned Mehran triaxial bearing v2 registry")
     if payload.get("doi") != "10.17632/fm6xzxnf36.2":
         raise ValueError("unexpected Mehran dataset DOI")
-    if payload.get("protocol_status") != "proposed":
-        raise ValueError("Mehran protocol must remain proposed until Decision 0004 is accepted")
+    if payload.get("protocol_status") != "accepted":
+        raise ValueError("Mehran registry must retain the Decision 0004 acceptance status")
     if payload.get("license", {}).get("spdx") != "CC-BY-4.0":
         raise ValueError("Mehran registry must retain the official CC-BY-4.0 license")
 

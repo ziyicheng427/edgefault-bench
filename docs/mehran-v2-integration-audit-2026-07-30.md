@@ -59,7 +59,12 @@ successfully for the adapter, download, and data-card stages respectively.
 
 ## Acceptance boundary
 
-All mechanical validation items in proposed Decision 0004 are now evidenced. The decision
-remains **Proposed** because the maintainer has not yet ratified the dataset, healthy-file
-exclusion, two labels, or task directions. Benchmark training and frozen-result claims must
-wait for that explicit decision.
+At the time this mechanical audit finished, all validation items in proposed Decision 0004
+were evidenced but maintainer ratification had not yet occurred. Benchmark training and
+frozen-result claims therefore remained out of scope until the subsequent decision below.
+
+## Maintainer ratification
+
+After this mechanical audit, Ziyi Cheng accepted Decision 0004 on 2026-07-30. The registry is
+now marked accepted and both v1 task manifests are frozen. This post-audit ratification does
+not retroactively turn the audit into model-performance evidence.

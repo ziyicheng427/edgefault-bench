@@ -16,6 +16,8 @@ versioning after the first tagged release.
 - Added a complete 38-file Mehran v2 registry snapshot, provisional 36-recording adapter and
   cross-load tasks, shared checksum-enforced downloads, and inner/outer source validation.
 - Passed a clean-checkout 56-test integration audit while retaining Decision 0004 as proposed.
+- Accepted Decision 0004 and froze the Mehran v2 selection, labels, cross-load partitions,
+  window settings, and seeds before benchmark training.
 
 ## 1.0.0 - 2026-07-28
 

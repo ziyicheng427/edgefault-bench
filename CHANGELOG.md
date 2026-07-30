@@ -15,6 +15,7 @@ versioning after the first tagged release.
   triaxial bearing v2 dataset as the second independent integration.
 - Added a complete 38-file Mehran v2 registry snapshot, provisional 36-recording adapter and
   cross-load tasks, shared checksum-enforced downloads, and inner/outer source validation.
+- Passed a clean-checkout 56-test integration audit while retaining Decision 0004 as proposed.
 
 ## 1.0.0 - 2026-07-28
 

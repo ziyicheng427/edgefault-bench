@@ -5,7 +5,10 @@ versioning after the first tagged release.
 
 ## Unreleased
 
-No changes yet.
+### Added
+
+- Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
+  frozen v1.0 evidence chain.
 
 ## 1.0.0 - 2026-07-28
 

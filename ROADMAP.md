@@ -36,3 +36,20 @@
 - [x] Define a stable inference interface for time-series sensor windows.
 - [x] Build a clearly labelled CPU edge-inference demonstration with a trained model asset.
 - [x] Report demonstration constraints separately from benchmark conclusions.
+
+## Milestone 5 — Extensible benchmark kernel
+
+- [x] Ratify the dataset, task, leakage-audit, and artifact-boundary architecture.
+- [ ] Add dataset-agnostic recording and adapter interfaces.
+- [ ] Add a serializable leakage audit without changing frozen v1 results.
+- [ ] Adapt HUST metadata and tasks through the generic interfaces.
+- [ ] Publish contributor documentation for adding a dataset adapter.
+- [ ] Select a second public dataset only after license and source verification.
+
+## Milestone 6 — Research-software maturity
+
+- [ ] Publish installable package releases through a standard Python package index.
+- [ ] Add a documentation site, API reference, and end-to-end tutorials.
+- [ ] Add at least one additional inference backend and hardware class.
+- [ ] Demonstrate sustained public development and genuine research use over time.
+- [ ] Prepare the JOSS Markdown paper and archive the reviewed release with a DOI.

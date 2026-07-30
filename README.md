@@ -50,6 +50,11 @@ The primary v1 data source is the CC BY 4.0 HUST bearing dataset. EdgeFault-Benc
 source files and three condition-held-out tasks without redistributing the recordings. See
 the [`HUST v3 data card`](docs/datasets/hust-bearing-v3.md).
 
+The v1.1 development branch also contains a **provisional** second adapter for the CC BY 4.0
+Mehran triaxial bearing v2 dataset. Its 36-file cross-load selection and two task manifests
+remain subject to maintainer ratification under Decision 0004; they are not frozen benchmark
+results. See the [`Mehran v2 data card`](docs/datasets/mehran-bearing-v2.md).
+
 Development is AI-assisted and governed by explicit provenance and research-integrity rules.
 See [`docs/research-integrity.md`](docs/research-integrity.md) and
 [`CONTRIBUTING.md`](CONTRIBUTING.md).
@@ -72,7 +77,16 @@ uv run edgefault-download-hust --files N400.mat
 uv run edgefault-download-hust --verify-only --files N400.mat
 ```
 
-The full selected subset is approximately 414 MB. Every source file is accepted only after
+Exercise the proposed Mehran adapter with one registered CSV:
+
+```bash
+uv run edgefault-download-mehran --files 0.7outer-100watt-lB5LIS.csv
+uv run edgefault-audit-task \
+  --task registry/tasks/mehran_load_100_to_300_v1.json \
+  --dataset-manifest registry/mehran_v2.json
+```
+
+The full HUST subset is approximately 414 MB. Every source file is accepted only after
 its byte size and SHA-256 match the committed registry. Downloads use four workers by
 default; `--workers 1` provides a serial fallback.
 

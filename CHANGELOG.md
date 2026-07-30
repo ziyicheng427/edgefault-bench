@@ -13,6 +13,8 @@ versioning after the first tagged release.
   an audit CLI, and contributor documentation for future dataset integrations.
 - Published a source, license, domain, and auditability review proposing the CC BY 4.0 Mehran
   triaxial bearing v2 dataset as the second independent integration.
+- Added a complete 38-file Mehran v2 registry snapshot, provisional 36-recording adapter and
+  cross-load tasks, shared checksum-enforced downloads, and inner/outer source validation.
 
 ## 1.0.0 - 2026-07-28
 

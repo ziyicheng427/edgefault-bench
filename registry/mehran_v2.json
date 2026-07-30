@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "dataset_id": "mehran-triaxial-bearing-v2",
+  "title": "Triaxial Bearing Vibration Dataset of Induction Motor under Varying Load Conditions",
+  "repository": "Mendeley Data",
+  "landing_page": "https://data.mendeley.com/datasets/fm6xzxnf36/2",
+  "api_url": "https://data.mendeley.com/public-api/datasets/fm6xzxnf36",
+  "doi": "10.17632/fm6xzxnf36.2",
+  "version": 2,
+  "published": "2022-01-10T17:15:50.402Z",
+  "license": {
+    "spdx": "CC-BY-4.0",
+    "name": "CC BY 4.0",
+    "url": "http://creativecommons.org/licenses/by/4.0"
+  },
+  "sampling_rate_hz": 10000,
+  "channels": [
+    "x",
+    "y",
+    "z"
+  ],
+  "selection": {
+    "selected_count": 36,
+    "excluded_count": 2,
+    "reason": "Select the complete inner/outer, six-defect-size, three-load grid; exclude healthy files whose source metadata do not assign a load."
+  },
+  "files": [
+    {
+      "filename": "0.7inner-100watt-67V2Iv.csv",
+      "id": "ee70cdfd-c664-4c28-a1a3-360c29f258e2",
+      "size_bytes": 4520076,
+      "sha256": "3b1f1ebd2499cd75a4443455afcc4101bd64136b02ea7c1ba3caed3c86780724",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/ee70cdfd-c664-4c28-a1a3-360c29f258e2/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.7inner-200watt-jolm8U.csv",
+      "id": "54aadca5-575d-4189-bce9-25101c4cb3b1",
+      "size_bytes": 3965081,
+      "sha256": "42ee4b84d3c6da73f7d6fafddb763baf23a8a4d5e339f7bbd8329c510c0fe9d1",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/54aadca5-575d-4189-bce9-25101c4cb3b1/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.7inner-300watt-Zo8w7U.csv",
+      "id": "24273672-3cd7-4a2f-b90a-758a0aaa36c8",
+      "size_bytes": 3588368,
+      "sha256": "c34fe2546040776e3434659a577179ff8baa42ef6f1fbdac2fa789ddcbf27db3",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/24273672-3cd7-4a2f-b90a-758a0aaa36c8/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.7outer-100watt-lB5LIS.csv",
+      "id": "0ed998de-b9d9-422b-b2e4-2b3d8a617930",
+      "size_bytes": 4125202,
+      "sha256": "782dcac141a504b10c39e2fe4a236f92930d8a8a99264f344a541cd4cd7f2487",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/0ed998de-b9d9-422b-b2e4-2b3d8a617930/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.7outer-200watt-0Pp0qm.csv",
+      "id": "6b3522a4-7e81-473a-94da-70f461366a73",
+      "size_bytes": 4128685,
+      "sha256": "b6681ef3c102af88197520af5ad69497afa5782bf05b6b82fafb1f162b80259f",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/6b3522a4-7e81-473a-94da-70f461366a73/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.7outer-300watt-PzsIeS.csv",
+      "id": "60bb2f00-3674-4bd5-a034-980f3e11296b",
+      "size_bytes": 2092319,
+      "sha256": "0aca794580648b30be829171eb5e4b1b4f50c5d9d156d742db92b74418760ba5",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/60bb2f00-3674-4bd5-a034-980f3e11296b/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9inner-100watt.csv",
+      "id": "9eeb69d3-f8f3-4009-b818-54cb85fbdd60",
+      "size_bytes": 4835760,
+      "sha256": "3c683997ab165237b552c8c6c81e5513a13bbacaecef6d9da5199730643eb93b",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/9eeb69d3-f8f3-4009-b818-54cb85fbdd60/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9inner-200watt.csv",
+      "id": "1bf27264-771f-402b-bde6-6aea8fc8acc2",
+      "size_bytes": 4347169,
+      "sha256": "b9dbaac7d11b288701f23d9b864f843e2b7eb98004fcc1aa001b1307d296261e",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/1bf27264-771f-402b-bde6-6aea8fc8acc2/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9inner-300watt.csv",
+      "id": "9320df78-12e3-4e90-8326-b5318f3e3489",
+      "size_bytes": 4191982,
+      "sha256": "4a2d045353620aefc1dccca408b73c552663051480a2d308a6bbf5581bd4ff92",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/9320df78-12e3-4e90-8326-b5318f3e3489/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9outer-100watt.csv",
+      "id": "984ff782-a757-4607-83e1-559691c760fc",
+      "size_bytes": 4435383,
+      "sha256": "8d6ab75c6ab875fb42e5c8d8dae15b6fc4588fbcc18b4207e33c2c0f5e943843",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/984ff782-a757-4607-83e1-559691c760fc/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9outer-200watt.csv",
+      "id": "9df23b0a-856d-46db-970c-e6cefe6f95ff",
+      "size_bytes": 4446197,
+      "sha256": "896954f44a96d7709cfb26e0e8477df8a05ce4b8f7e43d33da182ac3dce757e5",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/9df23b0a-856d-46db-970c-e6cefe6f95ff/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "0.9outer-300watt.csv",
+      "id": "f6dedc60-1c7c-41bf-b584-d4346be9c403",
+      "size_bytes": 3871320,
+      "sha256": "120f4b349f191a837a7ad29e830a604a5c7cef88440e40fc927024b90a013dd3",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/f6dedc60-1c7c-41bf-b584-d4346be9c403/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1inner-100watt.csv",
+      "id": "40748c93-fb96-4ba7-bbd4-e187484b3488",
+      "size_bytes": 4308508,
+      "sha256": "20031b17785d8a1747caca9858d70fd4878ff1b12870ccce98ab599fa2c868a3",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/40748c93-fb96-4ba7-bbd4-e187484b3488/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1inner-200watt.csv",
+      "id": "f5dde4a5-9e22-499f-8606-fe9aa436e141",
+      "size_bytes": 4342791,
+      "sha256": "f11663c3292e6da7af0e1c57c5f6c083e8fa7fe78130024b30e9f72f868da255",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/f5dde4a5-9e22-499f-8606-fe9aa436e141/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1inner-300watt.csv",
+      "id": "554c6127-c17c-40f6-b390-906bbc3db8aa",
+      "size_bytes": 4647943,
+      "sha256": "0ff7bcbc6eed1326cbc9c18953914bbdb2942c6bf34f351f521724048b23dd84",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/554c6127-c17c-40f6-b390-906bbc3db8aa/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1outer-100watt.csv",
+      "id": "4bad6867-1991-47c9-99d2-018369c75ecd",
+      "size_bytes": 4299102,
+      "sha256": "476bba2ba5560dfba799a9d6288b954b6e66303e937f3a52e167d6c1a92df3e8",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/4bad6867-1991-47c9-99d2-018369c75ecd/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1outer-200watt.csv",
+      "id": "e6815c6e-91bd-4534-891c-5d740f42b104",
+      "size_bytes": 4798393,
+      "sha256": "ed96bbfb78b1eab76be4e14c7393a7bc2762cf13902bea1ea329fbe8b3bea2d4",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/e6815c6e-91bd-4534-891c-5d740f42b104/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.1outer-300watt.csv",
+      "id": "53c90cd1-f93c-4ca0-92e6-e60926d6d50c",
+      "size_bytes": 4406367,
+      "sha256": "8396de2057f39f5f4a22d9b29d5da87d2b4c5a476c115031e979ff08f0013ed7",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/53c90cd1-f93c-4ca0-92e6-e60926d6d50c/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3inner-100watt.csv",
+      "id": "6e8dfeea-1f62-489b-a4e3-ec7ade8179ff",
+      "size_bytes": 4540613,
+      "sha256": "937f1e83ec3aeaaa991374591494bf2ae4df5a3031e77dd25786f589ed540902",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/6e8dfeea-1f62-489b-a4e3-ec7ade8179ff/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3inner-200watt.csv",
+      "id": "32bee783-81ac-4191-ad6b-cc233a8782c9",
+      "size_bytes": 4225040,
+      "sha256": "5740f505708df63bed59f937ac8643578d8cc7359accaabf6b6fd0aa3fb5453d",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/32bee783-81ac-4191-ad6b-cc233a8782c9/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3inner-300watt.csv",
+      "id": "4171c340-f6ac-4b50-83b7-eb90ba7b971e",
+      "size_bytes": 4054292,
+      "sha256": "531bda931859cc571c7f543190667114c8d38edc2e9011d17cc2a5d8f34c9a85",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/4171c340-f6ac-4b50-83b7-eb90ba7b971e/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3outer-100watt.csv",
+      "id": "79110054-3cfc-4767-84de-4d1a25eb4328",
+      "size_bytes": 4200627,
+      "sha256": "924ffe3901fee5f84049540b880a1e803c868f8a33a914c8d8779291eb1c0bec",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/79110054-3cfc-4767-84de-4d1a25eb4328/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3outer-200watt.csv",
+      "id": "e639316c-4854-48be-8fc3-fdea56b356a3",
+      "size_bytes": 4413675,
+      "sha256": "a7e76092a4a1f3e3304a1c1f8bfb354a5fc7038b9063d50dd32c975670106147",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/e639316c-4854-48be-8fc3-fdea56b356a3/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.3outer-300watt.csv",
+      "id": "92388c2a-0216-4b81-8c07-1f1ce487b11f",
+      "size_bytes": 4044226,
+      "sha256": "8bae96124c57c3cbbb7dcc909385c5c003f37a100eb9724a709640e3f54963e7",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/92388c2a-0216-4b81-8c07-1f1ce487b11f/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5inner-100watt.csv",
+      "id": "642e3827-26aa-4f81-bb23-b849d4067c5b",
+      "size_bytes": 4161491,
+      "sha256": "c4429e6d0b6ee7b3009ef11222030a052d8190dc9c9fdc3861a434383e60374a",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/642e3827-26aa-4f81-bb23-b849d4067c5b/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5inner-200watt.csv",
+      "id": "d9180616-db42-4ffe-84e6-9d653f559e63",
+      "size_bytes": 4621404,
+      "sha256": "dafbaef3bff196e39a548ba2d762247799ae2215f2f5d862d43103540d59c557",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/d9180616-db42-4ffe-84e6-9d653f559e63/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5inner-300watt.csv",
+      "id": "5f3843a1-dd73-4a54-bcd9-bd8fb1502dfd",
+      "size_bytes": 4244581,
+      "sha256": "eaeb55df426e20a440d4dc1d8f36429668c6367c8f0b126b9d290bd349618812",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/5f3843a1-dd73-4a54-bcd9-bd8fb1502dfd/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5outer-100watt.csv",
+      "id": "c342a18c-9351-477c-9bf0-798bde281734",
+      "size_bytes": 4176762,
+      "sha256": "fd852ef55d73d1a70c711e5e2de8c950753ea3d2c93bc02a7133b46b3e259d37",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/c342a18c-9351-477c-9bf0-798bde281734/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5outer-200watt.csv",
+      "id": "5cd3f6c3-4477-4cca-965a-977d36c034fa",
+      "size_bytes": 3976832,
+      "sha256": "876c69f1b613ed6d0d3d9274f695eb06cd49206935603b2147d7a0a6cb4569d0",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/5cd3f6c3-4477-4cca-965a-977d36c034fa/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.5outer-300watt.csv",
+      "id": "a56e1099-d21c-4156-9e84-35647ac3526f",
+      "size_bytes": 4279247,
+      "sha256": "be039880c519dd29a1a74f0c4040634d250945846931cf79b1e9051cb16091b4",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/a56e1099-d21c-4156-9e84-35647ac3526f/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7inner-100watt.csv",
+      "id": "8ad3c94d-8eab-4b3c-af44-acd765a035ee",
+      "size_bytes": 4386776,
+      "sha256": "84d1609a47d1420a8f1f7883e9be0cd517cd76418107cd033c38f61b8dcd554b",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/8ad3c94d-8eab-4b3c-af44-acd765a035ee/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7inner-200watt.csv",
+      "id": "ae0aa4aa-5911-404f-b453-17c9fb4f4133",
+      "size_bytes": 4369257,
+      "sha256": "79770d7c685c92d87455804aebfd6da5a0f4aa51d8de4adbb0b8749fd0c96b64",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/ae0aa4aa-5911-404f-b453-17c9fb4f4133/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7inner-300watt.csv",
+      "id": "bb1e9b75-18cf-490b-8af9-36148c6a4cbc",
+      "size_bytes": 4085053,
+      "sha256": "cba642a6b7c1fedbc8474a2ad860be743616481701affad4a06910a1a9525503",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/bb1e9b75-18cf-490b-8af9-36148c6a4cbc/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7outer-100watt.csv",
+      "id": "ebb21b9b-f19e-42d4-8d21-9a685986e99d",
+      "size_bytes": 4312365,
+      "sha256": "c4b765900a9260c5982dcba63dcd8e8c11bd7969bd5d4700a9be8df14bc20032",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/ebb21b9b-f19e-42d4-8d21-9a685986e99d/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7outer-200watt.csv",
+      "id": "87dac3d0-8fd8-4ef4-81dd-64cce0543c03",
+      "size_bytes": 4144996,
+      "sha256": "0f7676cecd35edd6aef241906c96e01b0d779aa256bce2cd76676c14a7293b68",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/87dac3d0-8fd8-4ef4-81dd-64cce0543c03/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "1.7outer-300watt.csv",
+      "id": "15063e0d-40a3-4fdd-9aff-6c6e60c8ebf7",
+      "size_bytes": 4336286,
+      "sha256": "d8032ad47a16c16ec8985b0be80e1bc80ac217437fedab4742b59e18726edce3",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/15063e0d-40a3-4fdd-9aff-6c6e60c8ebf7/file_downloaded",
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "filename": "Healthy with pulley.csv",
+      "id": "4e00e1e1-bee0-41de-890a-5146df787310",
+      "size_bytes": 3777235,
+      "sha256": "8cdf4c889491c260925470d41f60293c72a31747864cab5671952e182e8822e8",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/4e00e1e1-bee0-41de-890a-5146df787310/file_downloaded",
+      "selected": false,
+      "exclusion_reason": "healthy recording has no stated 100/200/300 W load assignment"
+    },
+    {
+      "filename": "healthy without pulley.csv",
+      "id": "2d7c13d1-a958-4bed-b7d4-361683bb621b",
+      "size_bytes": 3622830,
+      "sha256": "6439ad8a24ccae5465ee2b343b928437dcd2627abaceecada0a149ee4cdfb3f4",
+      "download_url": "https://data.mendeley.com/public-files/datasets/fm6xzxnf36/files/2d7c13d1-a958-4bed-b7d4-361683bb621b/file_downloaded",
+      "selected": false,
+      "exclusion_reason": "healthy recording has no stated 100/200/300 W load assignment"
+    }
+  ]
+}

@@ -27,6 +27,8 @@ versioning after the first tagged release.
 - Completed both three-seed standard-CNN controls: aggregate Macro-F1 improved over the
   compact model, while worst-defect-size reliability remained weak at roughly 13.8× the
   trainable parameter count.
+- Completed both compact-CORAL tasks and the full Mehran 2-task × 4-model matrix; CORAL did not
+  materially improve aggregate or worst-defect-size results over the compact architecture.
 
 ## 1.0.0 - 2026-07-28
 

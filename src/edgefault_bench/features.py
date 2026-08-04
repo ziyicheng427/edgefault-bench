@@ -20,6 +20,18 @@ FEATURE_NAMES = (
 )
 
 
+def multichannel_feature_names(channel_names: tuple[str, ...]) -> tuple[str, ...]:
+    """Return stable channel-qualified names for concatenated signal features."""
+
+    if not channel_names or len(set(channel_names)) != len(channel_names):
+        raise ValueError("channel_names must contain unique names")
+    return tuple(
+        f"{channel}_{feature}"
+        for channel in channel_names
+        for feature in FEATURE_NAMES
+    )
+
+
 def extract_features(windows: ArrayLike, *, sampling_rate: float) -> NDArray[np.float64]:
     """Extract time- and frequency-domain features from ``(samples, time)`` windows."""
 
@@ -67,3 +79,18 @@ def extract_features(windows: ArrayLike, *, sampling_rate: float) -> NDArray[np.
         )
     )
 
+
+def extract_multichannel_features(
+    windows: ArrayLike, *, sampling_rate: float
+) -> NDArray[np.float64]:
+    """Concatenate the documented features for ``(samples, channels, time)``."""
+
+    signals = np.asarray(windows, dtype=np.float64)
+    if signals.ndim != 3 or signals.shape[1] == 0:
+        raise ValueError("windows must have shape (samples, channels, time)")
+    return np.hstack(
+        [
+            extract_features(signals[:, channel], sampling_rate=sampling_rate)
+            for channel in range(signals.shape[1])
+        ]
+    )

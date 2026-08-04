@@ -1,4 +1,4 @@
-"""Three-seed signal-feature baseline for the frozen HUST tasks."""
+"""Three-seed signal-feature baseline for registered frozen tasks."""
 
 from __future__ import annotations
 
@@ -24,8 +24,20 @@ from edgefault_bench.datasets.hust import (
     load_hust_signal,
     verify_hust_file,
 )
+from edgefault_bench.datasets.mehran import (
+    build_mehran_window_records,
+    load_mehran_manifest,
+    load_mehran_signal,
+    preprocess_mehran_windows,
+    verify_mehran_file,
+)
 from edgefault_bench.evaluation import condition_metrics
-from edgefault_bench.features import FEATURE_NAMES, extract_features
+from edgefault_bench.features import (
+    FEATURE_NAMES,
+    extract_features,
+    extract_multichannel_features,
+    multichannel_feature_names,
+)
 from edgefault_bench.tasks import load_task_manifest, split_window_records
 
 
@@ -43,22 +55,89 @@ def _peak_rss_bytes() -> int:
     return value if platform.system() == "Darwin" else value * 1024
 
 
-def load_feature_table(manifest_path: Path, raw_dir: Path):
-    """Load verified files one at a time to bound feature-extraction memory."""
-
+def _load_hust_feature_table(
+    manifest_path: Path,
+    raw_dir: Path,
+    *,
+    window_length: int,
+    stride: int,
+):
     _, files = load_hust_manifest(manifest_path)
     all_features: list[np.ndarray] = []
     for specification in sorted(files, key=lambda item: item.filename):
         path = raw_dir / specification.filename
         verify_hust_file(path, specification)
         signal, _ = load_hust_signal(path)
-        windows = signal.reshape(125, 4096)
+        starts = range(0, len(signal) - window_length + 1, stride)
+        windows = np.stack([signal[start : start + window_length] for start in starts])
         all_features.append(extract_features(windows, sampling_rate=51_200.0))
     features = np.vstack(all_features)
-    records = build_window_records(files)
+    records = build_window_records(files, window_length=window_length, stride=stride)
     if len(features) != len(records):
         raise RuntimeError("feature rows and deterministic window records are misaligned")
-    return features, records
+    return features, records, FEATURE_NAMES
+
+
+def _load_mehran_feature_table(
+    manifest_path: Path,
+    raw_dir: Path,
+    *,
+    window_length: int,
+    stride: int,
+):
+    payload, files = load_mehran_manifest(manifest_path)
+    all_features: list[np.ndarray] = []
+    sample_counts: dict[str, int] = {}
+    for specification in sorted(files, key=lambda item: item.filename):
+        path = raw_dir / specification.filename
+        verify_mehran_file(path, specification)
+        signal = load_mehran_signal(path, minimum_samples=window_length)
+        sample_counts[specification.filename] = len(signal)
+        windows = preprocess_mehran_windows(
+            signal, window_length=window_length, stride=stride
+        )
+        all_features.append(
+            extract_multichannel_features(
+                windows, sampling_rate=float(payload["sampling_rate_hz"])
+            )
+        )
+    features = np.vstack(all_features)
+    records = build_mehran_window_records(
+        files,
+        sample_counts,
+        window_length=window_length,
+        stride=stride,
+    )
+    if len(features) != len(records):
+        raise RuntimeError("feature rows and Mehran window records are misaligned")
+    return features, records, multichannel_feature_names(("x", "y", "z"))
+
+
+def load_feature_table(
+    manifest_path: Path,
+    raw_dir: Path,
+    *,
+    window_length: int = 4096,
+    stride: int = 4096,
+):
+    """Load verified files one at a time through the registered adapter."""
+
+    dataset_id = json.loads(manifest_path.read_text(encoding="utf-8")).get("dataset_id")
+    if dataset_id == "hust-bearing-v3":
+        return _load_hust_feature_table(
+            manifest_path,
+            raw_dir,
+            window_length=window_length,
+            stride=stride,
+        )
+    if dataset_id == "mehran-triaxial-bearing-v2":
+        return _load_mehran_feature_table(
+            manifest_path,
+            raw_dir,
+            window_length=window_length,
+            stride=stride,
+        )
+    raise ValueError(f"unsupported feature dataset: {dataset_id!r}")
 
 
 def _latency_ms(model, sample: np.ndarray, *, warmup: int = 100, repeats: int = 1000):
@@ -82,7 +161,12 @@ def run_task(
     *, task_path: Path, manifest_path: Path, raw_dir: Path, output_dir: Path
 ) -> Path:
     task = load_task_manifest(task_path)
-    features, records = load_feature_table(manifest_path, raw_dir)
+    features, records, feature_names = load_feature_table(
+        manifest_path,
+        raw_dir,
+        window_length=task.window_length,
+        stride=task.stride,
+    )
     selected, split = split_window_records(records, task)
     labels = np.asarray([record.label for record in selected])
     evaluation_groups = np.asarray(
@@ -126,7 +210,11 @@ def run_task(
 
     payload = {
         "schema_version": 1,
-        "benchmark_id": "edgefault-bench-v1",
+        "benchmark_id": (
+            "edgefault-bench-v1"
+            if task.dataset_id == "hust-bearing-v3"
+            else "edgefault-bench-v1.1"
+        ),
         "model_id": "signal_features_logreg",
         "task_id": task.task_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -134,7 +222,8 @@ def run_task(
         "protocol": {
             "task_manifest": str(task_path),
             "dataset_manifest": str(manifest_path),
-            "feature_names": list(FEATURE_NAMES),
+            "feature_names": list(feature_names),
+            "input_channels": len(feature_names) // len(FEATURE_NAMES),
             "test_used_for_selection": False,
         },
         "environment": {

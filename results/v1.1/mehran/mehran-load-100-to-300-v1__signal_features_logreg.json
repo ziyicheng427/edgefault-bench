@@ -1,0 +1,188 @@
+{
+  "benchmark_id": "edgefault-bench-v1.1",
+  "created_at": "2026-08-04T09:46:44.331787+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "numpy": "2.2.6",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "scikit_learn": "1.7.2",
+    "scipy": "1.15.3"
+  },
+  "git_commit": "e6572571adabdf75e80783bbeb6974cfb14e2abe",
+  "model_id": "signal_features_logreg",
+  "partition_sizes": {
+    "test": 363,
+    "train": 398,
+    "validation": 393
+  },
+  "protocol": {
+    "dataset_manifest": "registry/mehran_v2.json",
+    "feature_names": [
+      "x_mean",
+      "x_standard_deviation",
+      "x_root_mean_square",
+      "x_peak_to_peak",
+      "x_crest_factor",
+      "x_skewness",
+      "x_kurtosis",
+      "x_spectral_centroid",
+      "x_spectral_bandwidth",
+      "x_spectral_entropy",
+      "y_mean",
+      "y_standard_deviation",
+      "y_root_mean_square",
+      "y_peak_to_peak",
+      "y_crest_factor",
+      "y_skewness",
+      "y_kurtosis",
+      "y_spectral_centroid",
+      "y_spectral_bandwidth",
+      "y_spectral_entropy",
+      "z_mean",
+      "z_standard_deviation",
+      "z_root_mean_square",
+      "z_peak_to_peak",
+      "z_crest_factor",
+      "z_skewness",
+      "z_kurtosis",
+      "z_spectral_centroid",
+      "z_spectral_bandwidth",
+      "z_spectral_entropy"
+    ],
+    "input_channels": 3,
+    "task_manifest": "registry/tasks/mehran_load_100_to_300_v1.json",
+    "test_used_for_selection": false
+  },
+  "runs": [
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 174080000,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.032036083001003135,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.077875,
+        "p95_ms": 0.0841333,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.5609422492401216,
+        "macro_f1": 0.5515595626318819,
+        "per_condition_macro_f1": {
+          "0.7": 0.8940886699507389,
+          "0.9": 0.9508196721311475,
+          "1.1": 0.6719298245614035,
+          "1.3": 0.03125,
+          "1.5": 0.25019225839528325,
+          "1.7": 0.46912442396313364
+        },
+        "worst_condition_macro_f1": 0.03125
+      },
+      "validation": {
+        "balanced_accuracy": 0.5569512068786906,
+        "macro_f1": 0.550827640567525,
+        "per_condition_macro_f1": {
+          "0.7": 0.19736842105263158,
+          "0.9": 0.9094594594594595,
+          "1.1": 0.9282051282051282,
+          "1.3": 0.41565703634669154,
+          "1.5": 0.11974340698503208,
+          "1.7": 0.6333333333333333
+        },
+        "worst_condition_macro_f1": 0.11974340698503208
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 174080000,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.002960332996735815,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.077459,
+        "p95_ms": 0.080667,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.5609422492401216,
+        "macro_f1": 0.5515595626318819,
+        "per_condition_macro_f1": {
+          "0.7": 0.8940886699507389,
+          "0.9": 0.9508196721311475,
+          "1.1": 0.6719298245614035,
+          "1.3": 0.03125,
+          "1.5": 0.25019225839528325,
+          "1.7": 0.46912442396313364
+        },
+        "worst_condition_macro_f1": 0.03125
+      },
+      "validation": {
+        "balanced_accuracy": 0.5569512068786906,
+        "macro_f1": 0.550827640567525,
+        "per_condition_macro_f1": {
+          "0.7": 0.19736842105263158,
+          "0.9": 0.9094594594594595,
+          "1.1": 0.9282051282051282,
+          "1.3": 0.41565703634669154,
+          "1.5": 0.11974340698503208,
+          "1.7": 0.6333333333333333
+        },
+        "worst_condition_macro_f1": 0.11974340698503208
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 174080000,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.0026827910041902214,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.07668749999999999,
+        "p95_ms": 0.08109229999999999,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.5609422492401216,
+        "macro_f1": 0.5515595626318819,
+        "per_condition_macro_f1": {
+          "0.7": 0.8940886699507389,
+          "0.9": 0.9508196721311475,
+          "1.1": 0.6719298245614035,
+          "1.3": 0.03125,
+          "1.5": 0.25019225839528325,
+          "1.7": 0.46912442396313364
+        },
+        "worst_condition_macro_f1": 0.03125
+      },
+      "validation": {
+        "balanced_accuracy": 0.5569512068786906,
+        "macro_f1": 0.550827640567525,
+        "per_condition_macro_f1": {
+          "0.7": 0.19736842105263158,
+          "0.9": 0.9094594594594595,
+          "1.1": 0.9282051282051282,
+          "1.3": 0.41565703634669154,
+          "1.5": 0.11974340698503208,
+          "1.7": 0.6333333333333333
+        },
+        "worst_condition_macro_f1": 0.11974340698503208
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "mehran-load-100-to-300-v1"
+}

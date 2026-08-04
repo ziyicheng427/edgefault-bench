@@ -1,0 +1,188 @@
+{
+  "benchmark_id": "edgefault-bench-v1.1",
+  "created_at": "2026-08-04T09:47:05.396220+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "numpy": "2.2.6",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "scikit_learn": "1.7.2",
+    "scipy": "1.15.3"
+  },
+  "git_commit": "e6572571adabdf75e80783bbeb6974cfb14e2abe",
+  "model_id": "signal_features_logreg",
+  "partition_sizes": {
+    "test": 398,
+    "train": 363,
+    "validation": 393
+  },
+  "protocol": {
+    "dataset_manifest": "registry/mehran_v2.json",
+    "feature_names": [
+      "x_mean",
+      "x_standard_deviation",
+      "x_root_mean_square",
+      "x_peak_to_peak",
+      "x_crest_factor",
+      "x_skewness",
+      "x_kurtosis",
+      "x_spectral_centroid",
+      "x_spectral_bandwidth",
+      "x_spectral_entropy",
+      "y_mean",
+      "y_standard_deviation",
+      "y_root_mean_square",
+      "y_peak_to_peak",
+      "y_crest_factor",
+      "y_skewness",
+      "y_kurtosis",
+      "y_spectral_centroid",
+      "y_spectral_bandwidth",
+      "y_spectral_entropy",
+      "z_mean",
+      "z_standard_deviation",
+      "z_root_mean_square",
+      "z_peak_to_peak",
+      "z_crest_factor",
+      "z_skewness",
+      "z_kurtosis",
+      "z_spectral_centroid",
+      "z_spectral_bandwidth",
+      "z_spectral_entropy"
+    ],
+    "input_channels": 3,
+    "task_manifest": "registry/tasks/mehran_load_300_to_100_v1.json",
+    "test_used_for_selection": false
+  },
+  "runs": [
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 185679872,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.03790920800383901,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.078708,
+        "p95_ms": 0.08391905000000001,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.5501199949475811,
+        "macro_f1": 0.5501120899245366,
+        "per_condition_macro_f1": {
+          "0.7": 0.14473684210526316,
+          "0.9": 0.915341812400636,
+          "1.1": 0.30526315789473685,
+          "1.3": 0.12,
+          "1.5": 0.9213952345860967,
+          "1.7": 0.8154706430568499
+        },
+        "worst_condition_macro_f1": 0.12
+      },
+      "validation": {
+        "balanced_accuracy": 0.7173676577229877,
+        "macro_f1": 0.7159017642576637,
+        "per_condition_macro_f1": {
+          "0.7": 0.32967032967032966,
+          "0.9": 0.9850613154960981,
+          "1.1": 0.689283449587825,
+          "1.3": 0.10810810810810811,
+          "1.5": 1.0,
+          "1.7": 1.0
+        },
+        "worst_condition_macro_f1": 0.10810810810810811
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 185679872,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.0026944999990519136,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.0770625,
+        "p95_ms": 0.080333,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.5501199949475811,
+        "macro_f1": 0.5501120899245366,
+        "per_condition_macro_f1": {
+          "0.7": 0.14473684210526316,
+          "0.9": 0.915341812400636,
+          "1.1": 0.30526315789473685,
+          "1.3": 0.12,
+          "1.5": 0.9213952345860967,
+          "1.7": 0.8154706430568499
+        },
+        "worst_condition_macro_f1": 0.12
+      },
+      "validation": {
+        "balanced_accuracy": 0.7173676577229877,
+        "macro_f1": 0.7159017642576637,
+        "per_condition_macro_f1": {
+          "0.7": 0.32967032967032966,
+          "0.9": 0.9850613154960981,
+          "1.1": 0.689283449587825,
+          "1.3": 0.10810810810810811,
+          "1.5": 1.0,
+          "1.7": 1.0
+        },
+        "worst_condition_macro_f1": 0.10810810810810811
+      }
+    },
+    {
+      "complexity": {
+        "process_peak_rss_bytes": 185679872,
+        "serialized_size_bytes": 2154,
+        "trainable_parameters": 31
+      },
+      "fit_seconds": 0.002318291997653432,
+      "latency": {
+        "batch_size": 1,
+        "median_ms": 0.077875,
+        "p95_ms": 0.08487705000000001,
+        "repeats": 1000,
+        "warmup": 100
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.5501199949475811,
+        "macro_f1": 0.5501120899245366,
+        "per_condition_macro_f1": {
+          "0.7": 0.14473684210526316,
+          "0.9": 0.915341812400636,
+          "1.1": 0.30526315789473685,
+          "1.3": 0.12,
+          "1.5": 0.9213952345860967,
+          "1.7": 0.8154706430568499
+        },
+        "worst_condition_macro_f1": 0.12
+      },
+      "validation": {
+        "balanced_accuracy": 0.7173676577229877,
+        "macro_f1": 0.7159017642576637,
+        "per_condition_macro_f1": {
+          "0.7": 0.32967032967032966,
+          "0.9": 0.9850613154960981,
+          "1.1": 0.689283449587825,
+          "1.3": 0.10810810810810811,
+          "1.5": 1.0,
+          "1.7": 1.0
+        },
+        "worst_condition_macro_f1": 0.10810810810810811
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "mehran-load-300-to-100-v1"
+}

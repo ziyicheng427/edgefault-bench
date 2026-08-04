@@ -52,7 +52,8 @@ the [`HUST v3 data card`](docs/datasets/hust-bearing-v3.md).
 
 The v1.1 development branch also contains a second adapter for the CC BY 4.0 Mehran triaxial
 bearing v2 dataset. Decision 0004 freezes its 36-file cross-load selection and two task
-manifests; no Mehran model result has yet been reported. See the
+manifests. The first measured 30-feature linear baseline is reported with substantial
+worst-defect-size failure; neural comparisons remain in progress. See the
 [`Mehran v2 data card`](docs/datasets/mehran-bearing-v2.md).
 
 Development is AI-assisted and governed by explicit provenance and research-integrity rules.

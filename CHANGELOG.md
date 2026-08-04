@@ -18,6 +18,10 @@ versioning after the first tagged release.
 - Passed a clean-checkout 56-test integration audit while retaining Decision 0004 as proposed.
 - Accepted Decision 0004 and froze the Mehran v2 selection, labels, cross-load partitions,
   window settings, and seeds before benchmark training.
+- Added deterministic triaxial windowing, dataset-dispatched tensor loading, task-specific
+  model channels/labels, and a 30-feature multichannel reference baseline.
+- Completed the two frozen Mehran signal-feature tasks, retaining poor worst-defect-size
+  performance as a documented negative result rather than selecting on test outcomes.
 
 ## 1.0.0 - 2026-07-28
 

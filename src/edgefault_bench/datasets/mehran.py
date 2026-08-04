@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -35,6 +36,26 @@ class MehranFile:
     label: str
     defect_size_mm: float
     load_w: int
+
+
+@dataclass(frozen=True)
+class MehranWindowRecord:
+    """Metadata for one non-overlapping window from an upstream CSV recording."""
+
+    filename: str
+    recording: str
+    label: str
+    defect_size_mm: float
+    load_w: int
+    start: int
+    stop: int
+
+    def domain_value(self, field: str) -> float | int:
+        if field == "load_w":
+            return self.load_w
+        if field == "defect_size_mm":
+            return self.defect_size_mm
+        raise ValueError(f"unsupported Mehran domain field: {field!r}")
 
 
 def parse_mehran_filename(filename: str) -> tuple[str, float, int]:
@@ -136,6 +157,67 @@ def load_mehran_signal(
     if not np.isfinite(values).all():
         raise ValueError(f"Mehran CSV contains non-finite acceleration values: {file_path}")
     return values.astype(np.float32)
+
+
+def build_mehran_window_records(
+    files: tuple[MehranFile, ...],
+    sample_counts: Mapping[str, int],
+    *,
+    window_length: int = 4096,
+    stride: int = 4096,
+) -> tuple[MehranWindowRecord, ...]:
+    """Build deterministic metadata from observed CSV lengths without padding."""
+
+    if window_length <= 0 or stride < window_length:
+        raise ValueError("window_length must be positive and stride must prevent overlap")
+    expected_names = {item.filename for item in files}
+    if set(sample_counts) != expected_names:
+        missing = sorted(expected_names - set(sample_counts))
+        extra = sorted(set(sample_counts) - expected_names)
+        raise ValueError(
+            f"sample-count keys do not match registry; missing={missing}, extra={extra}"
+        )
+    records: list[MehranWindowRecord] = []
+    for item in sorted(files, key=lambda value: value.filename):
+        sample_count = sample_counts[item.filename]
+        if sample_count < window_length:
+            raise ValueError(f"recording is shorter than one window: {item.filename}")
+        for start in range(0, sample_count - window_length + 1, stride):
+            records.append(
+                MehranWindowRecord(
+                    filename=item.filename,
+                    recording=item.filename,
+                    label=item.label,
+                    defect_size_mm=item.defect_size_mm,
+                    load_w=item.load_w,
+                    start=start,
+                    stop=start + window_length,
+                )
+            )
+    return tuple(records)
+
+
+def preprocess_mehran_windows(
+    signal: NDArray[np.float32],
+    *,
+    window_length: int = 4096,
+    stride: int = 4096,
+    epsilon: float = 1e-8,
+) -> NDArray[np.float32]:
+    """Return ``(windows, channels, time)`` with independent channel z-scores."""
+
+    values = np.asarray(signal, dtype=np.float64)
+    if values.ndim != 2 or values.shape[1] != 3:
+        raise ValueError("Mehran signal must have shape (time, 3)")
+    if window_length <= 0 or stride < window_length:
+        raise ValueError("window_length must be positive and stride must prevent overlap")
+    if values.shape[0] < window_length:
+        raise ValueError("Mehran signal is shorter than one window")
+    starts = range(0, values.shape[0] - window_length + 1, stride)
+    windows = np.stack([values[start : start + window_length].T for start in starts])
+    centered = windows - windows.mean(axis=2, keepdims=True)
+    scale = np.maximum(centered.std(axis=2, keepdims=True), epsilon)
+    return (centered / scale).astype(np.float32)
 
 
 class MehranV2Adapter:

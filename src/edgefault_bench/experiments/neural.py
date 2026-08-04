@@ -23,7 +23,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from edgefault_bench.evaluation import condition_metrics
 from edgefault_bench.models import build_model, coral_loss, trainable_parameter_count
 from edgefault_bench.tasks import load_task_manifest, split_window_records
-from edgefault_bench.torch_data import LABELS, encode_domains, load_tensor_table
+from edgefault_bench.torch_data import encode_domains, load_tensor_table
 
 MODEL_IDS = ("standard_cnn_1d", "compact_depthwise_cnn_1d", "compact_coral_cnn_1d")
 
@@ -67,12 +67,13 @@ def _score(
     targets: Tensor,
     groups: np.ndarray,
     *,
+    labels: tuple[str, ...],
     device: torch.device,
     batch_size: int,
 ):
     predictions = _predict(model, signals, device=device, batch_size=batch_size).numpy()
-    truth_names = np.asarray([LABELS[index] for index in targets.numpy()])
-    prediction_names = np.asarray([LABELS[index] for index in predictions])
+    truth_names = np.asarray([labels[index] for index in targets.numpy()])
+    prediction_names = np.asarray([labels[index] for index in predictions])
     return condition_metrics(truth_names, prediction_names, groups)
 
 
@@ -108,6 +109,7 @@ def train_one_seed(
     *,
     model_id: str,
     seed: int,
+    labels: tuple[str, ...],
     signals: Tensor,
     targets: Tensor,
     source_domains: Tensor,
@@ -126,7 +128,10 @@ def train_one_seed(
 ) -> dict[str, object]:
     _set_seed(seed)
     torch.set_num_threads(min(4, os.cpu_count() or 1))
-    model = build_model(model_id, num_classes=len(LABELS)).to(device)
+    input_channels = int(signals.shape[1])
+    model = build_model(
+        model_id, num_classes=len(labels), in_channels=input_channels
+    ).to(device)
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=learning_rate, weight_decay=weight_decay
     )
@@ -181,6 +186,7 @@ def train_one_seed(
             signals[validation_indices],
             targets[validation_indices],
             validation_groups,
+            labels=labels,
             device=device,
             batch_size=batch_size,
         )
@@ -211,6 +217,7 @@ def train_one_seed(
         signals[validation_indices],
         targets[validation_indices],
         validation_groups,
+        labels=labels,
         device=device,
         batch_size=batch_size,
     )
@@ -220,6 +227,7 @@ def train_one_seed(
         signals[test_indices],
         targets[test_indices],
         test_groups,
+        labels=labels,
         device=device,
         batch_size=batch_size,
     )
@@ -229,7 +237,8 @@ def train_one_seed(
         {
             "model_id": model_id,
             "seed": seed,
-            "labels": LABELS,
+            "labels": labels,
+            "input_channels": input_channels,
             "state_dict": best_state,
         },
         checkpoint_path,
@@ -271,7 +280,17 @@ def run_task(
     if model_id not in MODEL_IDS:
         raise ValueError(f"unsupported model: {model_id}")
     task = load_task_manifest(task_path)
-    table = load_tensor_table(manifest_path, raw_dir)
+    table = load_tensor_table(
+        manifest_path,
+        raw_dir,
+        window_length=task.window_length,
+        stride=task.stride,
+        normalization=task.normalization,
+    )
+    if table.labels != task.labels:
+        raise RuntimeError(
+            f"tensor labels {table.labels} do not match frozen task labels {task.labels}"
+        )
     selected, split = split_window_records(table.records, task)
     if len(selected) != len(table.records):
         raise RuntimeError("task selection changed the frozen tensor row set")
@@ -289,6 +308,7 @@ def run_task(
         train_one_seed(
             model_id=model_id,
             seed=seed,
+            labels=table.labels,
             signals=table.signals,
             targets=table.targets,
             source_domains=source_domains,
@@ -309,7 +329,11 @@ def run_task(
     ]
     payload = {
         "schema_version": 1,
-        "benchmark_id": "edgefault-bench-v1",
+        "benchmark_id": (
+            "edgefault-bench-v1"
+            if task.dataset_id == "hust-bearing-v3"
+            else "edgefault-bench-v1.1"
+        ),
         "model_id": model_id,
         "task_id": task.task_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -319,6 +343,9 @@ def run_task(
             "dataset_manifest": str(manifest_path),
             "test_used_for_selection": False,
             "source_alignment_field": task.evaluation_group_field if "coral" in model_id else None,
+            "labels": list(table.labels),
+            "input_channels": int(table.signals.shape[1]),
+            "window_normalization": task.normalization,
         },
         "training": {
             "device": device_name,

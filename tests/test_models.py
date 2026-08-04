@@ -16,6 +16,16 @@ def test_models_return_logits_and_embeddings() -> None:
         assert embedding.shape[0] == 3
 
 
+def test_models_accept_mehran_triaxial_input_and_two_classes() -> None:
+    signals = torch.randn(2, 3, 4096)
+    for model in (
+        StandardCNN1D(num_classes=2, in_channels=3),
+        CompactDepthwiseCNN1D(num_classes=2, in_channels=3),
+    ):
+        logits = model(signals)
+        assert logits.shape == (2, 2)
+
+
 def test_compact_model_is_at_most_quarter_standard_parameters() -> None:
     standard = trainable_parameter_count(StandardCNN1D())
     compact = trainable_parameter_count(CompactDepthwiseCNN1D())
@@ -34,4 +44,3 @@ def test_coral_loss_is_differentiable_with_single_domain() -> None:
     loss = coral_loss(embeddings, torch.zeros(4, dtype=torch.long))
     loss.backward()
     assert embeddings.grad is not None
-

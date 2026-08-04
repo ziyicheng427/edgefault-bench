@@ -49,7 +49,13 @@ def run_track(
     if model_id not in ROBUSTNESS_MODELS:
         raise ValueError(f"unsupported robustness model: {model_id}")
     task = load_task_manifest(task_path)
-    table = load_tensor_table(manifest_path, raw_dir)
+    table = load_tensor_table(
+        manifest_path,
+        raw_dir,
+        window_length=task.window_length,
+        stride=task.stride,
+        normalization=task.normalization,
+    )
     selected, split = split_window_records(table.records, task)
     if len(selected) != len(table.records):
         raise RuntimeError("task selection changed the frozen tensor row set")
@@ -106,6 +112,7 @@ def run_track(
             run = train_one_seed(
                 model_id=model_id,
                 seed=seed,
+                labels=table.labels,
                 signals=table.signals,
                 targets=table.targets,
                 source_domains=source_domains,
@@ -122,7 +129,11 @@ def run_track(
                 coral_weight=0.0,
                 checkpoint_path=checkpoint,
             )
-            model = build_model(model_id, num_classes=4)
+            model = build_model(
+                model_id,
+                num_classes=len(table.labels),
+                in_channels=int(table.signals.shape[1]),
+            )
             checkpoint_payload = torch.load(
                 checkpoint, map_location="cpu", weights_only=True
             )
@@ -137,6 +148,7 @@ def run_track(
                     noisy_test,
                     table.targets[test_indices],
                     test_groups,
+                    labels=table.labels,
                     device=torch.device("cpu"),
                     batch_size=64,
                 )
@@ -162,6 +174,7 @@ def run_track(
                 run = train_one_seed(
                     model_id=model_id,
                     seed=seed,
+                    labels=table.labels,
                     signals=table.signals,
                     targets=table.targets,
                     source_domains=source_domains,

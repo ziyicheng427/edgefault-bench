@@ -26,10 +26,12 @@ class ConvBlock(nn.Sequential):
 class StandardCNN1D(nn.Module):
     """Conventional full-convolution reference with a 128-dimensional embedding."""
 
-    def __init__(self, num_classes: int = 4):
+    def __init__(self, num_classes: int = 4, in_channels: int = 1):
         super().__init__()
+        if in_channels <= 0:
+            raise ValueError("in_channels must be positive")
         self.features = nn.Sequential(
-            ConvBlock(1, 32, 15, stride=2),
+            ConvBlock(in_channels, 32, 15, stride=2),
             nn.MaxPool1d(2),
             ConvBlock(32, 64, 9, stride=2),
             nn.MaxPool1d(2),
@@ -67,10 +69,12 @@ class DepthwiseSeparableBlock(nn.Sequential):
 class CompactDepthwiseCNN1D(nn.Module):
     """Edge-oriented depthwise-separable network with a 64-dimensional embedding."""
 
-    def __init__(self, num_classes: int = 4):
+    def __init__(self, num_classes: int = 4, in_channels: int = 1):
         super().__init__()
+        if in_channels <= 0:
+            raise ValueError("in_channels must be positive")
         self.features = nn.Sequential(
-            ConvBlock(1, 16, 9, stride=2),
+            ConvBlock(in_channels, 16, 9, stride=2),
             nn.MaxPool1d(2),
             DepthwiseSeparableBlock(16, 24, stride=2),
             DepthwiseSeparableBlock(24, 40, stride=2),
@@ -106,11 +110,15 @@ def coral_loss(embeddings: Tensor, domains: Tensor) -> Tensor:
     return torch.stack(losses).mean()
 
 
-def build_model(model_id: str, *, num_classes: int = 4) -> nn.Module:
+def build_model(
+    model_id: str, *, num_classes: int = 4, in_channels: int = 1
+) -> nn.Module:
     if model_id == "standard_cnn_1d":
-        return StandardCNN1D(num_classes=num_classes)
+        return StandardCNN1D(num_classes=num_classes, in_channels=in_channels)
     if model_id in {"compact_depthwise_cnn_1d", "compact_coral_cnn_1d"}:
-        return CompactDepthwiseCNN1D(num_classes=num_classes)
+        return CompactDepthwiseCNN1D(
+            num_classes=num_classes, in_channels=in_channels
+        )
     raise ValueError(f"unknown model: {model_id!r}")
 
 

@@ -29,6 +29,7 @@ versioning after the first tagged release.
   trainable parameter count.
 - Completed both compact-CORAL tasks and the full Mehran 2-task × 4-model matrix; CORAL did not
   materially improve aggregate or worst-defect-size results over the compact architecture.
+- Added an automated completeness and provenance audit for all eight Mehran core result files.
 
 ## 1.0.0 - 2026-07-28
 

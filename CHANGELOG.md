@@ -22,6 +22,8 @@ versioning after the first tagged release.
   model channels/labels, and a 30-feature multichannel reference baseline.
 - Completed the two frozen Mehran signal-feature tasks, retaining poor worst-defect-size
   performance as a documented negative result rather than selecting on test outcomes.
+- Completed both three-seed compact-CNN tasks and documented high reverse-direction seed
+  sensitivity and the absence of an aggregate advantage over the linear feature baseline.
 
 ## 1.0.0 - 2026-07-28
 

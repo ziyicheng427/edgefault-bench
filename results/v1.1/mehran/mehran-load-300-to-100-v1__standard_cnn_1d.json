@@ -1,0 +1,328 @@
+{
+  "benchmark_id": "edgefault-bench-v1.1",
+  "created_at": "2026-08-04T09:56:39.988686+00:00",
+  "environment": {
+    "logical_cpu_count": 8,
+    "machine": "arm64",
+    "platform": "macOS-26.3.1-arm64-arm-64bit",
+    "python": "3.10.13",
+    "torch": "2.13.0"
+  },
+  "git_commit": "2dd16c9474f176b11be98b360b4ca908949b26ca",
+  "model_id": "standard_cnn_1d",
+  "partition_sizes": {
+    "test": 398,
+    "train": 363,
+    "validation": 393
+  },
+  "protocol": {
+    "dataset_manifest": "registry/mehran_v2.json",
+    "input_channels": 3,
+    "labels": [
+      "inner_race",
+      "outer_race"
+    ],
+    "source_alignment_field": null,
+    "task_manifest": "registry/tasks/mehran_load_300_to_100_v1.json",
+    "test_used_for_selection": false,
+    "window_normalization": "per_window_channel_zscore"
+  },
+  "runs": [
+    {
+      "best_epoch": 4,
+      "checkpoint": "artifacts/checkpoints/mehran/mehran-load-300-to-100-v1__standard_cnn_1d__seed17.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 441909248,
+        "serialized_size_bytes": 320167,
+        "trainable_parameters": 77922
+      },
+      "epochs_ran": 8,
+      "fit_seconds": 12.970441249999567,
+      "history": [
+        {
+          "classification_loss": 0.6305952492495871,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.3338983050847458
+        },
+        {
+          "classification_loss": 0.4176565639407838,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.3338983050847458
+        },
+        {
+          "classification_loss": 0.27432664576148197,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.5719693839994592
+        },
+        {
+          "classification_loss": 0.17059816420078278,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.7878657022562885
+        },
+        {
+          "classification_loss": 0.09845401681241253,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.3439514437605403
+        },
+        {
+          "classification_loss": 0.07117739858582986,
+          "coral_loss": 0.0,
+          "epoch": 6,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.03622862625836341,
+          "coral_loss": 0.0,
+          "epoch": 7,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.02324566590412425,
+          "coral_loss": 0.0,
+          "epoch": 8,
+          "validation_macro_f1": 0.33838383838383834
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.836667,
+        "p95_ms": 1.1864437499999998,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 17,
+      "test": {
+        "balanced_accuracy": 0.716193002399899,
+        "macro_f1": 0.7010859636658886,
+        "per_condition_macro_f1": {
+          "0.7": 0.3781887755102041,
+          "0.9": 0.9716905901116428,
+          "1.1": 0.8610526315789473,
+          "1.3": 0.32653061224489793,
+          "1.5": 0.8899533284205354,
+          "1.7": 0.4554765291607397
+        },
+        "worst_condition_macro_f1": 0.32653061224489793
+      },
+      "validation": {
+        "balanced_accuracy": 0.7969543147208122,
+        "macro_f1": 0.7878657022562885,
+        "per_condition_macro_f1": {
+          "0.7": 0.9836065573770492,
+          "0.9": 0.7658979734451432,
+          "1.1": 0.7645079899074854,
+          "1.3": 0.32653061224489793,
+          "1.5": 0.8885077186963979,
+          "1.7": 0.8884184308841843
+        },
+        "worst_condition_macro_f1": 0.32653061224489793
+      }
+    },
+    {
+      "best_epoch": 2,
+      "checkpoint": "artifacts/checkpoints/mehran/mehran-load-300-to-100-v1__standard_cnn_1d__seed29.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 522502144,
+        "serialized_size_bytes": 320167,
+        "trainable_parameters": 77922
+      },
+      "epochs_ran": 6,
+      "fit_seconds": 6.22510450000118,
+      "history": [
+        {
+          "classification_loss": 0.6413128339883053,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.3338983050847458
+        },
+        {
+          "classification_loss": 0.42641791184086447,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.8106749024964859
+        },
+        {
+          "classification_loss": 0.25650495290756226,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.13453096559799735,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.06852165284276665,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.040769334040972154,
+          "coral_loss": 0.0,
+          "epoch": 6,
+          "validation_macro_f1": 0.33276740237691
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.963354,
+        "p95_ms": 1.19749585,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 29,
+      "test": {
+        "balanced_accuracy": 0.7072502210433245,
+        "macro_f1": 0.6985702337282589,
+        "per_condition_macro_f1": {
+          "0.7": 0.3781887755102041,
+          "0.9": 0.9576119402985075,
+          "1.1": 0.5168831168831168,
+          "1.3": 0.32653061224489793,
+          "1.5": 0.8738916256157635,
+          "1.7": 0.8620849779428836
+        },
+        "worst_condition_macro_f1": 0.32653061224489793
+      },
+      "validation": {
+        "balanced_accuracy": 0.8146042681031804,
+        "macro_f1": 0.8106749024964859,
+        "per_condition_macro_f1": {
+          "0.7": 0.9835889157923057,
+          "0.9": 0.5491718426501035,
+          "1.1": 0.8263027295285359,
+          "1.3": 0.32653061224489793,
+          "1.5": 1.0,
+          "1.7": 1.0
+        },
+        "worst_condition_macro_f1": 0.32653061224489793
+      }
+    },
+    {
+      "best_epoch": 5,
+      "checkpoint": "artifacts/checkpoints/mehran/mehran-load-300-to-100-v1__standard_cnn_1d__seed43.pt",
+      "complexity": {
+        "process_peak_rss_bytes": 522502144,
+        "serialized_size_bytes": 320167,
+        "trainable_parameters": 77922
+      },
+      "epochs_ran": 9,
+      "fit_seconds": 9.731289457995445,
+      "history": [
+        {
+          "classification_loss": 0.6424698090750324,
+          "coral_loss": 0.0,
+          "epoch": 1,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.4465009566016762,
+          "coral_loss": 0.0,
+          "epoch": 2,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.26761088181625714,
+          "coral_loss": 0.0,
+          "epoch": 3,
+          "validation_macro_f1": 0.33276740237691
+        },
+        {
+          "classification_loss": 0.1461102604948128,
+          "coral_loss": 0.0,
+          "epoch": 4,
+          "validation_macro_f1": 0.554306632213609
+        },
+        {
+          "classification_loss": 0.08130764775491287,
+          "coral_loss": 0.0,
+          "epoch": 5,
+          "validation_macro_f1": 0.7995527306967984
+        },
+        {
+          "classification_loss": 0.03644725709599404,
+          "coral_loss": 0.0,
+          "epoch": 6,
+          "validation_macro_f1": 0.33954133737815967
+        },
+        {
+          "classification_loss": 0.03434956234369232,
+          "coral_loss": 0.0,
+          "epoch": 7,
+          "validation_macro_f1": 0.3338983050847458
+        },
+        {
+          "classification_loss": 0.01985301006554572,
+          "coral_loss": 0.0,
+          "epoch": 8,
+          "validation_macro_f1": 0.42543859649122806
+        },
+        {
+          "classification_loss": 0.012599426611601157,
+          "coral_loss": 0.0,
+          "epoch": 9,
+          "validation_macro_f1": 0.6008382925154497
+        }
+      ],
+      "latency": {
+        "batch_size": 1,
+        "device": "cpu",
+        "median_ms": 0.8405415,
+        "p95_ms": 1.0797142499999999,
+        "repeats": 200,
+        "threads": 1,
+        "warmup": 25
+      },
+      "seed": 43,
+      "test": {
+        "balanced_accuracy": 0.5808765946696981,
+        "macro_f1": 0.49765383701591825,
+        "per_condition_macro_f1": {
+          "0.7": 0.9534495106230604,
+          "0.9": 0.3173076923076923,
+          "1.1": 0.3333333333333333,
+          "1.3": 0.417923186344239,
+          "1.5": 0.3333333333333333,
+          "1.7": 0.3333333333333333
+        },
+        "worst_condition_macro_f1": 0.3173076923076923
+      },
+      "validation": {
+        "balanced_accuracy": 0.8012793950067336,
+        "macro_f1": 0.7995527306967984,
+        "per_condition_macro_f1": {
+          "0.7": 0.33695652173913043,
+          "0.9": 0.9700892857142858,
+          "1.1": 0.8191214470284238,
+          "1.3": 0.5249593684699326,
+          "1.5": 1.0,
+          "1.7": 0.9531135531135531
+        },
+        "worst_condition_macro_f1": 0.33695652173913043
+      }
+    }
+  ],
+  "schema_version": 1,
+  "task_id": "mehran-load-300-to-100-v1",
+  "training": {
+    "batch_size": 64,
+    "coral_weight": 0.0,
+    "device": "cpu",
+    "epochs_max": 15,
+    "learning_rate": 0.001,
+    "patience": 4,
+    "weight_decay": 0.0001
+  }
+}

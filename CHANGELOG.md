@@ -24,6 +24,9 @@ versioning after the first tagged release.
   performance as a documented negative result rather than selecting on test outcomes.
 - Completed both three-seed compact-CNN tasks and documented high reverse-direction seed
   sensitivity and the absence of an aggregate advantage over the linear feature baseline.
+- Completed both three-seed standard-CNN controls: aggregate Macro-F1 improved over the
+  compact model, while worst-defect-size reliability remained weak at roughly 13.8× the
+  trainable parameter count.
 
 ## 1.0.0 - 2026-07-28
 

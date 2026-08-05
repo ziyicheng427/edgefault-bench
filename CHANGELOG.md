@@ -11,6 +11,9 @@ versioning after the first tagged release.
   audit-first research software framework rather than a collection of benchmark results.
 - Published an initial state-of-the-field comparison and falsifiable build-vs-contribute
   rationale covering domain-specific benchmarks and complementary research software.
+- Added the unified `edgefault` CLI with dataset inspection/acquisition, task auditing, and
+  result validation while retaining existing commands as compatibility aliases.
+- Added a raw-data-free external-user quickstart for the first unified workflow slice.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

@@ -18,6 +18,24 @@ measures. The [`state-of-the-field comparison`](docs/state-of-the-field.md) expl
 work relates to fault-diagnosis benchmarks, DomainBed, aeon, MLflow, and recent standardization
 research.
 
+## Three-minute audit workflow
+
+The preferred v1.2 command surface starts with one `edgefault` entry point and works without
+downloading raw data:
+
+```bash
+uv sync --extra dev
+uv run edgefault dataset inspect --manifest registry/mehran_v2.json
+uv run edgefault task audit \
+  --task registry/tasks/mehran_load_100_to_300_v1.json \
+  --dataset-manifest registry/mehran_v2.json
+uv run edgefault results validate \
+  results/v1.1/mehran/mehran-load-100-to-300-v1__signal_features_logreg.json
+```
+
+See the [`external-user quickstart`](docs/quickstart.md) for expected outputs, failure behavior,
+checksum-enforced acquisition, and the compatibility policy for existing commands.
+
 ## Research questions
 
 1. How much performance is lost when a model is evaluated on operating conditions that

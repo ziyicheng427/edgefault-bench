@@ -25,6 +25,7 @@ dev = [
 deep-learning = ["torch>=2.2,<3"]
 
 [project.scripts]
+edgefault = "edgefault_bench.cli:main"
 edgefault-smoke = "edgefault_bench.smoke:main"
 edgefault-download-hust = "edgefault_bench.download:main"
 edgefault-download-mehran = "edgefault_bench.download_mehran:main"

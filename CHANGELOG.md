@@ -9,6 +9,8 @@ versioning after the first tagged release.
 
 - Accepted Decision 0005 and repositioned EdgeFault-Bench as an installable, extensible,
   audit-first research software framework rather than a collection of benchmark results.
+- Published an initial state-of-the-field comparison and falsifiable build-vs-contribute
+  rationale covering domain-specific benchmarks and complementary research software.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

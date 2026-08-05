@@ -48,8 +48,12 @@
 
 ## Milestone 6 — Research-software maturity
 
+- [x] Freeze the product objective, primary users, core workflow, and non-goals.
+- [x] Publish an initial state-of-the-field and build-vs-contribute justification.
 - [ ] Publish installable package releases through a standard Python package index.
 - [ ] Add a documentation site, API reference, and end-to-end tutorials.
+- [ ] Replace dataset-specific entry points with a stable unified CLI while retaining aliases.
+- [ ] Demonstrate third-party-style dataset and model extensions through public interfaces.
 - [ ] Add at least one additional inference backend and hardware class.
 - [ ] Demonstrate sustained public development and genuine research use over time.
 - [ ] Prepare the JOSS Markdown paper and archive the reviewed release with a DOI.

@@ -14,7 +14,9 @@ Mehran experiments demonstrate the framework; they are not the product boundary.
 See the accepted
 [`research-software positioning decision`](docs/decisions/0005-research-software-product-positioning.md)
 for the target users, core workflow, distinguishing contribution, non-goals, and success
-measures.
+measures. The [`state-of-the-field comparison`](docs/state-of-the-field.md) explains how this
+work relates to fault-diagnosis benchmarks, DomainBed, aeon, MLflow, and recent standardization
+research.
 
 ## Research questions
 

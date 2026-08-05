@@ -2,9 +2,9 @@
 
 ## Mission
 
-Build an auditable, reusable benchmark that lowers the effort required to evaluate
-cross-condition generalization and edge-deployment efficiency in industrial fault
-diagnosis.
+Build an installable, auditable evaluation framework that turns heterogeneous machinery
+datasets and models into versioned, leakage-resistant, reproducible cross-condition
+benchmarks with reliability and edge-inference cost reported together.
 
 ## Problem statement
 
@@ -16,11 +16,23 @@ classification accuracy omits constraints that matter on industrial edge devices
 EdgeFault-Bench therefore treats the operating condition as a first-class experimental
 domain and evaluates reliability and efficiency together.
 
-## Intended users
+## Primary users
 
-- Researchers comparing domain-generalization methods for machinery health monitoring.
-- Engineers selecting compact diagnostic models for edge or robotic inspection systems.
-- Students who need a small, documented, reproducible reference implementation.
+- Researchers comparing fault-diagnosis and domain-generalization methods.
+- Dataset maintainers publishing source-audited condition-shift tasks.
+- Reviewers and reproducibility researchers auditing experimental claims.
+
+Edge-deployment researchers and educators are secondary users. Maintenance technicians,
+robot operators, and safety-critical production systems are outside the present product scope.
+
+## Product promise
+
+An external user should be able to install the package, validate or add a dataset adapter,
+select a frozen task, audit recording partitions, evaluate a model across registered seeds,
+and publish a validated result bundle without copying dataset-specific training code.
+
+The reusable workflow is the product. Bundled datasets, models, and measured results are
+reference implementations and verification evidence.
 
 ## Core deliverables
 
@@ -45,6 +57,8 @@ domain and evaluates reliability and efficiency together.
 - Using private employer data, code, or operational details.
 - Presenting simulation or benchmark performance as field deployment.
 - Tuning hyperparameters on the held-out test condition.
+- Providing live monitoring, alarms, maintenance scheduling, or robot control.
+- Adding datasets or models solely to increase the apparent project scope.
 
 ## Research integrity rules
 
@@ -57,9 +71,9 @@ domain and evaluates reliability and efficiency together.
 
 ## Definition of success
 
-The project succeeds when an external user can reproduce the documented benchmark from a
-clean checkout and understand the trade-offs and limitations. A new model outperforming
-every baseline is desirable but is not required for an honest and useful benchmark.
+The project succeeds when an external user can install and extend the documented benchmark,
+reproduce its reports, and understand the audit trail and limitations. A new model
+outperforming every baseline is neither required nor the primary software objective.
 
 ### Level 1 — Auditable baseline
 
@@ -83,10 +97,17 @@ every baseline is desirable but is not required for an honest and useful benchma
 - A robot, simulator, or edge-device demonstration that consumes the benchmarked inference
   interface without changing the reported benchmark protocol.
 
+### Level 4 — JOSS-ready research software
+
+- Standard package-index distribution and a stable, documented public API/CLI.
+- End-to-end tutorials for users, dataset contributors, and model contributors.
+- A state-of-the-field comparison and explicit build-vs-contribute justification.
+- Sustained public development and genuine external use or community feedback.
+- A JOSS-format paper with software-design, research-impact, and AI-usage sections.
+
 ## Privacy and publication boundary
 
 This repository contains only original project work and appropriately referenced public
 inputs. Immigration records, personal identifiers, recommendation correspondence,
 employer-confidential information, and private strategy documents are explicitly outside
 the repository scope.
-

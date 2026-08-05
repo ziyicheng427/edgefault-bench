@@ -1,11 +1,20 @@
 # EdgeFault-Bench
 
-**A reproducible benchmark for cross-condition and resource-efficient fault diagnosis.**
+**Auditable cross-condition evaluation for industrial time-series diagnosis.**
 
-EdgeFault-Bench evaluates whether fault-diagnosis models remain reliable when operating
-conditions change and compute resources are limited. The project focuses on transparent
-experimental protocols, reproducible baselines, and deployment-oriented measurements
-rather than accuracy from random within-condition splits.
+EdgeFault-Bench turns heterogeneous machinery datasets and model implementations into
+versioned, leakage-audited, reproducible benchmarks. It helps researchers evaluate whether
+diagnostic models remain reliable when operating conditions change and whether compact models
+actually reduce edge-inference cost.
+
+The software is for researchers, dataset maintainers, and reproducibility reviewers. It is not
+a live machinery-monitoring, alarm, maintenance, or robot-control system. The bundled HUST and
+Mehran experiments demonstrate the framework; they are not the product boundary.
+
+See the accepted
+[`research-software positioning decision`](docs/decisions/0005-research-software-product-positioning.md)
+for the target users, core workflow, distinguishing contribution, non-goals, and success
+measures.
 
 ## Research questions
 

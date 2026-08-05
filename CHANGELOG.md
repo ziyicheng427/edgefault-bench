@@ -14,6 +14,7 @@ versioning after the first tagged release.
 - Added the unified `edgefault` CLI with dataset inspection/acquisition, task auditing, and
   result validation while retaining existing commands as compatibility aliases.
 - Added a raw-data-free external-user quickstart for the first unified workflow slice.
+- Passed a new-checkout installation audit covering 77 tests and the installed unified CLI.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

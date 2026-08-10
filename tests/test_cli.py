@@ -6,6 +6,37 @@ import edgefault_bench.cli as cli
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_plugin_list_exposes_builtin_provenance(capsys) -> None:
+    exit_code = cli.main(["plugin", "list"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["plugins"] == [
+        {"dataset_id": "hust-bearing-v3", "source": "edgefault-bench"},
+        {"dataset_id": "mehran-triaxial-bearing-v2", "source": "edgefault-bench"},
+    ]
+
+
+def test_plugin_validate_checks_adapter_boundary(capsys) -> None:
+    exit_code = cli.main(
+        [
+            "plugin",
+            "validate",
+            "--manifest",
+            str(ROOT / "registry/mehran_v2.json"),
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload == {
+        "schema_version": 1,
+        "passed": True,
+        "dataset_id": "mehran-triaxial-bearing-v2",
+        "recording_count": 36,
+    }
+
+
 def test_dataset_inspect_exposes_canonical_mehran_metadata(capsys) -> None:
     exit_code = cli.main(
         [

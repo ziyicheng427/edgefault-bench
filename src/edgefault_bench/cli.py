@@ -8,9 +8,9 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 from edgefault_bench.audit import main as audit_main
-from edgefault_bench.datasets import HustV3Adapter, MehranV2Adapter
 from edgefault_bench.download import main as download_hust_main
 from edgefault_bench.download_mehran import main as download_mehran_main
+from edgefault_bench.plugins import discover_dataset_plugins, load_dataset_adapter
 from edgefault_bench.reporting import load_result
 
 
@@ -29,12 +29,42 @@ def _manifest_payload(path: Path) -> dict:
 
 
 def _adapter(manifest: Path):
-    dataset_id = _manifest_payload(manifest)["dataset_id"]
-    if dataset_id == "hust-bearing-v3":
-        return HustV3Adapter(manifest)
-    if dataset_id == "mehran-triaxial-bearing-v2":
-        return MehranV2Adapter(manifest)
-    raise ValueError(f"no dataset adapter is registered for {dataset_id!r}")
+    return load_dataset_adapter(manifest)
+
+
+def _plugin_list(args: argparse.Namespace) -> int:
+    plugins = discover_dataset_plugins()
+    print(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "plugins": [
+                    {"dataset_id": plugin.dataset_id, "source": plugin.source}
+                    for plugin in sorted(plugins.values(), key=lambda item: item.dataset_id)
+                ],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def _plugin_validate(args: argparse.Namespace) -> int:
+    adapter = load_dataset_adapter(args.manifest)
+    print(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "passed": True,
+                "dataset_id": adapter.metadata.dataset_id,
+                "recording_count": len(adapter.recordings()),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
 
 
 def _dataset_inspect(args: argparse.Namespace) -> int:
@@ -122,6 +152,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {_version()}")
     commands = parser.add_subparsers(dest="command", required=True)
+
+    plugin = commands.add_parser("plugin", help="Discover or validate dataset plugins")
+    plugin_commands = plugin.add_subparsers(dest="plugin_command", required=True)
+    list_plugins = plugin_commands.add_parser(
+        "list", help="List built-in and installed dataset plugins"
+    )
+    list_plugins.set_defaults(handler=_plugin_list)
+    validate_plugin = plugin_commands.add_parser(
+        "validate", help="Instantiate and validate the plugin selected by a manifest"
+    )
+    validate_plugin.add_argument("--manifest", required=True, type=Path)
+    validate_plugin.set_defaults(handler=_plugin_validate)
 
     dataset = commands.add_parser("dataset", help="Inspect or acquire a registered dataset")
     dataset_commands = dataset.add_subparsers(dest="dataset_command", required=True)

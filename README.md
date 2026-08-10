@@ -25,6 +25,8 @@ downloading raw data:
 
 ```bash
 uv sync --extra dev
+uv run edgefault plugin list
+uv run edgefault plugin validate --manifest registry/mehran_v2.json
 uv run edgefault dataset inspect --manifest registry/mehran_v2.json
 uv run edgefault task audit \
   --task registry/tasks/mehran_load_100_to_300_v1.json \
@@ -35,6 +37,8 @@ uv run edgefault results validate \
 
 See the [`external-user quickstart`](docs/quickstart.md) for expected outputs, failure behavior,
 checksum-enforced acquisition, and the compatibility policy for existing commands.
+Dataset maintainers can publish adapters from independent Python packages through the
+documented [`dataset plugin interface`](docs/dataset-adapters.md#registering-an-external-adapter).
 
 ## Research questions
 

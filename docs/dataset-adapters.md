@@ -45,6 +45,42 @@ class ExampleAdapter:
         )
 ```
 
+## Registering an external adapter
+
+An adapter can live in an independent Python distribution. Register its factory with the
+`edgefault_bench.datasets` entry-point group; the entry-point name must exactly match the
+manifest's `dataset_id`:
+
+```toml
+[project.entry-points."edgefault_bench.datasets"]
+example-v1 = "edgefault_example:ExampleAdapter"
+```
+
+The registered object must be callable with one `pathlib.Path` argument. It may be the adapter
+class itself when its constructor accepts the manifest path, or a factory function:
+
+```python
+from pathlib import Path
+
+
+def create_adapter(manifest: Path) -> ExampleAdapter:
+    return ExampleAdapter(manifest)
+```
+
+After installing both packages, inspect the discovery provenance and validate the complete
+metadata boundary without loading signal payloads:
+
+```bash
+edgefault plugin list
+edgefault plugin validate --manifest example-manifest.json
+edgefault dataset inspect --manifest example-manifest.json
+```
+
+Validation fails closed when a plugin collides with a built-in dataset identifier, returns a
+different dataset identity, emits duplicate recording identifiers, omits a declared domain, or
+returns values outside the public contracts. Installing a plugin executes code from that
+package, so users should review and trust third-party distributions before installation.
+
 ## Source and license review
 
 Before implementation, open a public issue that records:
@@ -87,5 +123,6 @@ the window builder and its tests.
 - Run the full test suite and clean audit.
 - Disclose material AI assistance and human verification in the pull request.
 
-The first implementation is `HustV3Adapter`. Future adapters should reuse the contracts and
-audit rather than copying HUST-specific parsing rules.
+The built-in implementations are `HustV3Adapter` and `MehranV2Adapter`. Future adapters should
+reuse the contracts, plugin registry, and audit rather than copying dataset-specific dispatch
+or parsing rules into the benchmark kernel.

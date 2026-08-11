@@ -39,6 +39,8 @@ See the [`external-user quickstart`](docs/quickstart.md) for expected outputs, f
 checksum-enforced acquisition, and the compatibility policy for existing commands.
 Dataset maintainers can publish adapters from independent Python packages through the
 documented [`dataset plugin interface`](docs/dataset-adapters.md#registering-an-external-adapter).
+Model authors can use the separate [`model plugin interface`](docs/model-plugins.md), which
+currently freezes discovery and construction without overstating execution-runner support.
 
 ## Research questions
 

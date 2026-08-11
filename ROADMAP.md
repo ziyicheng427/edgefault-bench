@@ -54,6 +54,7 @@
 - [ ] Add a documentation site, API reference, and end-to-end tutorials.
 - [ ] Replace dataset-specific entry points with a stable unified CLI while retaining aliases.
 - [x] Add fail-closed discovery and validation for externally packaged dataset adapters.
+- [x] Freeze a backend-aware discovery and construction boundary for external model plugins.
 - [ ] Demonstrate third-party-style dataset and model extensions through public interfaces.
 - [ ] Add at least one additional inference backend and hardware class.
 - [ ] Demonstrate sustained public development and genuine research use over time.

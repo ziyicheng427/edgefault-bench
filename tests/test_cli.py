@@ -11,10 +11,53 @@ def test_plugin_list_exposes_builtin_provenance(capsys) -> None:
     payload = json.loads(capsys.readouterr().out)
 
     assert exit_code == 0
+    assert payload["plugin_type"] == "dataset"
     assert payload["plugins"] == [
         {"dataset_id": "hust-bearing-v3", "source": "edgefault-bench"},
         {"dataset_id": "mehran-triaxial-bearing-v2", "source": "edgefault-bench"},
     ]
+
+
+def test_plugin_list_exposes_builtin_model_backends(capsys) -> None:
+    exit_code = cli.main(["plugin", "list", "--kind", "model"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["plugin_type"] == "model"
+    assert {item["model_id"] for item in payload["plugins"]} == {
+        "signal_features_logreg",
+        "standard_cnn_1d",
+        "compact_depthwise_cnn_1d",
+        "compact_coral_cnn_1d",
+    }
+    assert {item["backend"] for item in payload["plugins"]} == {"sklearn", "pytorch"}
+
+
+def test_plugin_validate_model_checks_executable_boundary(capsys) -> None:
+    exit_code = cli.main(
+        [
+            "plugin",
+            "validate-model",
+            "--model",
+            "signal_features_logreg",
+            "--num-classes",
+            "2",
+            "--input-channels",
+            "3",
+            "--seed",
+            "29",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload == {
+        "schema_version": 1,
+        "passed": True,
+        "model_id": "signal_features_logreg",
+        "backend": "sklearn",
+        "source": "edgefault-bench",
+    }
 
 
 def test_plugin_validate_checks_adapter_boundary(capsys) -> None:

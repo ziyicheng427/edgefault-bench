@@ -6,7 +6,10 @@ import pytest
 
 from edgefault_bench.contracts import DatasetMetadata, Recording
 from edgefault_bench.plugins import (
+    ModelBuildContext,
+    ModelPlugin,
     discover_dataset_plugins,
+    discover_model_plugins,
     load_dataset_adapter,
     validate_dataset_adapter,
 )
@@ -43,6 +46,31 @@ class FakeEntryPoint:
 
     def load(self):
         return lambda manifest: ExampleAdapter()
+
+
+class ExampleEstimator:
+    def fit(self, features, labels):
+        return self
+
+    def predict(self, features):
+        return []
+
+    def get_params(self):
+        return {}
+
+
+class FakeModelEntryPoint:
+    name = "example_estimator"
+    module = "example_models"
+    dist = SimpleNamespace(name="edgefault-example-models")
+
+    def load(self):
+        return ModelPlugin(
+            model_id="example_estimator",
+            backend="sklearn",
+            source="replaced-on-discovery",
+            factory=lambda context: ExampleEstimator(),
+        )
 
 
 def test_discovers_third_party_entry_point() -> None:
@@ -93,3 +121,37 @@ def test_rejects_recording_with_missing_domain() -> None:
 
     with pytest.raises(ValueError, match="missing domains"):
         validate_dataset_adapter(adapter)
+
+
+def test_discovers_and_builds_third_party_model_plugin() -> None:
+    plugins = discover_model_plugins([FakeModelEntryPoint()])
+    plugin = plugins["example_estimator"]
+
+    model = plugin.create(ModelBuildContext(num_classes=2, input_channels=3, seed=29))
+
+    assert isinstance(model, ExampleEstimator)
+    assert plugin.source == "edgefault-example-models"
+
+
+def test_rejects_invalid_model_context_and_implementation() -> None:
+    with pytest.raises(ValueError, match="at least two"):
+        ModelBuildContext(num_classes=1, input_channels=1, seed=17)
+    plugin = ModelPlugin("broken", "sklearn", "example", lambda context: object())
+    with pytest.raises(TypeError, match="missing required methods"):
+        plugin.create(ModelBuildContext(num_classes=2, input_channels=1, seed=17))
+
+
+def test_rejects_model_plugin_identity_mismatch() -> None:
+    entry_point = FakeModelEntryPoint()
+    entry_point.name = "different-name"
+
+    with pytest.raises(ValueError, match="identity mismatch"):
+        discover_model_plugins([entry_point])
+
+
+def test_rejects_model_plugin_collision_with_builtin() -> None:
+    entry_point = FakeModelEntryPoint()
+    entry_point.name = "standard_cnn_1d"
+
+    with pytest.raises(ValueError, match="duplicate model plugin"):
+        discover_model_plugins([entry_point])

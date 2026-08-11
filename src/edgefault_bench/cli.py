@@ -10,7 +10,12 @@ from pathlib import Path
 from edgefault_bench.audit import main as audit_main
 from edgefault_bench.download import main as download_hust_main
 from edgefault_bench.download_mehran import main as download_mehran_main
-from edgefault_bench.plugins import discover_dataset_plugins, load_dataset_adapter
+from edgefault_bench.plugins import (
+    ModelBuildContext,
+    discover_dataset_plugins,
+    discover_model_plugins,
+    load_dataset_adapter,
+)
 from edgefault_bench.reporting import load_result
 
 
@@ -33,15 +38,28 @@ def _adapter(manifest: Path):
 
 
 def _plugin_list(args: argparse.Namespace) -> int:
-    plugins = discover_dataset_plugins()
+    if args.kind == "dataset":
+        plugins = discover_dataset_plugins()
+        items = [
+            {"dataset_id": plugin.dataset_id, "source": plugin.source}
+            for plugin in sorted(plugins.values(), key=lambda item: item.dataset_id)
+        ]
+    else:
+        model_plugins = discover_model_plugins()
+        items = [
+            {
+                "model_id": plugin.model_id,
+                "backend": plugin.backend,
+                "source": plugin.source,
+            }
+            for plugin in sorted(model_plugins.values(), key=lambda item: item.model_id)
+        ]
     print(
         json.dumps(
             {
                 "schema_version": 1,
-                "plugins": [
-                    {"dataset_id": plugin.dataset_id, "source": plugin.source}
-                    for plugin in sorted(plugins.values(), key=lambda item: item.dataset_id)
-                ],
+                "plugin_type": args.kind,
+                "plugins": items,
             },
             indent=2,
             sort_keys=True,
@@ -59,6 +77,30 @@ def _plugin_validate(args: argparse.Namespace) -> int:
                 "passed": True,
                 "dataset_id": adapter.metadata.dataset_id,
                 "recording_count": len(adapter.recordings()),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+def _plugin_validate_model(args: argparse.Namespace) -> int:
+    plugins = discover_model_plugins()
+    try:
+        plugin = plugins[args.model]
+    except KeyError as error:
+        raise ValueError(f"no model plugin is registered for {args.model!r}") from error
+    context = ModelBuildContext(args.num_classes, args.input_channels, args.seed)
+    plugin.create(context)
+    print(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "passed": True,
+                "model_id": plugin.model_id,
+                "backend": plugin.backend,
+                "source": plugin.source,
             },
             indent=2,
             sort_keys=True,
@@ -156,14 +198,23 @@ def build_parser() -> argparse.ArgumentParser:
     plugin = commands.add_parser("plugin", help="Discover or validate dataset plugins")
     plugin_commands = plugin.add_subparsers(dest="plugin_command", required=True)
     list_plugins = plugin_commands.add_parser(
-        "list", help="List built-in and installed dataset plugins"
+        "list", help="List built-in and installed dataset or model plugins"
     )
+    list_plugins.add_argument("--kind", choices=("dataset", "model"), default="dataset")
     list_plugins.set_defaults(handler=_plugin_list)
     validate_plugin = plugin_commands.add_parser(
         "validate", help="Instantiate and validate the plugin selected by a manifest"
     )
     validate_plugin.add_argument("--manifest", required=True, type=Path)
     validate_plugin.set_defaults(handler=_plugin_validate)
+    validate_model_plugin = plugin_commands.add_parser(
+        "validate-model", help="Instantiate and validate a registered model plugin"
+    )
+    validate_model_plugin.add_argument("--model", required=True)
+    validate_model_plugin.add_argument("--num-classes", type=int, default=4)
+    validate_model_plugin.add_argument("--input-channels", type=int, default=1)
+    validate_model_plugin.add_argument("--seed", type=int, default=17)
+    validate_model_plugin.set_defaults(handler=_plugin_validate_model)
 
     dataset = commands.add_parser("dataset", help="Inspect or acquire a registered dataset")
     dataset_commands = dataset.add_subparsers(dest="dataset_command", required=True)

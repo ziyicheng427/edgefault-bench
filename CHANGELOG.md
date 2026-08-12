@@ -19,6 +19,8 @@ versioning after the first tagged release.
   plugin listing and validation commands, and adapter-boundary tests.
 - Added backend-aware model plugin discovery and construction contexts for independently
   packaged scikit-learn and PyTorch implementations, with fail-closed identity checks.
+- Added an independently packaged synthetic dataset/model plugin and install-level CI audit on
+  Python 3.10 and 3.12, without representing the maintained fixture as external adoption.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

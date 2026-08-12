@@ -55,7 +55,9 @@
 - [ ] Replace dataset-specific entry points with a stable unified CLI while retaining aliases.
 - [x] Add fail-closed discovery and validation for externally packaged dataset adapters.
 - [x] Freeze a backend-aware discovery and construction boundary for external model plugins.
-- [ ] Demonstrate third-party-style dataset and model extensions through public interfaces.
+- [x] Demonstrate independently packaged dataset and model extensions through public discovery
+      and validation interfaces.
+- [ ] Execute an installed model plugin against a versioned task and validated result bundle.
 - [ ] Add at least one additional inference backend and hardware class.
 - [ ] Demonstrate sustained public development and genuine research use over time.
 - [ ] Prepare the JOSS Markdown paper and archive the reviewed release with a DOI.

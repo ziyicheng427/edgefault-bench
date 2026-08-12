@@ -41,6 +41,9 @@ Dataset maintainers can publish adapters from independent Python packages throug
 documented [`dataset plugin interface`](docs/dataset-adapters.md#registering-an-external-adapter).
 Model authors can use the separate [`model plugin interface`](docs/model-plugins.md), which
 currently freezes discovery and construction without overstating execution-runner support.
+An [`independently packaged example`](examples/edgefault-example-plugin) exercises both entry-point
+groups in CI; its [`installation audit`](docs/example-plugin-install-audit-2026-08-12.md) states
+the evidence and the remaining execution gap.
 
 ## Research questions
 

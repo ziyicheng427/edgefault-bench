@@ -1,0 +1,26 @@
+{
+  "dataset_id": "edgefault-example-v1",
+  "version": 1,
+  "title": "Synthetic plugin-boundary example",
+  "license_spdx": "CC0-1.0",
+  "source_url": "https://github.com/ziyicheng427/edgefault-bench",
+  "domain_fields": ["device", "load"],
+  "recordings": [
+    {
+      "recording_id": "device-a-load-0-healthy",
+      "source_file": "synthetic/device-a-load-0-healthy.csv",
+      "label": "healthy",
+      "domains": {"device": "a", "load": 0},
+      "sample_rate_hz": 1000.0,
+      "sample_count": 4096
+    },
+    {
+      "recording_id": "device-b-load-100-fault",
+      "source_file": "synthetic/device-b-load-100-fault.csv",
+      "label": "fault",
+      "domains": {"device": "b", "load": 100},
+      "sample_rate_hz": 1000.0,
+      "sample_count": 4096
+    }
+  ]
+}

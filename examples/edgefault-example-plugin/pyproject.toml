@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "edgefault-example-plugin"
+version = "0.1.0"
+description = "Minimal independently packaged dataset and model plugins for EdgeFault-Bench"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = ["edgefault-bench>=1.0.0"]
+
+[project.entry-points."edgefault_bench.datasets"]
+edgefault-example-v1 = "edgefault_example_plugin:ExampleDatasetAdapter"
+
+[project.entry-points."edgefault_bench.models"]
+example_centroid_classifier = "edgefault_example_plugin:model_plugin"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/edgefault_example_plugin"]

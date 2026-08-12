@@ -24,3 +24,13 @@ jobs:
         run: uv run ruff check .
       - name: Test
         run: uv run pytest
+      - name: Install independent example plugin
+        run: uv pip install --python .venv/bin/python --no-deps ./examples/edgefault-example-plugin
+      - name: Audit installed plugin entry points
+        run: |
+          .venv/bin/python -m edgefault_bench.cli plugin list
+          .venv/bin/python -m edgefault_bench.cli plugin list --kind model
+          .venv/bin/python -m edgefault_bench.cli plugin validate \
+            --manifest examples/edgefault-example-plugin/example_manifest.json
+          .venv/bin/python -m edgefault_bench.cli plugin validate-model \
+            --model example_centroid_classifier

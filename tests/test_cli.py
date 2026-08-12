@@ -12,7 +12,10 @@ def test_plugin_list_exposes_builtin_provenance(capsys) -> None:
 
     assert exit_code == 0
     assert payload["plugin_type"] == "dataset"
-    assert payload["plugins"] == [
+    builtin_plugins = [
+        item for item in payload["plugins"] if item["source"] == "edgefault-bench"
+    ]
+    assert builtin_plugins == [
         {"dataset_id": "hust-bearing-v3", "source": "edgefault-bench"},
         {"dataset_id": "mehran-triaxial-bearing-v2", "source": "edgefault-bench"},
     ]
@@ -24,13 +27,16 @@ def test_plugin_list_exposes_builtin_model_backends(capsys) -> None:
 
     assert exit_code == 0
     assert payload["plugin_type"] == "model"
-    assert {item["model_id"] for item in payload["plugins"]} == {
+    builtin_plugins = [
+        item for item in payload["plugins"] if item["source"] == "edgefault-bench"
+    ]
+    assert {item["model_id"] for item in builtin_plugins} == {
         "signal_features_logreg",
         "standard_cnn_1d",
         "compact_depthwise_cnn_1d",
         "compact_coral_cnn_1d",
     }
-    assert {item["backend"] for item in payload["plugins"]} == {"sklearn", "pytorch"}
+    assert {item["backend"] for item in builtin_plugins} == {"sklearn", "pytorch"}
 
 
 def test_plugin_validate_model_checks_executable_boundary(capsys) -> None:

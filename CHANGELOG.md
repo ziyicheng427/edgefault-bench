@@ -23,6 +23,8 @@ versioning after the first tagged release.
   Python 3.10 and 3.12, without representing the maintained fixture as external adoption.
 - Added a portable prepared-feature-table contract and a fail-closed scikit-learn plugin runner
   that emits seed-complete, provenance-bound result bundles from versioned tasks.
+- Shipped Draft 2020-12 JSON Schemas for tasks, prepared feature tables, and core results, with
+  multi-file CLI validation and repository-wide CI enforcement.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

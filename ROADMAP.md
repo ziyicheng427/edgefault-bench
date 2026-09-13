@@ -59,6 +59,8 @@
       and validation interfaces.
 - [x] Execute an installed scikit-learn model plugin against a versioned task and validated result
       bundle while keeping synthetic evidence separate from research findings.
+- [x] Ship versioned JSON Schemas and continuously validate registered tasks, prepared fixtures,
+      generated plugin outputs, and all published core result bundles.
 - [ ] Define and implement a versioned PyTorch plugin training policy.
 - [ ] Add at least one additional inference backend and hardware class.
 - [ ] Demonstrate sustained public development and genuine research use over time.

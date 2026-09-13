@@ -32,6 +32,12 @@ values, and inconsistent row widths. Task preparation additionally rejects datas
 unknown labels, missing domain fields, unassigned conditions, empty partitions, and inconsistent
 metadata for rows sharing a recording identifier.
 
+Validate the portable structure before binding the table to a task:
+
+```bash
+edgefault schema validate --kind prepared-feature-table prepared/example-v1.json
+```
+
 JSON is not intended as the final high-volume storage backend. A future binary or columnar format
 must preserve these semantics and publish hashes rather than silently weakening provenance.
 

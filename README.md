@@ -25,6 +25,8 @@ downloading raw data:
 
 ```bash
 uv sync --extra dev
+uv run edgefault schema list
+uv run edgefault schema validate --kind task registry/tasks/*.json
 uv run edgefault plugin list
 uv run edgefault plugin validate --manifest registry/mehran_v2.json
 uv run edgefault dataset inspect --manifest registry/mehran_v2.json
@@ -47,6 +49,8 @@ the evidence and the remaining execution gap.
 The [`prepared feature table`](docs/prepared-feature-tables.md) and unified `benchmark run` command
 now carry installed scikit-learn plugins through frozen seeds to a provenance-validated result;
 the [`execution audit`](docs/plugin-execution-audit-2026-09-13.md) records the exact boundary.
+The packaged [`versioned JSON Schemas`](docs/json-schemas.md) let external tools validate task,
+prepared-table, and result structures before the domain-aware semantic audits run.
 
 ## Research questions
 

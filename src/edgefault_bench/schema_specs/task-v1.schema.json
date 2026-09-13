@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgefault-bench.org/schemas/task-v1.schema.json",
+  "title": "EdgeFault-Bench task v1",
+  "type": "object",
+  "required": [
+    "schema_version", "task_id", "dataset_id", "domain_field",
+    "evaluation_group_field", "partitions", "labels", "window", "seeds", "description"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "domain_field": {"type": "string", "minLength": 1},
+    "evaluation_group_field": {"type": "string", "minLength": 1},
+    "partitions": {
+      "type": "object",
+      "required": ["train", "validation", "test"],
+      "additionalProperties": false,
+      "properties": {
+        "train": {"$ref": "#/$defs/domainPartition"},
+        "validation": {"$ref": "#/$defs/domainPartition"},
+        "test": {"$ref": "#/$defs/domainPartition"}
+      }
+    },
+    "labels": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "window": {
+      "type": "object",
+      "required": ["length", "stride", "normalization"],
+      "additionalProperties": false,
+      "properties": {
+        "length": {"type": "integer", "minimum": 1},
+        "stride": {"type": "integer", "minimum": 1},
+        "normalization": {"type": "string", "minLength": 1}
+      }
+    },
+    "seeds": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "integer"}
+    },
+    "description": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "domainValue": {"type": ["string", "number", "boolean"]},
+    "domainPartition": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"$ref": "#/$defs/domainValue"}
+    }
+  }
+}

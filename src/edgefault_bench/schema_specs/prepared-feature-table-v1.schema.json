@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgefault-bench.org/schemas/prepared-feature-table-v1.schema.json",
+  "title": "EdgeFault-Bench prepared feature table v1",
+  "type": "object",
+  "required": ["schema_version", "dataset_id", "feature_names", "samples"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "feature_names": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "preparation": {"type": "object"},
+    "samples": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/sample"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "domainValue": {"type": ["string", "number", "boolean"]},
+    "sample": {
+      "type": "object",
+      "required": ["recording_id", "label", "domains", "features"],
+      "additionalProperties": false,
+      "properties": {
+        "recording_id": {"type": "string", "minLength": 1},
+        "label": {"type": "string", "minLength": 1},
+        "domains": {
+          "type": "object", "minProperties": 1,
+          "additionalProperties": {"$ref": "#/$defs/domainValue"}
+        },
+        "features": {
+          "type": "array", "minItems": 1,
+          "items": {"type": "number"}
+        }
+      }
+    }
+  }
+}

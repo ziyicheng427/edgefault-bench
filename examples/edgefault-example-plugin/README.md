@@ -21,3 +21,17 @@ uv pip install --python .venv/bin/python --no-deps ./examples/edgefault-example-
 
 The main CI workflow performs this installation after the core test suite on every supported
 Python version.
+
+Run the complete synthetic execution path and validate its result bundle:
+
+```bash
+.venv/bin/python -m edgefault_bench.cli benchmark run \
+  --task examples/edgefault-example-plugin/example_task.json \
+  --features examples/edgefault-example-plugin/prepared_features.json \
+  --model example_centroid_classifier \
+  --output outputs/example-plugin-result.json
+.venv/bin/python -m edgefault_bench.cli results validate \
+  outputs/example-plugin-result.json
+```
+
+The inputs and scores are synthetic interface fixtures, not machinery research results.

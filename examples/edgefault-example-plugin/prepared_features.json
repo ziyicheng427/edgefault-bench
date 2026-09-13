@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "dataset_id": "edgefault-example-v1",
+  "feature_names": ["synthetic_rms", "synthetic_kurtosis"],
+  "preparation": {
+    "kind": "deterministic-synthetic-example",
+    "research_result": false
+  },
+  "samples": [
+    {"recording_id": "a-0-h", "label": "healthy", "domains": {"device": "a", "load": 0}, "features": [0.0, 0.2]},
+    {"recording_id": "a-0-f", "label": "fault", "domains": {"device": "a", "load": 0}, "features": [10.0, 9.8]},
+    {"recording_id": "b-0-h", "label": "healthy", "domains": {"device": "b", "load": 0}, "features": [0.1, 0.3]},
+    {"recording_id": "b-0-f", "label": "fault", "domains": {"device": "b", "load": 0}, "features": [9.9, 9.7]},
+    {"recording_id": "a-100-h", "label": "healthy", "domains": {"device": "a", "load": 100}, "features": [0.3, 0.4]},
+    {"recording_id": "a-100-f", "label": "fault", "domains": {"device": "a", "load": 100}, "features": [9.7, 9.6]},
+    {"recording_id": "b-100-h", "label": "healthy", "domains": {"device": "b", "load": 100}, "features": [0.4, 0.5]},
+    {"recording_id": "b-100-f", "label": "fault", "domains": {"device": "b", "load": 100}, "features": [9.6, 9.5]},
+    {"recording_id": "a-200-h", "label": "healthy", "domains": {"device": "a", "load": 200}, "features": [0.6, 0.7]},
+    {"recording_id": "a-200-f", "label": "fault", "domains": {"device": "a", "load": 200}, "features": [9.4, 9.3]},
+    {"recording_id": "b-200-h", "label": "healthy", "domains": {"device": "b", "load": 200}, "features": [0.7, 0.8]},
+    {"recording_id": "b-200-f", "label": "fault", "domains": {"device": "b", "load": 200}, "features": [9.3, 9.2]}
+  ]
+}

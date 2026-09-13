@@ -34,3 +34,14 @@ jobs:
             --manifest examples/edgefault-example-plugin/example_manifest.json
           .venv/bin/python -m edgefault_bench.cli plugin validate-model \
             --model example_centroid_classifier
+      - name: Execute installed model plugin
+        run: |
+          .venv/bin/python -m edgefault_bench.cli benchmark run \
+            --task examples/edgefault-example-plugin/example_task.json \
+            --features examples/edgefault-example-plugin/prepared_features.json \
+            --model example_centroid_classifier \
+            --output "${RUNNER_TEMP}/example-plugin-result.json" \
+            --latency-warmup 1 \
+            --latency-repeats 3
+          .venv/bin/python -m edgefault_bench.cli results validate \
+            "${RUNNER_TEMP}/example-plugin-result.json"

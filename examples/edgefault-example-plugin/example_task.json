@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "edgefault-example-load-v1",
+  "dataset_id": "edgefault-example-v1",
+  "domain_field": "load",
+  "evaluation_group_field": "device",
+  "partitions": {
+    "train": [0],
+    "validation": [100],
+    "test": [200]
+  },
+  "labels": ["healthy", "fault"],
+  "window": {
+    "length": 4,
+    "stride": 4,
+    "normalization": "none"
+  },
+  "seeds": [17, 29, 43],
+  "protocol_status": "synthetic-example",
+  "description": "Synthetic cross-load task for testing the installed plugin workflow."
+}

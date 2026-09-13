@@ -17,6 +17,7 @@ from edgefault_bench.plugins import (
     load_dataset_adapter,
 )
 from edgefault_bench.reporting import load_result
+from edgefault_bench.runner import run_prepared_benchmark
 
 
 def _version() -> str:
@@ -187,6 +188,19 @@ def _results_validate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _benchmark_run(args: argparse.Namespace) -> int:
+    output = run_prepared_benchmark(
+        task_path=args.task,
+        prepared_path=args.features,
+        model_id=args.model,
+        output_path=args.output,
+        latency_warmup=args.latency_warmup,
+        latency_repeats=args.latency_repeats,
+    )
+    print(output)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="edgefault",
@@ -194,6 +208,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {_version()}")
     commands = parser.add_subparsers(dest="command", required=True)
+
+    benchmark = commands.add_parser("benchmark", help="Run a versioned benchmark workflow")
+    benchmark_commands = benchmark.add_subparsers(dest="benchmark_command", required=True)
+    run = benchmark_commands.add_parser(
+        "run", help="Run an installed sklearn plugin on a prepared feature table"
+    )
+    run.add_argument("--task", required=True, type=Path)
+    run.add_argument("--features", required=True, type=Path)
+    run.add_argument("--model", required=True)
+    run.add_argument("--output", required=True, type=Path)
+    run.add_argument("--latency-warmup", type=int, default=20)
+    run.add_argument("--latency-repeats", type=int, default=100)
+    run.set_defaults(handler=_benchmark_run)
 
     plugin = commands.add_parser("plugin", help="Discover or validate dataset plugins")
     plugin_commands = plugin.add_subparsers(dest="plugin_command", required=True)

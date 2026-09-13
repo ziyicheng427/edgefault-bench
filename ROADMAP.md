@@ -57,7 +57,9 @@
 - [x] Freeze a backend-aware discovery and construction boundary for external model plugins.
 - [x] Demonstrate independently packaged dataset and model extensions through public discovery
       and validation interfaces.
-- [ ] Execute an installed model plugin against a versioned task and validated result bundle.
+- [x] Execute an installed scikit-learn model plugin against a versioned task and validated result
+      bundle while keeping synthetic evidence separate from research findings.
+- [ ] Define and implement a versioned PyTorch plugin training policy.
 - [ ] Add at least one additional inference backend and hardware class.
 - [ ] Demonstrate sustained public development and genuine research use over time.
 - [ ] Prepare the JOSS Markdown paper and archive the reviewed release with a DOI.

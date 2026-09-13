@@ -44,6 +44,9 @@ currently freezes discovery and construction without overstating execution-runne
 An [`independently packaged example`](examples/edgefault-example-plugin) exercises both entry-point
 groups in CI; its [`installation audit`](docs/example-plugin-install-audit-2026-08-12.md) states
 the evidence and the remaining execution gap.
+The [`prepared feature table`](docs/prepared-feature-tables.md) and unified `benchmark run` command
+now carry installed scikit-learn plugins through frozen seeds to a provenance-validated result;
+the [`execution audit`](docs/plugin-execution-audit-2026-09-13.md) records the exact boundary.
 
 ## Research questions
 

@@ -21,6 +21,8 @@ versioning after the first tagged release.
   packaged scikit-learn and PyTorch implementations, with fail-closed identity checks.
 - Added an independently packaged synthetic dataset/model plugin and install-level CI audit on
   Python 3.10 and 3.12, without representing the maintained fixture as external adoption.
+- Added a portable prepared-feature-table contract and a fail-closed scikit-learn plugin runner
+  that emits seed-complete, provenance-bound result bundles from versioned tasks.
 - Accepted Decision 0003 and opened the v1.1 extensible-kernel milestone while preserving the
   frozen v1.0 evidence chain.
 - Added dataset-independent contracts, a HUST v3 adapter, structured recording-leakage audits,

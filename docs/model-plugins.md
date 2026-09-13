@@ -71,6 +71,12 @@ edgefault plugin validate-model \
 Validation constructs the model but does not train it or endorse its results. Installation and
 discovery execute third-party Python code, so users must review and trust external packages.
 
+For `sklearn` plugins, the prepared-table runner now provides a complete versioned execution path.
+See the [`prepared feature table contract`](prepared-feature-tables.md) and the
+[`installed-plugin execution audit`](plugin-execution-audit-2026-09-13.md). PyTorch plugins remain
+discoverable and constructible, but the unified runner rejects them until its training policy is
+formally versioned.
+
 ## Contribution checklist
 
 - Use a stable, descriptive model identifier and document the backend.

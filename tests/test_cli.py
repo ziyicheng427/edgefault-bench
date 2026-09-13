@@ -66,6 +66,41 @@ def test_plugin_validate_model_checks_executable_boundary(capsys) -> None:
     }
 
 
+def test_schema_list_exposes_stable_identifiers(capsys) -> None:
+    exit_code = cli.main(["schema", "list"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert [item["name"] for item in payload["schemas"]] == [
+        "prepared-feature-table",
+        "result",
+        "task",
+    ]
+    assert all(
+        item["schema_id"].startswith("https://edgefault-bench.org/")
+        for item in payload["schemas"]
+    )
+
+
+def test_schema_validate_reports_multiple_artifacts(capsys) -> None:
+    paths = [
+        ROOT / "registry/tasks/mehran_load_100_to_300_v1.json",
+        ROOT / "registry/tasks/mehran_load_300_to_100_v1.json",
+    ]
+    exit_code = cli.main(
+        ["schema", "validate", "--kind", "task", *(str(path) for path in paths)]
+    )
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["passed"] is True
+    assert payload["artifact_count"] == 2
+    assert [item["identity"] for item in payload["artifacts"]] == [
+        "mehran-load-100-to-300-v1",
+        "mehran-load-300-to-100-v1",
+    ]
+
+
 def test_plugin_validate_checks_adapter_boundary(capsys) -> None:
     exit_code = cli.main(
         [

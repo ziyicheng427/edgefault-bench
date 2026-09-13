@@ -18,6 +18,7 @@ from edgefault_bench.plugins import (
 )
 from edgefault_bench.reporting import load_result
 from edgefault_bench.runner import run_prepared_benchmark
+from edgefault_bench.schema import load_schema, schema_names, validate_artifact_schema
 
 
 def _version() -> str:
@@ -201,6 +202,48 @@ def _benchmark_run(args: argparse.Namespace) -> int:
     return 0
 
 
+def _schema_list(args: argparse.Namespace) -> int:
+    schemas = []
+    for name in schema_names():
+        specification = load_schema(name)
+        schemas.append(
+            {
+                "name": name,
+                "schema_id": specification["$id"],
+                "title": specification["title"],
+            }
+        )
+    print(json.dumps({"schema_version": 1, "schemas": schemas}, indent=2, sort_keys=True))
+    return 0
+
+
+def _schema_validate(args: argparse.Namespace) -> int:
+    validated = []
+    for path in args.paths:
+        payload = validate_artifact_schema(path, args.kind)
+        identity = (
+            payload.get("task_id")
+            or payload.get("dataset_id")
+            or payload.get("benchmark_id")
+            or path.name
+        )
+        validated.append({"path": str(path), "identity": identity})
+    print(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "passed": True,
+                "kind": args.kind,
+                "artifact_count": len(validated),
+                "artifacts": validated,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="edgefault",
@@ -208,6 +251,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {_version()}")
     commands = parser.add_subparsers(dest="command", required=True)
+
+    schema = commands.add_parser("schema", help="Inspect or apply packaged JSON Schemas")
+    schema_commands = schema.add_subparsers(dest="schema_command", required=True)
+    list_schemas = schema_commands.add_parser("list", help="List packaged schema identifiers")
+    list_schemas.set_defaults(handler=_schema_list)
+    validate_schema = schema_commands.add_parser(
+        "validate", help="Validate one or more JSON artifacts against a packaged schema"
+    )
+    validate_schema.add_argument("--kind", choices=schema_names(), required=True)
+    validate_schema.add_argument("paths", nargs="+", type=Path)
+    validate_schema.set_defaults(handler=_schema_validate)
 
     benchmark = commands.add_parser("benchmark", help="Run a versioned benchmark workflow")
     benchmark_commands = benchmark.add_subparsers(dest="benchmark_command", required=True)

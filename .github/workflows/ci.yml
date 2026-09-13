@@ -24,6 +24,17 @@ jobs:
         run: uv run ruff check .
       - name: Test
         run: uv run pytest
+      - name: Validate versioned repository artifacts
+        run: |
+          uv run edgefault schema list
+          uv run edgefault schema validate --kind task \
+            registry/tasks/*.json \
+            examples/edgefault-example-plugin/example_task.json
+          uv run edgefault schema validate --kind prepared-feature-table \
+            examples/edgefault-example-plugin/prepared_features.json
+          uv run edgefault schema validate --kind result \
+            results/v1/*.json \
+            results/v1.1/mehran/*.json
       - name: Install independent example plugin
         run: uv pip install --python .venv/bin/python --no-deps ./examples/edgefault-example-plugin
       - name: Audit installed plugin entry points
@@ -44,4 +55,6 @@ jobs:
             --latency-warmup 1 \
             --latency-repeats 3
           .venv/bin/python -m edgefault_bench.cli results validate \
+            "${RUNNER_TEMP}/example-plugin-result.json"
+          .venv/bin/python -m edgefault_bench.cli schema validate --kind result \
             "${RUNNER_TEMP}/example-plugin-result.json"

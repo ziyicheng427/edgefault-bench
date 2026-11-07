@@ -1,29 +1,25 @@
-\documentclass[review,number]{elsarticle}
+%% SOFEN article template: acmart (acmsmall), PACMPL-style, single column.
+%% Anonymous review option strips author details for double-anonymized review.
+\documentclass[acmsmall,review,anonymous]{acmart}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
 
-\usepackage{amsmath,amssymb}
 \usepackage{booktabs}
-\usepackage{graphicx}
 \usepackage{listings}
-\usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
-\usepackage{url}
 
 \lstdefinestyle{inl}{
   basicstyle=\ttfamily\small, keywordstyle=\color{blue!60!black},
   breaklines=true, frame=single, framesep=4pt
 }
 
-\journal{Software Engineering Nexus}
-
 \begin{document}
-
-\begin{frontmatter}
 
 \title{EdgeFault-Bench: A Formally Specified and Extensible Software Framework
 for Auditable Industrial Fault-Diagnosis Experiments}
 
-% Double-anonymized submission: author details live in titlepage.tex and are
-% supplied separately through the submission system.
+%% Author block lives in titlepage.tex (de-anonymized variant) and in the
+%% submission system; the anonymous class option enforces the review copy.
 
 \begin{abstract}
 Cross-condition fault-diagnosis experiments are unusually exposed to
@@ -48,21 +44,17 @@ code---versioned combined-condition and leave-one-device-out task manifests,
 group-bootstrap confidence intervals over recording-level resampling units,
 and result bundles whose input artefacts are content-hashed and re-verifiable.
 Framework overhead is measured (15--30$\times$ bare JSON parsing for
-load-and-validate; sub-millisecond result validation), and cross-Python and cross-OS
-executions reproduce metrics exactly. We report the design, the verification
-stack, and honest boundaries: the formal model covers the abstract guard
-logic, not the Python implementation, and third-party adoption evidence is
-not yet available.
+load-and-validate; sub-millisecond result validation), and cross-Python and
+cross-OS executions reproduce metrics exactly. We report the design, the
+verification stack, and honest boundaries: the formal model covers the
+abstract guard logic, not the Python implementation, and third-party adoption
+evidence is not yet available.
 \end{abstract}
 
-\begin{keyword}
-experiment integrity \sep formal specification \sep model checking \sep
-benchmark frameworks \sep fault diagnosis \sep reproducibility \sep
-plugin architectures
+\keywords{experiment integrity; formal specification; model checking;
+benchmark frameworks; fault diagnosis; reproducibility; plugin architectures}
 
-\end{keyword}
-
-\end{frontmatter}
+\maketitle
 
 \input{sec-intro}
 \input{sec-related}
@@ -99,7 +91,7 @@ its persistent identifier in the published version. Underlying datasets are
 third-party CC BY 4.0 archives that are not redistributed; each is pinned by
 checksums in the repository and cited in the reference list.
 
-\bibliographystyle{elsarticle-num}
+\bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
 \end{document}

@@ -1,0 +1,90 @@
+\documentclass[acmsmall,review,screen]{acmart}
+
+%% SOFEN article template
+%% Recommended for submissions to Software Engineering Nexus (SOFEN)
+%% Based on the PACMPL-style requirements described by the journal.
+
+%% Choose ONE citation style:
+%% Option A: author-year
+\citestyle{acmauthoryear}
+%% Option B: numeric
+%% \citestyle{numeric}
+
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+
+\begin{document}
+
+\title{Title of the Paper}
+
+\author{First Author}
+\affiliation{%
+  \institution{Institution Name}
+  \city{City}
+  \country{Country}}
+\email{first.author@example.com}
+
+\author{Second Author}
+\affiliation{%
+  \institution{Institution Name}
+  \city{City}
+  \country{Country}}
+\email{second.author@example.com}
+
+\begin{abstract}
+Write a concise abstract here. The manuscript should use the PACMPL format, specifically
+the \texttt{acmart} class with the \texttt{acmsmall} option, in a single-column page layout.
+The main text of each paper should be no more than 25 pages, excluding the bibliography.
+\end{abstract}
+
+\keywords{software engineering, trustworthy AI, industrial software, formal methods}
+
+\maketitle
+
+\section{Introduction}
+Introduce the research problem, motivation, and contributions.
+
+\section{Background and Related Work}
+Summarize the technical and scientific context.
+
+\section{Approach}
+Describe the proposed method, framework, system, or theory.
+
+\subsection{Design Overview}
+Add key technical details here.
+
+\subsection{Implementation Details}
+Describe algorithms, architecture, data structures, or workflow.
+
+\section{Evaluation}
+Present the experimental setup, datasets, baselines, metrics, and results.
+
+\begin{table}[t]
+\caption{Example table for SOFEN submissions.}
+\label{tab:example}
+\begin{tabular}{lcl}
+\toprule
+Setting & Value & Notes \\
+\midrule
+Learning rate & 0.001 & Replace with actual values \\
+Batch size    & 64    & Keep formatting consistent \\
+Epochs        & 100   & Edit as needed \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion}
+Discuss limitations, threats to validity, and implications.
+
+\section{Conclusion}
+Conclude the paper succinctly.
+
+\begin{acks}
+Optional. Add funding and acknowledgment information here.
+\end{acks}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{sofen-sample}
+
+\end{document}

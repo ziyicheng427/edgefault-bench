@@ -17,6 +17,21 @@ Recent standardization work in the domain makes exactly this complaint: ad hoc
 partitions and evaluation setups make cross-condition results incomparable
 across papers~\cite{zhao2024dgbenchmark,ieeeaccess2025standard}.
 
+\begin{figure}[t]
+\centering
+% Replace with your artwork: \includegraphics[width=\linewidth]{figures/figure1.pdf}
+\fbox{\parbox[c][5.2cm][c]{0.96\linewidth}{\centering artwork placeholder}}
+\caption{The same experiment under two regimes. Left: in a conventional
+script pipeline, windows cut from one vibration recording straddle the
+train/test boundary, normalization statistics are fitted on all data, and a
+dropped seed silently disappears, yielding an inflated yet unreproducible
+score. Right: EdgeFault-Bench rejects the identical artefact at the
+\textsc{TaskAudited} transition with a machine-readable invariant violation
+(\emph{recording R spans partitions train/test}, INV-2); nothing partial
+survives.}
+\label{fig:motivated}
+\end{figure}
+
 A natural first reaction is to standardize the benchmark: fix the datasets,
 the splits, and the metrics, as domain-generalization research did for vision
 (DomainBed~\cite{gulrajani2021domainbed}) and as fault-diagnosis benchmark

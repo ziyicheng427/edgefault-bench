@@ -1,6 +1,21 @@
 \section{System Architecture}
 \label{sec:arch}
 
+\begin{figure}[t]
+\centering
+% Replace with your artwork: \includegraphics[width=\linewidth]{figures/figure2.pdf}
+\fbox{\parbox[c][6.0cm][c]{0.96\linewidth}{\centering artwork placeholder}}
+\caption{Architecture overview. A recording-identity data layer feeds the
+extensible execution module, whose plugins (dataset signal streams,
+fit-scope-restricted preprocessing, policy-bound models) never receive the
+test partition: the locked channel opens only inside the evaluation
+transition $t_6$. The guarded lifecycle (states \textsc{Empty} to
+\textsc{Published}, with \textsc{Rejected}) sits above the modules and pins
+each invariant INV-1--INV-6 to the transition that enforces it; the
+reproducibility module emits result bundles whose inputs are content-hashed.}
+\label{fig:overview}
+\end{figure}
+
 The kernel is organized in four modules, each owning one concern of the
 lifecycle; the formal guards of \S\ref{sec:spec} sit at the module
 boundaries.

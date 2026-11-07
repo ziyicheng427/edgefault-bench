@@ -1,0 +1,106 @@
+{
+  "catalogue": "formal-spec-draft.md#6",
+  "detected": 12,
+  "mutations": [
+    {
+      "description": "source bytes differ from registered SHA-256",
+      "detail": "SHA-256 mismatch for N400.mat: expected 0c60b57bc39e33f55f1e12078274e860efed1f2dcbccddfa9ddd1c8669b1c7bc, got 23c6e6c17b848d966ca62c897dbf184d8051be4866836fcc3907146bce908bc3",
+      "detected": true,
+      "mechanism": "adapter checksum verification",
+      "mutation_id": "M-HASH-01",
+      "target_invariant": "INV-1"
+    },
+    {
+      "description": "recording duplicated across partitions",
+      "detail": "failed checks ['recording_identity', 'recording_exclusivity']: leakage audit failed: recording_identity: 1 recording identifiers are duplicated; recording_exclusivity: 1 recording identifiers cross partitions",
+      "detected": true,
+      "mechanism": "pre-training audit",
+      "mutation_id": "M-LEAK-01",
+      "target_invariant": "INV-2"
+    },
+    {
+      "description": "test recording relabelled as train rows",
+      "detail": "recording 'rec-200a' belongs to partition 'test' but its table rows were assigned 'train': relabelled partitions are rejected",
+      "detected": true,
+      "mechanism": "recording cross-audit",
+      "mutation_id": "M-LEAK-02",
+      "target_invariant": "INV-2"
+    },
+    {
+      "description": "preprocessing fitted with test statistics",
+      "detail": "kernel digest matches train-only fit and differs from all-rows fit; fit_scope=('train', 'validation')",
+      "detected": true,
+      "mechanism": "kernel fit-scope guard",
+      "mutation_id": "M-LEAK-03",
+      "target_invariant": "INV-3"
+    },
+    {
+      "description": "fit call receives test rows",
+      "detail": "fit saw rows [0, 1]; test rows [4, 5] absent",
+      "detected": true,
+      "mechanism": "partition-restricted views",
+      "mutation_id": "M-LEAK-04",
+      "target_invariant": "INV-3"
+    },
+    {
+      "description": "entry-point identity mismatch",
+      "detail": "model plugin identity mismatch: registered as 'registered-name', declared 'declared-other-id'",
+      "detected": true,
+      "mechanism": "plugin registry",
+      "mutation_id": "M-PLUGIN-01",
+      "target_invariant": "INV-6"
+    },
+    {
+      "description": "model missing contract methods",
+      "detail": "pytorch model is missing required methods: ['train', 'eval', 'state_dict', 'parameters']",
+      "detected": true,
+      "mechanism": "plugin contract validation",
+      "mutation_id": "M-PLUGIN-02",
+      "target_invariant": "INV-6"
+    },
+    {
+      "description": "built-in identifier collision",
+      "detail": "duplicate model plugin for 'standard_cnn_1d'",
+      "detected": true,
+      "mechanism": "plugin registry",
+      "mutation_id": "M-PLUGIN-03",
+      "target_invariant": "INV-6"
+    },
+    {
+      "description": "environment provenance removed",
+      "detail": "/var/folders/7t/1y1j5k1125j6fg1dcf8stv0r0000gn/T/edgefault-mutation-_cxpia6j/m-prov-01/m-prov-01.json: missing required fields: environment",
+      "detected": true,
+      "mechanism": "result validator",
+      "mutation_id": "M-PROV-01",
+      "target_invariant": "INV-5"
+    },
+    {
+      "description": "input artefact modified after result creation",
+      "detail": "{\"status\": \"mismatch\", \"path\": \"/var/folders/7t/1y1j5k1125j6fg1dcf8stv0r0000gn/T/edgefault-mutation-_cxpia6j/m-prov-02/m-prov-02-features.json\", \"expected_sha256\": \"23970c781cf026c9ef6662515cce926cb3a",
+      "detected": true,
+      "mechanism": "input-artifact hash check",
+      "mutation_id": "M-PROV-02",
+      "target_invariant": "INV-5"
+    },
+    {
+      "description": "seed run dropped from bundle",
+      "detail": "/var/folders/7t/1y1j5k1125j6fg1dcf8stv0r0000gn/T/edgefault-mutation-_cxpia6j/m-seed-01/m-seed-01.json: runs [17] do not biject with registered seeds [17, 29]",
+      "detected": true,
+      "mechanism": "result validator",
+      "mutation_id": "M-SEED-01",
+      "target_invariant": "INV-4"
+    },
+    {
+      "description": "seed duplicated to impersonate another",
+      "detail": "/var/folders/7t/1y1j5k1125j6fg1dcf8stv0r0000gn/T/edgefault-mutation-_cxpia6j/m-seed-02/m-seed-02.json: runs [17, 17] do not biject with registered seeds [17, 29]",
+      "detected": true,
+      "mechanism": "result validator",
+      "mutation_id": "M-SEED-02",
+      "target_invariant": "INV-4"
+    }
+  ],
+  "passed": true,
+  "schema_version": 1,
+  "total": 12,
+  "undetected": []
+}

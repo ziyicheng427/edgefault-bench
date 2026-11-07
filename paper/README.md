@@ -35,11 +35,15 @@ registries. Three 2025–2026 items are marked citation-level in
 
 ## Pre-submission checklist (open)
 
-- [ ] Complete the three citation-level bibliography entries (T18 full pass).
-- [ ] Re-check the DG benchmark repository URL in `references.bib`
-      (`CHAOZHAO-1/Domain-generalization-fault-diagnosis-benchmark` vs the
-      possibly renamed `CHAOZHAO-1/DG-PHM`) against the paper's data
-      availability statement.
+- [x] Citation-level bibliography entries completed and verified
+      (Kramer & Lu, Cureus 2025; Lyu, AI Agent 2(3):23, 2026,
+      doi:10.20517/aiagent.2026.31; MLReplicate, arXiv:2605.16616).
+- [x] DG benchmark repository URL re-checked: both
+      `CHAOZHAO-1/Domain-generalization-fault-diagnosis-benchmark` and
+      `CHAOZHAO-1/DG-PHM` resolve (HTTP 200); kept the URL our
+      state-of-the-field document references.
+- [ ] `titlepage.tex` country field is a provisional value — author verifies
+      affiliation details before upload.
 - [x] Evidence re-run at the final pre-tag commit (2026-11-07): TLC identical
       (89,476/46,686, no errors), mutation 12/12, overhead re-archived; paper
       table and abstract updated to the fresh numbers.
@@ -62,11 +66,22 @@ registries. Three 2025–2026 items are marked citation-level in
       mandatory); generative-AI use MUST be declared with the standard
       statement (added to main.tex); declarations (competing interests,
       funding) submitted via the declarations tool as .doc/.docx.
-- [ ] Download the journal's official LaTeX template and diff against our
-      elsarticle setup (ours compiles; confirm class/options match).
-- [ ] Add 1-3 figures (lifecycle state machine, architecture overview, RQ
-      results) — the manuscript currently has tables only; Elsevier artwork
-      rules: vector PDF/EPS, 300/1000 dpi rasters.
+- [x] Migrated to the journal's official LaTeX template (2026-11-07): SEN
+      mandates `acmart` (acmsmall, PACMPL-style, single column, max 25 main-text
+      pages excluding references), NOT elsarticle. `main.tex` now uses
+      `[acmsmall,review,anonymous]` (native double-anonymized mode),
+      ACM-Reference-Format numeric citations, compiles to 13 review pages with
+      no errors and no undefined references; `titlepage.tex` is the
+      de-anonymized companion. Official template kept at
+      `paper/official-template/sofen-latex-template.tex`.
+- [x] Figure 3 (results) generated from committed artefacts via
+      `paper/figures/plot_results.py` (mutation detection matrix + LODO folds
+      with CIs); wired into sec-eval.
+- [ ] Figures 1 (motivated example, sec-intro) and 2 (architecture overview,
+      sec-arch): captioned figure environments are in place with placeholder
+      boxes — author draws the artwork (vector PDF, >=8pt fonts,
+      colour-blind-safe palette) and swaps the placeholder for
+      `\includegraphics`.
 - [ ] Prepare the declarations .docx, ORCID, APC decision (USD 1,600; check
       waiver eligibility), and the anonymized-repository link strategy for
       reviewers (e.g., an anonymous 4open.science mirror until acceptance).

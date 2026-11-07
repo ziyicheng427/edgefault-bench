@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scales": [
+    {
+      "rows": 1000,
+      "kernel_load_and_validate_seconds": 0.085731,
+      "bare_json_load_seconds": 0.002847,
+      "overhead_ratio": 30.11
+    },
+    {
+      "rows": 10000,
+      "kernel_load_and_validate_seconds": 0.779654,
+      "bare_json_load_seconds": 0.028727,
+      "overhead_ratio": 27.14
+    },
+    {
+      "rows": 100000,
+      "kernel_load_and_validate_seconds": 8.81313,
+      "bare_json_load_seconds": 0.566723,
+      "overhead_ratio": 15.55
+    }
+  ],
+  "note": "Kernel cost = load_prepared_feature_table + schema validation; bare cost = json.loads on the same file. Median of 5 repeats; synthetic tables.",
+  "result_validation_seconds": 0.000661
+}

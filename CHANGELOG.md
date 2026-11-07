@@ -3,7 +3,7 @@
 All notable changes and public milestones are recorded here. The project follows semantic
 versioning after the first tagged release.
 
-## 1.2.0 - Unreleased
+## 1.2.0 - 2026-11-07
 
 ### Added
 

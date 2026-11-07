@@ -17,7 +17,7 @@ Every number in the manuscript traces to a repository artefact:
 | Integration effort (239/175/6 and 261/158/5 LOC) | `docs/integration-effort-2026-11-06.md` |
 | Cross-Python identical metrics | `results/verification/reproduction-3.11-vs-3.12.json` |
 | Cross-OS reproduction gate | `.github/workflows/ci.yml` (`reproduce`, `reproduce-compare`) |
-| Overhead table (27.3/26.2/15.2×, 8.37 s, 0.5 ms) | `results/verification/framework-overhead-2026-11-06.json` (`scripts/framework_overhead.sh`) |
+| Overhead table (30.1/27.1/15.6×, 8.81 s, 0.66 ms) | `results/verification/framework-overhead-2026-11-07.json` (`scripts/framework_overhead.sh`; the 2026-11-06 run is also archived) |
 | Gearbox / combined-condition audit-policy scores + CIs | committed run bundles (2026-11-06/07), policy `audit-1` |
 | LODO fold means 0.565/0.377/0.597/0.472/0.268, outer 0.456 | `results/verification/hust-lodo-outer-2026-11-07.json` |
 | v1.0/v1.1 protocol matrices and negative results | `results/v1`, `results/v1.1`, `docs/technical-report.md` |
@@ -40,8 +40,9 @@ registries. Three 2025–2026 items are marked citation-level in
       (`CHAOZHAO-1/Domain-generalization-fault-diagnosis-benchmark` vs the
       possibly renamed `CHAOZHAO-1/DG-PHM`) against the paper's data
       availability statement.
-- [ ] Re-run TLC / mutation audit / overhead script at the final commit and
-      refresh the numbers above.
+- [x] Evidence re-run at the final pre-tag commit (2026-11-07): TLC identical
+      (89,476/46,686, no errors), mutation 12/12, overhead re-archived; paper
+      table and abstract updated to the fresh numbers.
 - [ ] Execute the KAIST vibration task on a ≥16 GB machine; add to RQ4 or keep
       the boundary statement.
 - [ ] Author affiliation + ORCID; repository archival DOI (Zenodo) once the

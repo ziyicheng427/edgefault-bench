@@ -48,8 +48,8 @@ multimodal acoustic/vibration pair integrated without dataset-specific kernel
 code---versioned combined-condition and leave-one-device-out task manifests,
 group-bootstrap confidence intervals over recording-level resampling units,
 and result bundles whose input artefacts are content-hashed and re-verifiable.
-Framework overhead is measured (15--27$\times$ bare JSON parsing for
-load-and-validate; 0.5\,ms result validation), and cross-Python and cross-OS
+Framework overhead is measured (15--30$\times$ bare JSON parsing for
+load-and-validate; sub-millisecond result validation), and cross-Python and cross-OS
 executions reproduce metrics exactly. We report the design, the verification
 stack, and honest boundaries: the formal model covers the abstract guard
 logic, not the Python implementation, and third-party adoption evidence is

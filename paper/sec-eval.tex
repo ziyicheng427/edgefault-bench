@@ -149,11 +149,11 @@ versions of the same pipeline and remain the benchmark claims of record.
 
 \paragraph{Framework overhead.}
 Table~\ref{tab:overhead} measures the kernel's cost on synthetic tables.
-Loading plus schema-validating a 100{,}000-row v2 table costs 8.4\,s against
-0.55\,s for bare JSON parsing ($15\times$)---the price of constructing
+Loading plus schema-validating a 100{,}000-row v2 table costs 8.8\,s against
+0.57\,s for bare JSON parsing ($15.6\times$)---the price of constructing
 immutable, identity-carrying rows and validating them; the optional Parquet
 backend addresses exactly this cost for large matrices. Result validation is
-0.5\,ms per bundle. Streaming extraction plus audit of the 36-file triaxial
+0.7\,ms per bundle. Streaming extraction plus audit of the 36-file triaxial
 archive (1{,}154 windows) completes in 1.4\,s.
 
 \begin{table}[t]
@@ -165,9 +165,9 @@ archive (1{,}154 windows) completes in 1.4\,s.
 \toprule
 Rows & Kernel (s) & Bare JSON (s) & Ratio \\
 \midrule
-1{,}000 & 0.077 & 0.0028 & 27.3 \\
-10{,}000 & 0.767 & 0.0292 & 26.2 \\
-100{,}000 & 8.370 & 0.5519 & 15.2 \\
+1{,}000 & 0.086 & 0.0028 & 30.1 \\
+10{,}000 & 0.780 & 0.0287 & 27.1 \\
+100{,}000 & 8.813 & 0.5667 & 15.6 \\
 \bottomrule
 \end{tabular}
 \end{table}

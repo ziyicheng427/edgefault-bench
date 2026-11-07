@@ -121,7 +121,7 @@ with tempfile.TemporaryDirectory() as tmp:
         execution._git_commit = original
     report["result_validation_seconds"] = timed(lambda: load_result(bundle))
 
-out = Path("results/verification/framework-overhead-2026-11-06.json")
+out = Path(f"results/verification/framework-overhead-{__import__('datetime').date.today().isoformat()}.json")
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(json.dumps(report, indent=2) + "\n")
 print(json.dumps(report, indent=2))

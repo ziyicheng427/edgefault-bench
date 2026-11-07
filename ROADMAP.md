@@ -100,6 +100,10 @@ itself rather than to accumulate model comparisons.
       `.github/ISSUE_TEMPLATE/third-party-integration.yml` with an acceptance
       checklist); an actual non-author integration remains open.
 - [ ] T17: One third-party integration performed and documented by a non-author.
+      Solicitation is live as
+      [issue #4](https://github.com/ziyicheng427/edgefault-bench/issues/4)
+      with the acceptance-checklist template; evidence lands here when an
+      integration completes.
 
 ## Batch 5 — Paper and release (T18–T20)
 

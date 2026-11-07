@@ -45,6 +45,18 @@ registries. Three 2025–2026 items are marked citation-level in
       table and abstract updated to the fresh numbers.
 - [ ] Execute the KAIST vibration task on a ≥16 GB machine; add to RQ4 or keep
       the boundary statement.
-- [ ] Author affiliation + ORCID; repository archival DOI (Zenodo) once the
-      reviewed release exists.
+- [x] v1.2.0 frozen and pushed: tag
+      [v1.2.0](https://github.com/ziyicheng427/edgefault-bench/releases/tag/v1.2.0)
+      with the evidence re-run at the final commit.
+- [x] Third-party integration solicited:
+      [issue #4](https://github.com/ziyicheng427/edgefault-bench/issues/4).
+- [ ] Zenodo DOI: maintainer steps in `docs/zenodo-archival-steps.md`
+      (account action required), then add it here, to `CITATION.cff`, and to
+      the availability statement.
+- [ ] SEN submission logistics: gold open access, APC USD 1,600 (waivers
+      exist), article type "Research paper" fits. The Guide for Authors page
+      blocks automated retrieval — confirm manually in a browser whether any
+      artifact-availability statement is mandatory and whether LaTeX source
+      submission is accepted.
+- [ ] Author affiliation + ORCID.
 - [ ] Run `pre-submission-reviewer` on the compiled PDF.

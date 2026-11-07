@@ -105,8 +105,12 @@ itself rather than to accumulate model comparisons.
 
 - [ ] T18: Refresh related work (2024–2026) including formal methods for experiment
       systems; update `docs/state-of-the-field.md`.
-- [ ] T19: Write the SEN manuscript and supplementary artefacts per the frozen section
-      plan; run pre-submission review.
+- [x] T19 (draft): full SEN manuscript drafted in LaTeX (`paper/`, elsarticle,
+      21 compiled pages, no undefined references) from the frozen section plan;
+      bibliography independently verified (11/11 entries, one year corrected,
+      three citation-level placeholders flagged); claim-to-evidence map in
+      `paper/README.md`. Open: final-commit evidence refresh, pre-submission
+      review, affiliation/archival metadata.
 - [ ] T20: Stable release: unify code/package/schema versions, publish API docs, and
       archive the reviewed release with a DOI.
 

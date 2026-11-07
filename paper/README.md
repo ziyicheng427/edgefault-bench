@@ -36,6 +36,10 @@ registries. Three 2025–2026 items are marked citation-level in
 ## Pre-submission checklist (open)
 
 - [ ] Complete the three citation-level bibliography entries (T18 full pass).
+- [ ] Re-check the DG benchmark repository URL in `references.bib`
+      (`CHAOZHAO-1/Domain-generalization-fault-diagnosis-benchmark` vs the
+      possibly renamed `CHAOZHAO-1/DG-PHM`) against the paper's data
+      availability statement.
 - [ ] Re-run TLC / mutation audit / overhead script at the final commit and
       refresh the numbers above.
 - [ ] Execute the KAIST vibration task on a ≥16 GB machine; add to RQ4 or keep

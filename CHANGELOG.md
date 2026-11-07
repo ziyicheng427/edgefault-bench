@@ -7,6 +7,11 @@ versioning after the first tagged release.
 
 ### Added
 
+- Drafted the SEN manuscript (`paper/`, elsarticle, 21 compiled pages):
+  frozen eight-section structure with the four RQs, all numbers traced to
+  committed artefacts via `paper/README.md`, and an independently verified
+  bibliography (one year corrected; three citation-level placeholders
+  flagged for the T18 full pass).
 - Integrated the KAIST vibration archive (Decision 0008 extension): 45
   four-channel recordings at 25.6 kHz across three loads × fifteen conditions,
   the upstream misspelling normalized with original filenames still pinned, and

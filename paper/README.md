@@ -53,10 +53,22 @@ registries. Three 2025–2026 items are marked citation-level in
 - [ ] Zenodo DOI: maintainer steps in `docs/zenodo-archival-steps.md`
       (account action required), then add it here, to `CITATION.cff`, and to
       the availability statement.
-- [ ] SEN submission logistics: gold open access, APC USD 1,600 (waivers
-      exist), article type "Research paper" fits. The Guide for Authors page
-      blocks automated retrieval — confirm manually in a browser whether any
-      artifact-availability statement is mandatory and whether LaTeX source
-      submission is accepted.
+- [x] Guide for Authors verified (2026-11-07, full text): double-anonymized
+      review (manuscript anonymized, `titlepage.tex` carries author details);
+      LaTeX `.tex` accepted as source, two-column allowed; length limit 20
+      pages (two-column build is ~7); abstract limit 250 words (ours: 238);
+      1-7 keywords (ours: 7); official Word/LaTeX templates required;
+      research-data policy is Option A (deposit + cite encouraged, not
+      mandatory); generative-AI use MUST be declared with the standard
+      statement (added to main.tex); declarations (competing interests,
+      funding) submitted via the declarations tool as .doc/.docx.
+- [ ] Download the journal's official LaTeX template and diff against our
+      elsarticle setup (ours compiles; confirm class/options match).
+- [ ] Add 1-3 figures (lifecycle state machine, architecture overview, RQ
+      results) — the manuscript currently has tables only; Elsevier artwork
+      rules: vector PDF/EPS, 300/1000 dpi rasters.
+- [ ] Prepare the declarations .docx, ORCID, APC decision (USD 1,600; check
+      waiver eligibility), and the anonymized-repository link strategy for
+      reviewers (e.g., an anonymous 4open.science mirror until acceptance).
 - [ ] Author affiliation + ORCID.
 - [ ] Run `pre-submission-reviewer` on the compiled PDF.

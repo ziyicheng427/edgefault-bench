@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "claim": "same commit, same inputs, Python 3.11 (dev) vs 3.12 (independent venv), same machine",
+  "python_a": "3.11.15",
+  "python_b": "3.12.0",
+  "task_id": "edgefault-example-load-v1",
+  "model_id": "example_centroid_classifier",
+  "per_seed": [
+    {
+      "seed": 17,
+      "macro_f1_311": 1.0,
+      "macro_f1_312": 1.0,
+      "identical": true
+    },
+    {
+      "seed": 29,
+      "macro_f1_311": 1.0,
+      "macro_f1_312": 1.0,
+      "identical": true
+    },
+    {
+      "seed": 43,
+      "macro_f1_311": 1.0,
+      "macro_f1_312": 1.0,
+      "identical": true
+    }
+  ],
+  "metrics_identical": true,
+  "git_commit": "38398b44118a6becc6eef807daa21ebfa403862e",
+  "boundary": "Same physical machine; cross-machine reproduction remains open (RQ3 multi-environment matrix)."
+}

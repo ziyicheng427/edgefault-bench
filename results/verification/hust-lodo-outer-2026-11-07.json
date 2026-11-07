@@ -1,0 +1,95 @@
+{
+  "claim_scope": "Mechanism-validation runs under a reduced audit policy; NOT comparable to the frozen v1.0 protocol results and not a benchmark claim.",
+  "folds": {
+    "6204": {
+      "mean_macro_f1": 0.5645220481437412,
+      "seed_scores": [
+        {
+          "macro_f1": 0.49088765658023403,
+          "seed": 17
+        },
+        {
+          "macro_f1": 0.6159816658173614,
+          "seed": 29
+        },
+        {
+          "macro_f1": 0.5866968220336283,
+          "seed": 43
+        }
+      ]
+    },
+    "6205": {
+      "mean_macro_f1": 0.37690080581903124,
+      "seed_scores": [
+        {
+          "macro_f1": 0.4047008547008547,
+          "seed": 17
+        },
+        {
+          "macro_f1": 0.47600156275623895,
+          "seed": 29
+        },
+        {
+          "macro_f1": 0.25,
+          "seed": 43
+        }
+      ]
+    },
+    "6206": {
+      "mean_macro_f1": 0.5974269522146844,
+      "seed_scores": [
+        {
+          "macro_f1": 0.6586232362051164,
+          "seed": 17
+        },
+        {
+          "macro_f1": 0.4991137120171695,
+          "seed": 29
+        },
+        {
+          "macro_f1": 0.6345439084217673,
+          "seed": 43
+        }
+      ]
+    },
+    "6207": {
+      "mean_macro_f1": 0.47216498056203043,
+      "seed_scores": [
+        {
+          "macro_f1": 0.3039254559873117,
+          "seed": 17
+        },
+        {
+          "macro_f1": 0.5663406404504623,
+          "seed": 29
+        },
+        {
+          "macro_f1": 0.5462288452483173,
+          "seed": 43
+        }
+      ]
+    },
+    "6208": {
+      "mean_macro_f1": 0.2684780719946077,
+      "seed_scores": [
+        {
+          "macro_f1": 0.3660687586487083,
+          "seed": 17
+        },
+        {
+          "macro_f1": 0.32856380175703825,
+          "seed": 29
+        },
+        {
+          "macro_f1": 0.11080165557807653,
+          "seed": 43
+        }
+      ]
+    }
+  },
+  "model": "compact_depthwise_cnn_1d",
+  "outer_mean_of_fold_means": 0.45589857174681897,
+  "policy": "audit-1 (2 epochs, adam 1e-3, batch 64)",
+  "schema_version": 1,
+  "task_family": "hust-lodo-{device}-v1"
+}

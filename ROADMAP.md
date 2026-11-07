@@ -1,67 +1,119 @@
 # Roadmap
 
-## Milestone 0 — Protocol freeze
+Tracks the Software Engineering Nexus (SEN) publication plan from
+[`docs/research-design.md`](docs/research-design.md) and Decision 0006. Frozen v1.0 and
+v1.1 evidence remains valid; new work exists to answer RQ1–RQ4 about the framework
+itself rather than to accumulate model comparisons.
 
-- [x] Define mission, evidence boundaries, and success levels.
-- [x] Define leakage controls and primary metrics.
-- [x] Select the first dataset after verifying source terms and metadata.
-- [x] Publish versioned task manifests and a data card.
+## Batch 1 — Research design freeze (T01–T03)
 
-## Milestone 1 — Auditable baseline
+- [x] Freeze the SEN positioning, four contributions, four research questions, and the
+      experiment matrix (`docs/research-design.md`).
+- [x] Draft the formal specification: lifecycle state machine, transition guards, and
+      invariants INV-1 through INV-6 (`docs/formal-spec-draft.md`).
+- [x] Publish the architecture gap analysis G1–G10 with target v2 contracts
+      (`docs/architecture-gap-analysis.md`).
+- [x] Record Decision 0006 and retire the JOSS-only target.
 
-- [x] Implement package structure, configuration validation, and tests.
-- [x] Implement download/preparation pipeline without committing raw data.
-- [x] Add signal-feature, standard 1D-CNN, and compact depthwise CNN baselines.
-- [x] Run condition-held-out experiments for three seeds.
-- [x] Generate machine-readable results and the first technical report.
+## Batch 2 — Core kernel architecture (T04–T08)
 
-## Milestone 2 — Resource-efficient generalization
+- [x] T04: Dataset signal capability (`SignalDatasetAdapter.open`, `SignalStream`,
+      chunked reads, checksum re-verification at open) with HUST v3 and Mehran v2
+      implementations and fail-closed validation (G1).
+- [x] T05: Preprocessing contract with kernel-enforced training-side fitting, window
+      identity, fitted-state digests, and a discoverable plugin group (G2).
+- [x] T06: Unified execution — versioned `TrainingPolicy`, partition-restricted
+      `DataView`s, sklearn and PyTorch estimators under one `benchmark run` command
+      (G3).
+- [x] T07: Window identity on every prepared row, schema-v2 tables, JSON/Parquet
+      storage split, and window-level partition-inheritance audits (G5).
+- [x] T08: Result bundle v2 with content-hashed input artifacts, failed-seed
+      placeholders, overhead timings, and `results validate --check-hashes` (G8 partly).
+- [x] Retire dataset-id dispatch from the legacy audit entry (G7).
 
-- [x] Add a lightweight condition-generalization method.
-- [x] Benchmark parameters, model size, CPU latency, scoped MACs, and isolated-process RSS.
-- [x] Add noise, label-scarcity, and class-imbalance tracks.
-- [x] Validate across five bearing-device domains in addition to load domains.
+## Batch 3 — Formal and software verification (T09–T12)
 
-## Milestone 3 — Public release
+- [x] T09: TLA+ lifecycle model with transition guards and INV-1…INV-6; TLC
+      exhaustive check clean (46,686 distinct states, depth 11, no errors,
+      no deadlocks) — `formal/`, `scripts/run_tlc.sh`, CI `formal` job,
+      report `formal/tlc-report-2026-11-06.txt`.
+- [x] T10: Hypothesis property tests with independent accept/reject oracles
+      (task partitions, recording audit, window partitioning, table identity,
+      seed bijection, policies, plugin contracts) — `tests/test_properties.py`.
+- [x] T11: Fault-injection catalogue implemented and executable via
+      `edgefault mutation audit`; 12/12 mutations detected fail-closed
+      (M-LEAK/M-HASH/M-SEED/M-PROV/M-PLUGIN).
+- [x] T12 (mechanism layer): real-data window path exercised end-to-end on the
+      36-file Mehran v2 registry (streamed, checksum-verified, windowed,
+      preprocessed train-side-only, PyTorch plugin executed under a versioned
+      policy, schema-v2 bundle hash-verified); independent Python 3.12 venv
+      install + execution audit passed —
+      `docs/window-execution-audit-2026-11-06.md`.
+- [ ] T12 (external adoption): an independently authored dataset or model
+      plugin, integrated and documented by a non-author (folds into T17).
 
-- [x] Add continuous integration, model card, contribution guide, and citation metadata.
-- [x] Publish a tagged release with reproducibility instructions.
-- [ ] Archive an eligible release with a persistent identifier.
-- [x] Pass a new-directory, locked-environment maintainer reproduction audit.
-- [ ] Invite technically relevant external reproduction and feedback without representing
-      unanswered outreach as endorsement or collaboration.
+## Batch 4 — Heterogeneous evaluation (T13–T17)
 
-## Milestone 4 — Inspection integration
+- [x] T13: Gearbox two-stage v1 adapter (20 checksum-pinned recordings, healthy vs
+      broken tooth × ten loads, unstated sampling rate handled honestly with
+      `sample_rate_hz=None` and fail-closed spectral features), one frozen cross-load
+      task, end-to-end real-data run with group statistics. Data card, Decision 0007,
+      kernel-purity assertion in tests.
+- [x] T14 (acoustic subset): KAIST acoustic v6 adapter — five Test.Lab MAT recordings
+      at 51.2 kHz with unit-aware channel metadata, archive hash verified against the
+      Mendeley-published value. No task frozen (single load in this archive); vibration
+      and current/temperature archives remain open. Data card, Decision 0008.
+- [x] T14 (vibration subset, 2026-11-07): KAIST vibration v6 adapter — 45
+      checksum-pinned four-channel recordings (25.6 kHz, g) across three loads ×
+      fifteen conditions, upstream "Unbalalnce" misspelling normalized; frozen
+      five-class cross-load task `kaist-vibration-load-0-2-to-4-v1` (train 0 N·m,
+      select 2 N·m, test 4 N·m) passes the fail-closed audit. Real-archive streaming
+      verified; full end-to-end training awaits a ≥16 GB machine (documented on the
+      data card).
+- [ ] KAIST current/temperature TDMS modality (needs an npTDMS dependency).
+- [x] T15 (statistics core): group bootstrap with recording/group resampling units and
+      95% CIs, window-level vs recording-level dual reporting, paired per-seed bundle
+      comparison, retained per-sample test predictions in schema-v2 bundles, and the
+      `edgefault statistics bootstrap|compare` commands.
+- [x] T15 (task coverage): combined-condition partitions landed as task schema v2
+      (`condition_fields` + tuple `condition_partitions`, mode-agnostic
+      `partition_for_sample`); frozen `mehran-load-size-combined-v1` (load × defect
+      size shift, verified end-to-end on real data) and five HUST
+      leave-one-device-out folds `hust-lodo-{6204..6208}-v1`, all audit-passed.
+- [x] T16 (first evidence points): fault-injection detection matrix (batch 3),
+      framework-overhead benchmark (kernel load+validate is 15–27× bare JSON;
+      `results/verification/framework-overhead-2026-11-06.json`), Python 3.11 vs
+      3.12 reproduction with bit-identical metrics
+      (`results/verification/reproduction-3.11-vs-3.12.json`), and a cross-OS
+      reproduction matrix in CI (`reproduce` + `reproduce-compare` jobs). Open: the
+      full RQ1–RQ4 evidence matrix at paper scale.
+- [x] RQ2 quantitative comparison: `docs/integration-effort-2026-11-06.md` measures
+      adapter-side LOC per integration against the zero-kernel-edit property, with
+      every kernel touch listed and classified.
+- [x] LODO outer validation executed on real HUST data: all five
+      `hust-lodo-{device}-v1` folds ran end-to-end under an audit policy; the
+      outer-fold summary (fold means 0.27–0.60, outer mean 0.456, large
+      per-device and per-seed variance) is archived as
+      `results/verification/hust-lodo-outer-2026-11-07.json` with its
+      non-benchmark scope stated.
+- [ ] T17 third-party invitation prepared (issue template
+      `.github/ISSUE_TEMPLATE/third-party-integration.yml` with an acceptance
+      checklist); an actual non-author integration remains open.
+- [ ] T17: One third-party integration performed and documented by a non-author.
 
-- [x] Define a stable inference interface for time-series sensor windows.
-- [x] Build a clearly labelled CPU edge-inference demonstration with a trained model asset.
-- [x] Report demonstration constraints separately from benchmark conclusions.
+## Batch 5 — Paper and release (T18–T20)
 
-## Milestone 5 — Extensible benchmark kernel
+- [ ] T18: Refresh related work (2024–2026) including formal methods for experiment
+      systems; update `docs/state-of-the-field.md`.
+- [ ] T19: Write the SEN manuscript and supplementary artefacts per the frozen section
+      plan; run pre-submission review.
+- [ ] T20: Stable release: unify code/package/schema versions, publish API docs, and
+      archive the reviewed release with a DOI.
 
-- [x] Ratify the dataset, task, leakage-audit, and artifact-boundary architecture.
-- [x] Add dataset-agnostic recording and adapter interfaces.
-- [x] Add a serializable leakage audit without changing frozen v1 results.
-- [x] Adapt HUST metadata and tasks through the generic interfaces.
-- [x] Publish contributor documentation for adding a dataset adapter.
-- [x] Select a second public dataset only after license and source verification.
+## Carried engineering obligations (pre-dating Decision 0006)
 
-## Milestone 6 — Research-software maturity
-
-- [x] Freeze the product objective, primary users, core workflow, and non-goals.
-- [x] Publish an initial state-of-the-field and build-vs-contribute justification.
 - [ ] Publish installable package releases through a standard Python package index.
 - [ ] Add a documentation site, API reference, and end-to-end tutorials.
-- [ ] Replace dataset-specific entry points with a stable unified CLI while retaining aliases.
-- [x] Add fail-closed discovery and validation for externally packaged dataset adapters.
-- [x] Freeze a backend-aware discovery and construction boundary for external model plugins.
-- [x] Demonstrate independently packaged dataset and model extensions through public discovery
-      and validation interfaces.
-- [x] Execute an installed scikit-learn model plugin against a versioned task and validated result
-      bundle while keeping synthetic evidence separate from research findings.
-- [x] Ship versioned JSON Schemas and continuously validate registered tasks, prepared fixtures,
-      generated plugin outputs, and all published core result bundles.
-- [ ] Define and implement a versioned PyTorch plugin training policy.
-- [ ] Add at least one additional inference backend and hardware class.
+- [ ] Add at least one additional inference backend and hardware class, or narrow the
+      deployment claims to CPU inference cost.
 - [ ] Demonstrate sustained public development and genuine research use over time.
-- [ ] Prepare the JOSS Markdown paper and archive the reviewed release with a DOI.

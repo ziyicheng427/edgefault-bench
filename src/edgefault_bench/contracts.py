@@ -9,6 +9,9 @@ from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Protocol, TypeAlias, runtime_checkable
 
+import numpy as np
+from numpy.typing import NDArray
+
 DomainValue: TypeAlias = str | int | float | bool
 _SHA256_PATTERN = re.compile(r"[0-9a-f]{64}")
 _PARTITION_NAMES = ("train", "validation", "test")
@@ -55,6 +58,35 @@ def _freeze_partitions(
                 raise ValueError(
                     f"partitions {left_name!r} and {right_name!r} overlap: "
                     f"{sorted(overlap, key=str)}"
+                )
+    return MappingProxyType(frozen)
+
+
+def _freeze_condition_partitions(
+    values: Mapping[str, Sequence[Sequence[DomainValue]]],
+) -> Mapping[str, tuple[tuple[DomainValue, ...], ...]]:
+    """Freeze partitions over tuples of combined condition values."""
+
+    if set(values) != set(_PARTITION_NAMES):
+        raise ValueError(
+            "condition_partitions must contain exactly train, validation, and test"
+        )
+    frozen: dict[str, tuple[tuple[DomainValue, ...], ...]] = {}
+    for name in _PARTITION_NAMES:
+        partition = tuple(tuple(combination) for combination in values[name])
+        if not partition:
+            raise ValueError(f"condition partition {name!r} must not be empty")
+        if len(set(partition)) != len(partition):
+            raise ValueError(
+                f"condition partition {name!r} contains duplicate combinations"
+            )
+        frozen[name] = partition
+    for position, left_name in enumerate(_PARTITION_NAMES):
+        for right_name in _PARTITION_NAMES[position + 1 :]:
+            overlap = set(frozen[left_name]) & set(frozen[right_name])
+            if overlap:
+                raise ValueError(
+                    f"condition partitions {left_name!r} and {right_name!r} overlap"
                 )
     return MappingProxyType(frozen)
 
@@ -151,6 +183,60 @@ class DatasetAdapter(Protocol):
 
 
 @dataclass(frozen=True)
+class SignalInfo:
+    """Channel layout and extent of one openable recording.
+
+    ``sample_rate_hz`` may be ``None`` when the upstream source does not state
+    a rate; consumers that need physical frequencies (spectral features) must
+    fail closed on ``None`` instead of assuming a value.
+    """
+
+    channels: tuple[str, ...]
+    total_samples: int
+    sample_rate_hz: float | None = None
+    units: tuple[str, ...] | None = None
+
+    def __post_init__(self) -> None:
+        if not self.channels or len(set(self.channels)) != len(self.channels):
+            raise ValueError("channels must contain unique non-empty names")
+        for channel in self.channels:
+            _require_text(channel, "channel name")
+        if self.sample_rate_hz is not None and (
+            not math.isfinite(self.sample_rate_hz) or self.sample_rate_hz <= 0
+        ):
+            raise ValueError("sample_rate_hz must be finite and positive when stated")
+        if self.total_samples <= 0:
+            raise ValueError("total_samples must be positive")
+        if self.units is not None:
+            if len(self.units) != len(self.channels):
+                raise ValueError("units must align with channels when provided")
+            for unit in self.units:
+                _require_text(unit, "unit")
+
+
+@runtime_checkable
+class SignalStream(Protocol):
+    """Chunked read access to one recording without requiring a full-file load."""
+
+    @property
+    def info(self) -> SignalInfo: ...
+
+    def read(self, start: int, count: int) -> NDArray[np.float64]: ...
+
+
+@runtime_checkable
+class SignalDatasetAdapter(DatasetAdapter, Protocol):
+    """Dataset adapter that can also serve raw signal payloads.
+
+    Metadata-only adapters remain valid for audits and inspection. Kernel stages
+    that need signal values (window extraction) require this capability and fail
+    closed with a "capability missing" error instead of silently degrading.
+    """
+
+    def open(self, recording_id: str) -> SignalStream: ...
+
+
+@dataclass(frozen=True)
 class WindowSpec:
     """Window extraction and sample-local preprocessing contract."""
 
@@ -175,7 +261,15 @@ class WindowSpec:
 
 @dataclass(frozen=True)
 class TaskSpec:
-    """Dataset-independent definition of a condition-held-out classification task."""
+    """Dataset-independent definition of a condition-held-out classification task.
+
+    Two partition modes exist. Single-field tasks (the v1 form) hold out values
+    of ``domain_field`` via ``partitions``. Combined-condition tasks set
+    ``condition_fields`` (two or more domain fields) and assign partitions over
+    tuples of their values via ``condition_partitions``; in that mode
+    ``domain_field`` must equal ``condition_fields[0]`` (the primary shift
+    axis) and ``partitions`` must stay empty so no silent precedence exists.
+    """
 
     task_id: str
     dataset_id: str
@@ -187,6 +281,10 @@ class TaskSpec:
     seeds: tuple[int, ...]
     description: str
     metadata: Mapping[str, object] = field(default_factory=dict)
+    condition_fields: tuple[str, ...] = ()
+    condition_partitions: Mapping[str, Sequence[Sequence[DomainValue]]] = field(
+        default_factory=dict
+    )
 
     def __post_init__(self) -> None:
         for name in (
@@ -199,7 +297,28 @@ class TaskSpec:
             _require_text(getattr(self, name), name)
         if self.domain_field == self.evaluation_group_field:
             raise ValueError("evaluation group must differ from the held-out domain field")
-        object.__setattr__(self, "partitions", _freeze_partitions(self.partitions))
+        if self.condition_fields:
+            if self.partitions:
+                raise ValueError(
+                    "combined-condition tasks must leave single-field partitions empty"
+                )
+            if not all(isinstance(name, str) and name.strip() for name in self.condition_fields):
+                raise ValueError("condition_fields must contain non-empty names")
+            if len(set(self.condition_fields)) != len(self.condition_fields):
+                raise ValueError("condition_fields must be unique")
+            if self.domain_field != self.condition_fields[0]:
+                raise ValueError(
+                    "domain_field must equal condition_fields[0] in combined-condition tasks"
+                )
+            object.__setattr__(self, "partitions", MappingProxyType({}))
+            object.__setattr__(
+                self,
+                "condition_partitions",
+                _freeze_condition_partitions(self.condition_partitions),
+            )
+        else:
+            object.__setattr__(self, "partitions", _freeze_partitions(self.partitions))
+            object.__setattr__(self, "condition_partitions", MappingProxyType({}))
         if not self.labels or len(set(self.labels)) != len(self.labels):
             raise ValueError("labels must contain unique class names")
         for label in self.labels:
@@ -210,7 +329,47 @@ class TaskSpec:
             raise TypeError("seeds must contain integers")
         object.__setattr__(self, "metadata", MappingProxyType(dict(self.metadata)))
 
+    @property
+    def held_out_fields(self) -> tuple[str, ...]:
+        """Fields whose combined values define the held-out conditions."""
+
+        return self.condition_fields or (self.domain_field,)
+
     def partition_for(self, value: DomainValue) -> str | None:
+        """Single-field partition lookup (v1 tasks)."""
+
+        if self.condition_fields:
+            raise ValueError(
+                "combined-condition tasks assign partitions over tuples; use "
+                "partition_for_sample"
+            )
+        for name in _PARTITION_NAMES:
+            if value in self.partitions[name]:
+                return name
+        return None
+
+    def partition_for_sample(
+        self, domains: Mapping[str, DomainValue]
+    ) -> str | None:
+        """Mode-agnostic partition lookup for one recording or window."""
+
+        if self.condition_fields:
+            try:
+                key = tuple(domains[field] for field in self.condition_fields)
+            except KeyError as error:
+                raise ValueError(
+                    f"sample lacks a held-out condition field {error.args[0]!r}"
+                ) from error
+            for name in _PARTITION_NAMES:
+                if key in self.condition_partitions[name]:
+                    return name
+            return None
+        try:
+            value = domains[self.domain_field]
+        except KeyError as error:
+            raise ValueError(
+                f"sample lacks the held-out domain field {self.domain_field!r}"
+            ) from error
         for name in _PARTITION_NAMES:
             if value in self.partitions[name]:
                 return name
@@ -235,15 +394,27 @@ class TaskSpec:
         return self.window.normalization
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        payload: dict[str, object] = {
             "task_id": self.task_id,
             "dataset_id": self.dataset_id,
             "domain_field": self.domain_field,
             "evaluation_group_field": self.evaluation_group_field,
-            "partitions": {name: list(values) for name, values in self.partitions.items()},
+            "partitions": {
+                name: [list(combination) for combination in values]
+                if self.condition_fields
+                else list(values)
+                for name, values in (
+                    self.condition_partitions.items()
+                    if self.condition_fields
+                    else self.partitions.items()
+                )
+            },
             "labels": list(self.labels),
             "window": self.window.to_dict(),
             "seeds": list(self.seeds),
             "description": self.description,
             "metadata": dict(self.metadata),
         }
+        if self.condition_fields:
+            payload["condition_fields"] = list(self.condition_fields)
+        return payload

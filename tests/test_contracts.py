@@ -114,3 +114,82 @@ def test_task_spec_rejects_overlapping_domains() -> None:
 def test_window_spec_rejects_overlapping_windows() -> None:
     with pytest.raises(ValueError, match="prevent overlap"):
         WindowSpec(length=1024, stride=512, normalization="none")
+
+
+def test_combined_condition_task_spec_modes() -> None:
+    import pytest
+
+    from edgefault_bench.contracts import TaskSpec, WindowSpec
+
+    def combined(partitions, *, fields=("load_w", "defect_size_mm")):
+        return TaskSpec(
+            task_id="combined-v1",
+            dataset_id="example-v1",
+            domain_field=fields[0],
+            evaluation_group_field="device",
+            partitions={},
+            labels=("a", "b"),
+            window=WindowSpec(length=4, stride=4, normalization="none"),
+            seeds=(17,),
+            description="combined fixture",
+            condition_fields=fields,
+            condition_partitions=partitions,
+        )
+
+    spec = combined(
+        {
+            "train": [(100, 0.7), (200, 0.7)],
+            "validation": [(100, 1.1)],
+            "test": [(300, 1.7)],
+        }
+    )
+    assert spec.held_out_fields == ("load_w", "defect_size_mm")
+    assert spec.partition_for_sample({"load_w": 200, "defect_size_mm": 0.7}) == "train"
+    assert spec.partition_for_sample({"load_w": 300, "defect_size_mm": 1.7}) == "test"
+    assert spec.partition_for_sample({"load_w": 999, "defect_size_mm": 1.7}) is None
+    with pytest.raises(ValueError, match="condition field"):
+        spec.partition_for_sample({"load_w": 100})
+    with pytest.raises(ValueError, match="tuples"):
+        spec.partition_for(100)
+
+    with pytest.raises(ValueError, match="overlap"):
+        combined(
+            {
+                "train": [(100, 0.7)],
+                "validation": [(100, 0.7)],
+                "test": [(300, 1.7)],
+            }
+        )
+    with pytest.raises(ValueError, match="single-field partitions empty"):
+        combined(
+            {
+                "train": [(100, 0.7), (200, 0.7)],
+                "validation": [(100, 1.1)],
+                "test": [(300, 1.7)],
+            },
+        ).__class__(
+            task_id="x", dataset_id="d", domain_field="load_w",
+            evaluation_group_field="device",
+            partitions={"train": [1], "validation": [2], "test": [3]},
+            labels=("a",), window=WindowSpec(4, 4, "none"), seeds=(1,),
+            description="d", condition_fields=("load_w", "size"),
+            condition_partitions={
+                "train": [(1, 1)], "validation": [(2, 2)], "test": [(3, 3)]
+            },
+        )
+    with pytest.raises(ValueError, match="condition_fields\\[0\\]"):
+        TaskSpec(
+            task_id="mismatched",
+            dataset_id="example-v1",
+            domain_field="other_field",
+            evaluation_group_field="device",
+            partitions={},
+            labels=("a",),
+            window=WindowSpec(4, 4, "none"),
+            seeds=(1,),
+            description="d",
+            condition_fields=("load_w", "size"),
+            condition_partitions={
+                "train": [(1, 1)], "validation": [(2, 2)], "test": [(3, 3)]
+            },
+        )

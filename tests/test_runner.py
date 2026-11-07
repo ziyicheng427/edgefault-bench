@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from edgefault_bench.plugins import ModelPlugin
-from edgefault_bench.reporting import load_result
+from edgefault_bench.reporting import load_result, verify_input_artifact_hashes
 from edgefault_bench.runner import run_prepared_benchmark
 
 
@@ -87,7 +87,7 @@ def test_runs_plugin_for_frozen_seeds_and_writes_valid_result(
         "example-distribution",
         lambda context: ThresholdEstimator(context.seed),
     )
-    monkeypatch.setattr("edgefault_bench.runner._git_commit", lambda: "abcdef1234567890")
+    monkeypatch.setattr("edgefault_bench.execution._git_commit", lambda: "abcdef1234567890")
 
     result_path = run_prepared_benchmark(
         task_path=task,
@@ -100,21 +100,121 @@ def test_runs_plugin_for_frozen_seeds_and_writes_valid_result(
     )
     payload = load_result(result_path)
 
+    assert payload["schema_version"] == 2
     assert [run["seed"] for run in payload["runs"]] == [17, 29, 43]
+    assert all(run["status"] == "ok" for run in payload["runs"])
     assert all(run["test"]["macro_f1"] == 1.0 for run in payload["runs"])
     assert payload["model_plugin"]["source_distribution"] == "example-distribution"
     assert payload["protocol"]["test_used_for_selection"] is False
+    assert payload["input_artifacts"]["task_manifest"]["sha256"] != ""
+    assert payload["framework_overhead"]["load_seconds"] >= 0.0
+
+    hashes = verify_input_artifact_hashes(result_path)
+    assert hashes["passed"] is True
 
 
-def test_rejects_backend_without_implemented_execution_policy(tmp_path: Path) -> None:
+def test_input_artifact_hash_check_detects_tampering(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     task, features = _write_inputs(tmp_path)
-    plugin = ModelPlugin("neural", "pytorch", "example", lambda context: object())
+    plugin = ModelPlugin(
+        "threshold", "sklearn", "example-distribution",
+        lambda context: ThresholdEstimator(context.seed),
+    )
+    monkeypatch.setattr("edgefault_bench.execution._git_commit", lambda: "abcdef1234567890")
+    output = tmp_path / "result.json"
+    run_prepared_benchmark(
+        task_path=task,
+        prepared_path=features,
+        model_id="threshold",
+        output_path=output,
+        latency_warmup=0,
+        latency_repeats=1,
+        plugins={"threshold": plugin},
+    )
+    features.write_text(features.read_text().replace("0.1", "0.2"), encoding="utf-8")
 
-    with pytest.raises(ValueError, match="requires backend 'sklearn'"):
-        run_prepared_benchmark(
-            task_path=task,
-            prepared_path=features,
-            model_id="neural",
-            output_path=tmp_path / "result.json",
-            plugins={"neural": plugin},
-        )
+    report = verify_input_artifact_hashes(output)
+    assert report["passed"] is False
+    assert report["artifacts"]["prepared_feature_table"]["status"] == "mismatch"
+
+
+class UnstableEstimator:
+    """Module-level so the kernel's pickle-based size probe can serialize it."""
+
+    def __init__(self, seed: int):
+        if seed == 29:
+            raise RuntimeError("synthetic training failure")
+
+    def fit(self, features, labels):
+        return self
+
+    def predict(self, features):
+        return ["healthy"] * len(features)
+
+    def get_params(self):
+        return {}
+
+
+def test_failed_seed_is_retained_as_placeholder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    task, features = _write_inputs(tmp_path)
+    plugin = ModelPlugin(
+        "unstable", "sklearn", "example-distribution",
+        lambda context: UnstableEstimator(context.seed),
+    )
+    monkeypatch.setattr("edgefault_bench.execution._git_commit", lambda: "abcdef1234567890")
+    output = run_prepared_benchmark(
+        task_path=task,
+        prepared_path=features,
+        model_id="unstable",
+        output_path=tmp_path / "result.json",
+        latency_warmup=0,
+        latency_repeats=1,
+        plugins={"unstable": plugin},
+    )
+    payload = load_result(output)
+    statuses = {run["seed"]: run["status"] for run in payload["runs"]}
+    assert statuses == {17: "ok", 29: "failed", 43: "ok"}
+    failed = next(run for run in payload["runs"] if run["seed"] == 29)
+    assert "synthetic training failure" in failed["error"]
+
+
+def test_pytorch_plugin_runs_end_to_end_on_tabular_features(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    torch = pytest.importorskip("torch")
+
+    class TinyTorchNet(torch.nn.Module):
+        def __init__(self, num_classes: int, in_features: int):
+            super().__init__()
+            self.flatten = torch.nn.Flatten()
+            self.head = torch.nn.Linear(in_features, num_classes)
+
+        def forward(self, x):
+            return self.head(self.flatten(x))
+
+    def factory(context):
+        return TinyTorchNet(context.num_classes, context.input_channels)
+
+    plugin = ModelPlugin("tiny_net", "pytorch", "example-distribution", factory)
+    task, features = _write_inputs(tmp_path)
+    monkeypatch.setattr("edgefault_bench.execution._git_commit", lambda: "abcdef1234567890")
+
+    output = run_prepared_benchmark(
+        task_path=task,
+        prepared_path=features,
+        model_id="tiny_net",
+        output_path=tmp_path / "result.json",
+        latency_warmup=0,
+        latency_repeats=1,
+        plugins={"tiny_net": plugin},
+    )
+    payload = load_result(output)
+    assert payload["schema_version"] == 2
+    assert payload["model_plugin"]["backend"] == "pytorch"
+    assert all(run["status"] == "ok" for run in payload["runs"])
+    assert all(
+        run["complexity"]["trainable_parameters"] > 0 for run in payload["runs"]
+    )

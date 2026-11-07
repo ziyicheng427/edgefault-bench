@@ -13,8 +13,9 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-from edgefault_bench.contracts import DatasetMetadata, Recording
+from edgefault_bench.contracts import DatasetMetadata, Recording, SignalInfo
 from edgefault_bench.datasets.checksums import verify_registered_file
+from edgefault_bench.datasets.raw import resolve_raw_dir
 
 _FILENAME_PATTERN = re.compile(
     r"^(?P<size>0\.7|0\.9|1\.1|1\.3|1\.5|1\.7)"
@@ -220,10 +221,42 @@ def preprocess_mehran_windows(
     return (centered / scale).astype(np.float32)
 
 
+class MehranSignalStream:
+    """Triaxial acceleration stream over one checksum-registered CSV recording.
+
+    The CSV length is only known after parsing, so opening one recording reads
+    the three acceleration columns once and then serves chunked ``(3, count)``
+    slices through the generic signal interface.
+    """
+
+    def __init__(self, path: str | Path, *, sample_rate_hz: float) -> None:
+        values = load_mehran_signal(path)
+        self._values = values.T.astype(np.float64, copy=True)
+        self._info = SignalInfo(
+            channels=("acc_x", "acc_y", "acc_z"),
+            sample_rate_hz=sample_rate_hz,
+            total_samples=int(self._values.shape[1]),
+        )
+
+    @property
+    def info(self) -> SignalInfo:
+        return self._info
+
+    def read(self, start: int, count: int) -> NDArray[np.float64]:
+        if count <= 0:
+            raise ValueError("read count must be positive")
+        if start < 0 or start + count > self._info.total_samples:
+            raise ValueError(
+                f"read [{start}, {start + count}) exceeds recording of "
+                f"{self._info.total_samples} samples"
+            )
+        return self._values[:, start : start + count]
+
+
 class MehranV2Adapter:
     """Expose the selected 36-file factorial grid through the generic contract."""
 
-    def __init__(self, manifest_path: str | Path) -> None:
+    def __init__(self, manifest_path: str | Path, *, raw_dir: str | Path | None = None) -> None:
         payload, files = load_mehran_manifest(manifest_path)
         self._files = files
         self._metadata = DatasetMetadata(
@@ -236,6 +269,7 @@ class MehranV2Adapter:
             doi=payload["doi"],
         )
         self._sample_rate_hz = float(payload["sampling_rate_hz"])
+        self._raw_dir = Path(raw_dir) if raw_dir is not None else resolve_raw_dir("mehran_v2")
 
     @property
     def metadata(self) -> DatasetMetadata:
@@ -258,3 +292,18 @@ class MehranV2Adapter:
             )
             for item in self.files
         )
+
+    def open(self, recording_id: str) -> MehranSignalStream:
+        known = {item.filename for item in self._files}
+        if recording_id not in known:
+            raise ValueError(
+                f"unknown Mehran recording {recording_id!r}; expected one of 36 files"
+            )
+        specification = next(item for item in self._files if item.filename == recording_id)
+        path = self._raw_dir / specification.filename
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"raw Mehran file is missing: {path}; run 'edgefault dataset fetch' first"
+            )
+        verify_mehran_file(path, specification)
+        return MehranSignalStream(path, sample_rate_hz=self._sample_rate_hz)

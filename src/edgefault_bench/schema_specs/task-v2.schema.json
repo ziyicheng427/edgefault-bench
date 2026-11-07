@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://edgefault-bench.org/schemas/task-v2.schema.json",
+  "title": "EdgeFault-Bench task v2 (single-field or combined-condition partitions)",
+  "type": "object",
+  "required": [
+    "schema_version", "task_id", "dataset_id", "domain_field",
+    "evaluation_group_field", "labels", "window", "seeds", "description"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "task_id": {"type": "string", "minLength": 1},
+    "dataset_id": {"type": "string", "minLength": 1},
+    "domain_field": {"type": "string", "minLength": 1},
+    "evaluation_group_field": {"type": "string", "minLength": 1},
+    "condition_fields": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "condition_partitions": {"type": "object"},
+    "partitions": {"type": "object"},
+    "labels": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "window": {
+      "type": "object",
+      "required": ["length", "stride", "normalization"],
+      "additionalProperties": false,
+      "properties": {
+        "length": {"type": "integer", "minimum": 1},
+        "stride": {"type": "integer", "minimum": 1},
+        "normalization": {"type": "string", "minLength": 1}
+      }
+    },
+    "seeds": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "integer"}
+    },
+    "description": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "condition_fields": {"type": "array", "minItems": 1}
+        },
+        "required": ["condition_fields"]
+      },
+      "then": {
+        "required": ["condition_partitions"],
+        "properties": {
+          "partitions": {
+            "type": "object", "additionalProperties": false, "maxProperties": 0
+          },
+          "condition_partitions": {
+            "type": "object",
+            "required": ["train", "validation", "test"],
+            "additionalProperties": false,
+            "properties": {
+              "train": {"$ref": "#/$defs/combinedPartition"},
+              "validation": {"$ref": "#/$defs/combinedPartition"},
+              "test": {"$ref": "#/$defs/combinedPartition"}
+            }
+          }
+        }
+      },
+      "else": {
+        "required": ["partitions"],
+        "properties": {
+          "partitions": {
+            "type": "object",
+            "required": ["train", "validation", "test"],
+            "additionalProperties": false,
+            "properties": {
+              "train": {"$ref": "#/$defs/domainPartition"},
+              "validation": {"$ref": "#/$defs/domainPartition"},
+              "test": {"$ref": "#/$defs/domainPartition"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "domainValue": {"type": ["string", "number", "boolean"]},
+    "domainPartition": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"$ref": "#/$defs/domainValue"}
+    },
+    "combinedPartition": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "array", "minItems": 1,
+        "items": {"$ref": "#/$defs/domainValue"}
+      }
+    }
+  }
+}

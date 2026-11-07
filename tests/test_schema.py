@@ -14,7 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_packaged_schemas_are_valid_draft_2020_12() -> None:
-    assert schema_names() == ("prepared-feature-table", "result", "task")
+    assert schema_names() == (
+        "prepared-feature-table",
+        "prepared-feature-table-v2",
+        "result",
+        "result-v2",
+        "task",
+        "task-v2",
+    )
     for name in schema_names():
         assert load_schema(name)["$schema"] == "https://json-schema.org/draft/2020-12/schema"
 

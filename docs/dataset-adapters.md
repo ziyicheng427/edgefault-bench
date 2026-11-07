@@ -45,6 +45,47 @@ class ExampleAdapter:
         )
 ```
 
+## Signal capability
+
+Metadata-only adapters remain valid for inspection and audits. Adapters that also
+implement `SignalDatasetAdapter` — adding one `open` method — let the kernel stream
+raw windows without any dataset-specific parsing in benchmark code:
+
+```python
+from edgefault_bench.contracts import SignalInfo
+
+
+class ExampleSignalAdapter(ExampleAdapter):
+    def open(self, recording_id: str) -> ExampleSignalStream:
+        ...  # verify checksums, parse the source file, return a stream
+
+
+class ExampleSignalStream:
+    @property
+    def info(self) -> SignalInfo:
+        return SignalInfo(
+            channels=("acc_x", "acc_y", "acc_z"),
+            sample_rate_hz=12_800.0,
+            total_samples=128_000,
+        )
+
+    def read(self, start: int, count: int) -> np.ndarray:
+        ...  # return shape (len(self.info.channels), count)
+```
+
+Requirements enforced by the kernel:
+
+- `open` must fail closed when the raw file is missing or fails its registered
+  byte-size/SHA-256 verification (the built-in HUST v3 and Mehran v2 adapters do this);
+- `SignalInfo` must agree with the recording metadata — sample rate and, when declared,
+  sample count are cross-checked at open time;
+- `read(start, count)` returns finite `(channels, count)` blocks and raises on
+  out-of-range requests.
+
+Window extraction (`edgefault_bench.windows.extract_windows`) works with any
+signal-capable adapter; metadata-only adapters fail with a capability error rather
+than silently degrading.
+
 ## Registering an external adapter
 
 An adapter can live in an independent Python distribution. Register its factory with the

@@ -14,7 +14,12 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any
 
-from edgefault_bench.contracts import DatasetAdapter, Recording
+from edgefault_bench.contracts import (
+    DatasetAdapter,
+    Recording,
+    SignalDatasetAdapter,
+    SignalStream,
+)
 
 DATASET_ENTRY_POINT_GROUP = "edgefault_bench.datasets"
 MODEL_ENTRY_POINT_GROUP = "edgefault_bench.models"
@@ -80,11 +85,20 @@ class ModelPlugin:
 
 def _builtin_plugins() -> tuple[DatasetPlugin, ...]:
     # Imports stay local so importing the plugin registry remains lightweight.
-    from edgefault_bench.datasets import HustV3Adapter, MehranV2Adapter
+    from edgefault_bench.datasets import (
+        GearboxV1Adapter,
+        HustV3Adapter,
+        KaistAcousticV6Adapter,
+        KaistVibrationV6Adapter,
+        MehranV2Adapter,
+    )
 
     return (
         DatasetPlugin("hust-bearing-v3", "edgefault-bench", HustV3Adapter),
         DatasetPlugin("mehran-triaxial-bearing-v2", "edgefault-bench", MehranV2Adapter),
+        DatasetPlugin("gearbox-two-stage-v1", "edgefault-bench", GearboxV1Adapter),
+        DatasetPlugin("kaist-rotating-acoustic-v6", "edgefault-bench", KaistAcousticV6Adapter),
+        DatasetPlugin("kaist-rotating-vibration-v6", "edgefault-bench", KaistVibrationV6Adapter),
     )
 
 
@@ -265,3 +279,77 @@ def validate_model_implementation(model: object, *, backend: str) -> None:
     missing = [name for name in required if not callable(getattr(model, name, None))]
     if missing:
         raise TypeError(f"{backend} model is missing required methods: {missing}")
+
+
+def open_signal(adapter: object, recording_id: str) -> tuple[Recording, SignalStream]:
+    """Open one recording's signal stream against the adapter's canonical metadata.
+
+    Fails closed when the adapter is metadata-only, the identifier is unknown,
+    or the stream's channel layout, rate, or length contradicts the registered
+    :class:`~edgefault_bench.contracts.Recording` metadata.
+    """
+
+    if not isinstance(adapter, SignalDatasetAdapter):
+        raise TypeError(
+            "dataset adapter does not implement the signal capability "
+            "('open' is missing); window extraction requires a SignalDatasetAdapter"
+        )
+    recordings = {
+        record.recording_id: record
+        for record in adapter.recordings()
+        if isinstance(record, Recording)
+    }
+    record = recordings.get(recording_id)
+    if record is None:
+        raise ValueError(
+            f"unknown recording {recording_id!r} for dataset "
+            f"{adapter.metadata.dataset_id!r}"
+        )
+    stream = adapter.open(recording_id)
+    if not isinstance(stream, SignalStream):
+        raise TypeError("adapter.open must return a SignalStream")
+    info = stream.info
+    if (
+        record.sample_rate_hz is not None
+        and info.sample_rate_hz is not None
+        and info.sample_rate_hz != record.sample_rate_hz
+    ):
+        raise ValueError(
+            f"recording {recording_id!r} stream rate {info.sample_rate_hz} contradicts "
+            f"metadata {record.sample_rate_hz}"
+        )
+    if record.sample_count is not None and info.total_samples != record.sample_count:
+        raise ValueError(
+            f"recording {recording_id!r} stream length {info.total_samples} contradicts "
+            f"metadata {record.sample_count}"
+        )
+    return record, stream
+
+
+def validate_signal_adapter(
+    adapter: object,
+    *,
+    recording_ids: Sequence[str] | None = None,
+    probe_samples: int = 16,
+) -> None:
+    """Probe one or more streams for interface and metadata consistency."""
+
+    if recording_ids is None:
+        known = [
+            record.recording_id
+            for record in adapter.recordings()
+            if isinstance(record, Recording)
+        ]
+        if not known:
+            raise ValueError("adapter exposes no recordings to probe")
+        recording_ids = [known[0]]
+    for recording_id in recording_ids:
+        _, stream = open_signal(adapter, recording_id)
+        info = stream.info
+        count = min(probe_samples, info.total_samples)
+        block = stream.read(0, count)
+        if block.shape != (len(info.channels), count):
+            raise ValueError(
+                f"stream probe for {recording_id!r} returned {block.shape}, "
+                f"expected {(len(info.channels), count)}"
+            )

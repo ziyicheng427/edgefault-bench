@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "gearbox-load-low-to-high-v1",
+  "dataset_id": "gearbox-two-stage-v1",
+  "domain_field": "load_percent",
+  "evaluation_group_field": "gear_condition",
+  "partitions": {
+    "train": [0, 10, 20, 30],
+    "validation": [40, 50],
+    "test": [60, 70, 80, 90]
+  },
+  "labels": ["healthy", "broken_tooth"],
+  "window": {
+    "length": 4096,
+    "stride": 4096,
+    "normalization": "per_window_zscore"
+  },
+  "seeds": [17, 29, 43],
+  "primary": true,
+  "description": "Train on loads 0-30%, select at 40-50%, and evaluate once on unseen loads 60-90% with both gear conditions in every partition."
+}

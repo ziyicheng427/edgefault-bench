@@ -97,7 +97,7 @@ def audit_recordings(records: Sequence[Recording], task: TaskSpec) -> LeakageRep
             missing_group.append(record.recording_id)
         if record.label not in task.labels:
             unsupported_labels.append(record.recording_id)
-        partition = task.partition_for(record.domains[task.domain_field])
+        partition = task.partition_for_sample(record.domains)
         if partition is None:
             unassigned.append(record.recording_id)
             continue
@@ -195,17 +195,12 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """Run the registered adapter for a task and emit its structured audit report."""
 
-    from edgefault_bench.datasets import HustV3Adapter, MehranV2Adapter
+    from edgefault_bench.plugins import load_dataset_adapter
     from edgefault_bench.tasks import load_task_spec
 
     args = build_parser().parse_args(argv)
     task = load_task_spec(args.task)
-    if task.dataset_id == "hust-bearing-v3":
-        adapter = HustV3Adapter(args.dataset_manifest)
-    elif task.dataset_id == "mehran-triaxial-bearing-v2":
-        adapter = MehranV2Adapter(args.dataset_manifest)
-    else:
-        raise ValueError(f"no dataset adapter is registered for {task.dataset_id!r}")
+    adapter = load_dataset_adapter(Path(args.dataset_manifest))
     report = audit_recordings(adapter.recordings(), task)
     rendered = json.dumps(report.to_dict(), indent=2, sort_keys=True)
     if args.output:

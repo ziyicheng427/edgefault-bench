@@ -27,6 +27,25 @@ This comparison is representative, not an assertion that no other related packag
 must be revisited before a JOSS submission and updated when reviewers or users identify closer
 alternatives.
 
+## 2025–2026 update (SEN positioning)
+
+- MLOps infrastructure benchmarking now exists as reusable Infrastructure-as-Code
+  artefacts (Kramer, 2025), and recent reproducibility work argues that releasing
+  source plus dependency lists alone does not make ML benchmarks reproducible
+  (Lyu, 2026) — both support the need for enforced, artefact-level integrity
+  rather than conventions.
+- Benchmark-evaluation research (MLReplicate, 2026; MLCommons responsible-AI
+  tooling) targets what is measured or whether autonomous systems replicate;
+  neither prescribes lifecycle guards for experiment validity.
+- A November 2026 survey found **no published work combining TLA+-style model
+  checking with ML experiment integrity invariants**; adjacent results remain
+  either ML-reproducibility frameworks or formal-methods work on training
+  systems, not on the benchmark lifecycle itself. This is the gap the formal
+  specification layer of Decision 0006 occupies; the claim must be re-checked
+  with a dedicated literature pass before submission (T18 full pass pending).
+
+
+
 ## What EdgeFault-Bench uniquely combines
 
 The contribution is the integration of six concerns into one domain-specific workflow:

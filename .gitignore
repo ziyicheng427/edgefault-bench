@@ -25,3 +25,8 @@ outputs/
 *.pt
 *.pth
 
+
+# TLA+ tooling downloaded by scripts/run_tlc.sh
+tools/
+formal/states/
+formal/*_TTrace_*

@@ -56,5 +56,97 @@ jobs:
             --latency-repeats 3
           .venv/bin/python -m edgefault_bench.cli results validate \
             "${RUNNER_TEMP}/example-plugin-result.json"
+          .venv/bin/python -m edgefault_bench.cli results validate --check-hashes \
+            "${RUNNER_TEMP}/example-plugin-result.json"
           .venv/bin/python -m edgefault_bench.cli schema validate --kind result \
             "${RUNNER_TEMP}/example-plugin-result.json"
+      - name: Fault-injection detection matrix
+        run: |
+          .venv/bin/python -m edgefault_bench.cli mutation audit \
+            --output "${RUNNER_TEMP}/mutation-matrix.json"
+      - name: Property-based tests already ran via pytest
+        run: echo "hypothesis properties are part of the pytest suite"
+
+  formal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5.1.0
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Model-check the experiment lifecycle (T09)
+        run: scripts/run_tlc.sh
+
+  reproduce:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5.1.0
+      - uses: astral-sh/setup-uv@v8.3.2
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Install dependencies
+        run: uv sync --extra dev --extra deep-learning
+      - name: Run the example task and extract canonical metrics
+        run: |
+          uv run edgefault benchmark run \
+            --task examples/edgefault-example-plugin/example_task.json \
+            --features examples/edgefault-example-plugin/prepared_features.json \
+            --model example_centroid_classifier \
+            --output "$RUNNER_TEMP/result.json" \
+            --latency-warmup 1 \
+            --latency-repeats 3
+          uv run edgefault results validate --check-hashes "$RUNNER_TEMP/result.json"
+          uv run python - <<'EOF'
+          import json, os
+          payload = json.load(open(os.environ["RUNNER_TEMP"] + "/result.json"))
+          canonical = {
+              "task_id": payload["task_id"],
+              "model_id": payload["model_id"],
+              "runs": [
+                  {
+                      "seed": run["seed"],
+                      "status": run["status"],
+                      "test_macro_f1": run["test"]["macro_f1"],
+                      "test_worst_condition_macro_f1": run["test"]["worst_condition_macro_f1"],
+                      "validation_macro_f1": run["validation"]["macro_f1"],
+                  }
+                  for run in payload["runs"]
+              ],
+          }
+          with open(os.environ["RUNNER_TEMP"] + "/canonical.json", "w") as stream:
+              json.dump(canonical, stream, indent=2, sort_keys=True)
+          EOF
+      - name: Upload canonical metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: reproduction-${{ matrix.os }}
+          path: ${{ runner.temp }}/canonical.json
+
+  reproduce-compare:
+    needs: reproduce
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          path: artifacts
+      - name: Compare cross-OS metrics
+        run: |
+          python3 - <<'EOF'
+          import json
+          from pathlib import Path
+
+          files = sorted(Path("artifacts").glob("*/canonical.json"))
+          assert len(files) == 2, f"expected two artifacts, found {files}"
+          first = json.loads(files[0].read_text())
+          second = json.loads(files[1].read_text())
+          if first != second:
+              raise SystemExit(
+                  f"cross-OS reproduction mismatch:\n{files[0]}: {first}\n{files[1]}: {second}"
+              )
+          print(f"cross-OS metrics identical on {files[0].parent.name} and {files[1].parent.name}")
+          EOF

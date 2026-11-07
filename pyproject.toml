@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edgefault-bench"
-version = "1.0.0"
+version = "1.2.0"
 description = "Reproducible cross-condition and resource-efficient fault diagnosis benchmark"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,17 +19,21 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+  "hypothesis>=6.168.5",
   "pytest>=8.0,<9",
   "pytest-cov>=5.0,<7",
   "ruff>=0.6,<1",
 ]
 deep-learning = ["torch>=2.2,<3"]
+columnar = ["pyarrow>=15,<22"]
 
 [project.scripts]
 edgefault = "edgefault_bench.cli:main"
 edgefault-smoke = "edgefault_bench.smoke:main"
 edgefault-download-hust = "edgefault_bench.download:main"
 edgefault-download-mehran = "edgefault_bench.download_mehran:main"
+edgefault-download-gearbox = "edgefault_bench.datasets.gearbox:main"
+edgefault-download-kaist = "edgefault_bench.datasets.kaist:main"
 edgefault-run-features = "edgefault_bench.experiments.features:main"
 edgefault-run-neural = "edgefault_bench.experiments.neural:main"
 edgefault-run-robustness = "edgefault_bench.experiments.robustness:main"

@@ -10,8 +10,17 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 SCHEMA_FILES = {
     "prepared-feature-table": "prepared-feature-table-v1.schema.json",
+    "prepared-feature-table-v2": "prepared-feature-table-v2.schema.json",
     "result": "result-v1.schema.json",
+    "result-v2": "result-v2.schema.json",
     "task": "task-v1.schema.json",
+    "task-v2": "task-v2.schema.json",
+}
+
+_VERSIONED_KINDS = {
+    "prepared-feature-table": {1: "prepared-feature-table", 2: "prepared-feature-table-v2"},
+    "result": {1: "result", 2: "result-v2"},
+    "task": {1: "task", 2: "task-v2"},
 }
 
 
@@ -36,12 +45,34 @@ def load_schema(name: str) -> dict[str, object]:
     return schema
 
 
+def resolve_schema_name(kind: str, payload: dict[str, object]) -> str:
+    """Map a versioned artifact kind plus its payload to a concrete schema."""
+
+    versions = _VERSIONED_KINDS.get(kind)
+    if versions is None:
+        return kind
+    declared = payload.get("schema_version")
+    if not isinstance(declared, int) or declared not in versions:
+        raise ArtifactSchemaError(
+            f"schema_version {declared!r} is not one of {sorted(versions)} for kind {kind!r}"
+        )
+    return versions[declared]
+
+
 def validate_artifact_schema(path: str | Path, schema_name: str) -> dict[str, object]:
-    """Validate a JSON document and return its decoded object on success."""
+    """Validate a JSON document and return its decoded object on success.
+
+    For the versioned kinds (``task`` stays fixed), the payload's
+    ``schema_version`` selects the concrete schema, so a v2 bundle is never
+    forced through its v1 predecessor.
+    """
 
     artifact_path = Path(path)
     payload = json.loads(artifact_path.read_text(encoding="utf-8"))
-    schema = load_schema(schema_name)
+    if not isinstance(payload, dict):
+        raise ArtifactSchemaError(f"{artifact_path}: root must be an object")
+    concrete = resolve_schema_name(schema_name, payload)
+    schema = load_schema(concrete)
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
     errors = sorted(validator.iter_errors(payload), key=lambda item: list(item.absolute_path))
     if errors:
@@ -52,6 +83,4 @@ def validate_artifact_schema(path: str | Path, schema_name: str) -> dict[str, ob
                 location += f"[{component}]" if isinstance(component, int) else f".{component}"
             rendered.append(f"{location}: {error.message}")
         raise ArtifactSchemaError(f"{artifact_path}: " + "; ".join(rendered))
-    if not isinstance(payload, dict):
-        raise ArtifactSchemaError(f"{artifact_path}: root must be an object")
     return payload

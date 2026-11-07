@@ -23,15 +23,21 @@ def load_task_spec(path: str | Path) -> TaskSpec:
     """Load a dataset-independent task while enforcing known frozen profiles."""
 
     payload: dict[str, Any] = json.loads(Path(path).read_text(encoding="utf-8"))
+    condition_fields = tuple(payload.get("condition_fields", ()))
+    combined = bool(condition_fields)
     manifest = TaskSpec(
         task_id=payload["task_id"],
         dataset_id=payload["dataset_id"],
         domain_field=payload["domain_field"],
         evaluation_group_field=payload["evaluation_group_field"],
-        partitions={
-            name: tuple(payload["partitions"][name])
-            for name in ("train", "validation", "test")
-        },
+        partitions=(
+            {}
+            if combined
+            else {
+                name: tuple(payload["partitions"][name])
+                for name in ("train", "validation", "test")
+            }
+        ),
         labels=tuple(payload["labels"]),
         window=WindowSpec(
             length=int(payload["window"]["length"]),
@@ -40,6 +46,18 @@ def load_task_spec(path: str | Path) -> TaskSpec:
         ),
         seeds=tuple(int(seed) for seed in payload["seeds"]),
         description=payload["description"],
+        condition_fields=condition_fields,
+        condition_partitions=(
+            {
+                name: tuple(
+                    tuple(combination)
+                    for combination in payload["condition_partitions"][name]
+                )
+                for name in ("train", "validation", "test")
+            }
+            if combined
+            else {}
+        ),
         metadata={
             key: value
             for key, value in payload.items()
@@ -54,6 +72,8 @@ def load_task_spec(path: str | Path) -> TaskSpec:
                 "window",
                 "seeds",
                 "description",
+                "condition_fields",
+                "condition_partitions",
             }
         },
     )

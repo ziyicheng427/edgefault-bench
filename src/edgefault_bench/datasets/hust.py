@@ -12,8 +12,9 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.io import loadmat
 
-from edgefault_bench.contracts import DatasetMetadata, Recording
+from edgefault_bench.contracts import DatasetMetadata, Recording, SignalInfo
 from edgefault_bench.datasets.checksums import verify_registered_file
+from edgefault_bench.datasets.raw import resolve_raw_dir
 
 _FILENAME_PATTERN = re.compile(
     r"^(?P<label>IO|IB|OB|N|I|O|B)(?P<bearing>[4-8])(?P<load>00|02|04)\.mat$"
@@ -51,10 +52,47 @@ class WindowRecord:
         raise ValueError(f"unsupported HUST domain field: {field!r}")
 
 
+class HustSignalStream:
+    """Single-channel vibration stream over one checksum-registered MAT file.
+
+    The MATLAB v5 format is parsed with one ``loadmat`` call; the array is then
+    served through the chunked :class:`~edgefault_bench.contracts.SignalStream`
+    interface so kernel code never depends on the file format.
+    """
+
+    def __init__(
+        self,
+        path: str | Path,
+        *,
+        sample_rate_hz: float,
+        channels: tuple[str, ...],
+    ) -> None:
+        self._signal, _ = load_hust_signal(path)
+        self._info = SignalInfo(
+            channels=channels,
+            sample_rate_hz=sample_rate_hz,
+            total_samples=int(self._signal.size),
+        )
+
+    @property
+    def info(self) -> SignalInfo:
+        return self._info
+
+    def read(self, start: int, count: int) -> NDArray[np.float64]:
+        if count <= 0:
+            raise ValueError("read count must be positive")
+        if start < 0 or start + count > self._info.total_samples:
+            raise ValueError(
+                f"read [{start}, {start + count}) exceeds recording of "
+                f"{self._info.total_samples} samples"
+            )
+        return self._signal[start : start + count].reshape(1, -1)
+
+
 class HustV3Adapter:
     """Expose the pinned HUST v3 registry through the generic dataset contract."""
 
-    def __init__(self, manifest_path: str | Path) -> None:
+    def __init__(self, manifest_path: str | Path, *, raw_dir: str | Path | None = None) -> None:
         payload, files = load_hust_manifest(manifest_path)
         self._files = files
         self._metadata = DatasetMetadata(
@@ -67,6 +105,7 @@ class HustV3Adapter:
             doi=payload["doi"],
         )
         self._sample_rate_hz = float(payload["sampling_rate_hz"])
+        self._raw_dir = Path(raw_dir) if raw_dir is not None else resolve_raw_dir("hust_v3")
 
     @property
     def metadata(self) -> DatasetMetadata:
@@ -85,6 +124,21 @@ class HustV3Adapter:
                 sha256=item.sha256,
             )
             for item in self._files
+        )
+
+    def open(self, recording_id: str) -> HustSignalStream:
+        known = {item.filename for item in self._files}
+        if recording_id not in known:
+            raise ValueError(f"unknown HUST recording {recording_id!r}; expected one of 60 files")
+        specification = next(item for item in self._files if item.filename == recording_id)
+        path = self._raw_dir / specification.filename
+        if not path.is_file():
+            raise FileNotFoundError(
+                f"raw HUST file is missing: {path}; run 'edgefault dataset fetch' first"
+            )
+        verify_hust_file(path, specification)
+        return HustSignalStream(
+            path, sample_rate_hz=self._sample_rate_hz, channels=("vibration",)
         )
 
 

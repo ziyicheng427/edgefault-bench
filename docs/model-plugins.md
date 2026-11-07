@@ -44,16 +44,25 @@ to self-report its provenance. Built-in model identifiers cannot be overridden.
 
 ## Backend boundary
 
-The first interface supports two explicit backends:
+The interface supports two explicit backends, and both now execute through the unified
+`benchmark run` command under a kernel-owned, versioned training policy:
 
-- `sklearn`: the returned object provides callable `fit`, `predict`, and `get_params` methods;
+- `sklearn`: the returned object provides callable `fit`, `predict`, and `get_params` methods.
+  Execution fits on the training partition only and never receives test rows.
 - `pytorch`: the returned object provides callable `train`, `eval`, `state_dict`, and
-  `parameters` methods.
+  `parameters` methods. Execution runs the kernel training loop — optimizer, learning
+  rate, batch size, epoch budget, and validation-only early stopping are all taken from
+  a `TrainingPolicy` manifest, never from the plugin.
 
 These checks establish executable compatibility, not scientific validity. A publishable result
 must still record its frozen task, preprocessing, seeds, training policy, dependency versions,
-hardware, metrics, and git commit. Backend-specific objectives such as CORAL also require an
-execution policy; a model factory by itself does not silently introduce a new training method.
+hardware, metrics, and git commit; the schema-v2 result bundle records them and hashes its
+input artifacts. Backend-specific objectives such as CORAL also require an execution policy;
+a model factory by itself does not silently introduce a new training method.
+
+Training plugins are architecturally isolated from the test partition: the kernel hands
+`fit` partition-restricted data views (train and validation only), and the test view is
+materialized exclusively inside the evaluation step.
 
 ## Discovery and validation
 
@@ -69,13 +78,23 @@ edgefault plugin validate-model \
 ```
 
 Validation constructs the model but does not train it or endorse its results. Installation and
-discovery execute third-party Python code, so users must review and trust external packages.
+discovery execute third-party Python code, so users should review and trust external packages.
 
-For `sklearn` plugins, the prepared-table runner now provides a complete versioned execution path.
+Both backends execute from a prepared feature table, and PyTorch plugins can also run
+straight from a registered dataset manifest, in which case the kernel streams windows from
+checksum-verified recordings and applies a preprocessing plugin:
+
+```bash
+edgefault benchmark run \
+  --task registry/tasks/example.json \
+  --dataset-manifest registry/example_v1.json \
+  --model tiny_cnn \
+  --output outputs/example__tiny_cnn.json
+```
+
 See the [`prepared feature table contract`](prepared-feature-tables.md) and the
-[`installed-plugin execution audit`](plugin-execution-audit-2026-09-13.md). PyTorch plugins remain
-discoverable and constructible, but the unified runner rejects them until its training policy is
-formally versioned.
+[`installed-plugin execution audit`](plugin-execution-audit-2026-09-13.md) for the earlier
+scikit-learn boundary; the PyTorch execution policy was added in 1.2.0.
 
 ## Contribution checklist
 

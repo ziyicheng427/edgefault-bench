@@ -41,16 +41,23 @@ See the [`external-user quickstart`](docs/quickstart.md) for expected outputs, f
 checksum-enforced acquisition, and the compatibility policy for existing commands.
 Dataset maintainers can publish adapters from independent Python packages through the
 documented [`dataset plugin interface`](docs/dataset-adapters.md#registering-an-external-adapter).
-Model authors can use the separate [`model plugin interface`](docs/model-plugins.md), which
-currently freezes discovery and construction without overstating execution-runner support.
+Model authors can use the separate [`model plugin interface`](docs/model-plugins.md); installed
+scikit-learn and PyTorch plugins now both execute through the unified `benchmark run` command
+under a versioned [`training policy`](docs/model-plugins.md#backend-boundary).
 An [`independently packaged example`](examples/edgefault-example-plugin) exercises both entry-point
 groups in CI; its [`installation audit`](docs/example-plugin-install-audit-2026-08-12.md) states
 the evidence and the remaining execution gap.
-The [`prepared feature table`](docs/prepared-feature-tables.md) and unified `benchmark run` command
-now carry installed scikit-learn plugins through frozen seeds to a provenance-validated result;
-the [`execution audit`](docs/plugin-execution-audit-2026-09-13.md) records the exact boundary.
+The [`prepared feature table`](docs/prepared-feature-tables.md) carries window identity
+(`window_id`, `recording_id`, `start_sample`, `end_sample`) on every v2 row, supports
+optional Parquet storage, and can be rebuilt straight from a registered dataset manifest
+through the checksum-verified [`signal interface`](docs/dataset-adapters.md#signal-capability).
 The packaged [`versioned JSON Schemas`](docs/json-schemas.md) let external tools validate task,
-prepared-table, and result structures before the domain-aware semantic audits run.
+prepared-table, and result structures before the domain-aware semantic audits run; result
+bundles hash their input artifacts and `edgefault results validate --check-hashes` recomputes
+them. The experiment lifecycle itself is model-checked: the
+[`formal/TLA+ specification`](formal/README.md) is verified with TLC on every push, the
+pytest suite includes Hypothesis property tests, and `edgefault mutation audit` replays the
+fault-injection catalogue to confirm every planted integrity violation is rejected.
 
 ## Research questions
 

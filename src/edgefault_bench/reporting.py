@@ -3,35 +3,121 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import statistics
 from pathlib import Path
 
 EXPECTED_SEEDS = (17, 29, 43)
 
+_V1_REQUIRED = {"task_id", "model_id", "git_commit", "runs", "environment"}
+_V2_REQUIRED = _V1_REQUIRED | {"protocol", "model_plugin", "input_artifacts"}
+
 
 def _mean_sd(values: list[float]) -> str:
     return f"{statistics.mean(values):.4f} ± {statistics.pstdev(values):.4f}"
 
 
-def load_result(path: Path, *, expected_seeds: tuple[int, ...] = EXPECTED_SEEDS) -> dict:
-    """Load a result and reject missing, duplicated, or reordered predefined seeds."""
-
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    required = {"task_id", "model_id", "git_commit", "runs", "environment"}
+def _require_fields(payload: dict, required: set[str], path: Path) -> None:
     missing = sorted(required.difference(payload))
     if missing:
         raise ValueError(f"{path}: missing required fields: {', '.join(missing)}")
-    seeds = tuple(run.get("seed") for run in payload["runs"])
-    if seeds != expected_seeds:
-        raise ValueError(f"{path}: expected seeds {expected_seeds}, found {seeds}")
+
+
+def _check_commit(payload: dict, path: Path) -> None:
     if payload["git_commit"] == "unknown" or len(payload["git_commit"]) < 7:
         raise ValueError(f"{path}: result is not bound to a valid Git commit")
-    for run in payload["runs"]:
-        for section in ("validation", "test", "complexity", "latency"):
-            if section not in run:
-                raise ValueError(f"{path}: seed {run['seed']} is missing {section}")
-    return payload
+
+
+def load_result(path: Path, *, expected_seeds: tuple[int, ...] = EXPECTED_SEEDS) -> dict:
+    """Load a v1 or v2 result and reject incomplete seed provenance.
+
+    v1 bundles keep the frozen 17/29/43 seed order. v2 bundles carry their own
+    registered seed list in ``protocol.task_seeds`` and may retain failed runs
+    as explicit placeholders instead of dropping seeds (INV-4).
+    """
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    version = payload.get("schema_version", 1)
+    if version == 1:
+        _require_fields(payload, _V1_REQUIRED, path)
+        seeds = tuple(run.get("seed") for run in payload["runs"])
+        if seeds != expected_seeds:
+            raise ValueError(f"{path}: expected seeds {expected_seeds}, found {seeds}")
+        _check_commit(payload, path)
+        for run in payload["runs"]:
+            for section in ("validation", "test", "complexity", "latency"):
+                if section not in run:
+                    raise ValueError(f"{path}: seed {run['seed']} is missing {section}")
+        return payload
+    if version == 2:
+        _require_fields(payload, _V2_REQUIRED, path)
+        _check_commit(payload, path)
+        registered = tuple(payload.get("protocol", {}).get("task_seeds", ()))
+        if not registered:
+            raise ValueError(f"{path}: v2 result does not declare protocol.task_seeds")
+        seeds = tuple(run.get("seed") for run in payload["runs"])
+        if seeds != registered:
+            raise ValueError(
+                f"{path}: runs {list(seeds)} do not biject with registered seeds "
+                f"{list(registered)}"
+            )
+        for run in payload["runs"]:
+            status = run.get("status")
+            if status == "ok":
+                for section in ("validation", "test", "complexity", "latency"):
+                    if section not in run:
+                        raise ValueError(
+                            f"{path}: ok run for seed {run['seed']} is missing {section}"
+                        )
+            elif status == "failed":
+                if not run.get("error"):
+                    raise ValueError(
+                        f"{path}: failed run for seed {run['seed']} has no error record"
+                    )
+            else:
+                raise ValueError(
+                    f"{path}: run for seed {run['seed']} has invalid status {status!r}"
+                )
+        return payload
+    raise ValueError(f"{path}: unsupported schema_version {version!r}")
+
+
+def verify_input_artifact_hashes(path: Path) -> dict:
+    """Recompute the SHA-256 of every referenced input artifact (INV-5, M-PROV-02)."""
+
+    payload = load_result(path)
+    artifacts = payload.get("input_artifacts", {})
+    if not artifacts:
+        raise ValueError(f"{path}: result predates content-hashed input artifacts")
+    outcomes: dict[str, dict[str, object]] = {}
+    passed = True
+    for name in sorted(artifacts):
+        reference = artifacts[name]
+        if reference is None:
+            outcomes[name] = {"status": "not-applicable"}
+            continue
+        artifact_path = Path(reference["path"])
+        if not artifact_path.is_file():
+            outcomes[name] = {
+                "status": "missing",
+                "path": str(artifact_path),
+                "expected_sha256": reference["sha256"],
+            }
+            passed = False
+            continue
+        digest = hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+        if digest != reference["sha256"]:
+            outcomes[name] = {
+                "status": "mismatch",
+                "path": str(artifact_path),
+                "expected_sha256": reference["sha256"],
+                "actual_sha256": digest,
+            }
+            passed = False
+        else:
+            outcomes[name] = {"status": "verified", "sha256": digest}
+    return {"passed": passed, "artifacts": outcomes}
 
 
 def summarize(paths: list[Path]) -> str:

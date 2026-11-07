@@ -16,7 +16,10 @@ def test_plugin_list_exposes_builtin_provenance(capsys) -> None:
         item for item in payload["plugins"] if item["source"] == "edgefault-bench"
     ]
     assert builtin_plugins == [
+        {"dataset_id": "gearbox-two-stage-v1", "source": "edgefault-bench"},
         {"dataset_id": "hust-bearing-v3", "source": "edgefault-bench"},
+        {"dataset_id": "kaist-rotating-acoustic-v6", "source": "edgefault-bench"},
+        {"dataset_id": "kaist-rotating-vibration-v6", "source": "edgefault-bench"},
         {"dataset_id": "mehran-triaxial-bearing-v2", "source": "edgefault-bench"},
     ]
 
@@ -73,8 +76,11 @@ def test_schema_list_exposes_stable_identifiers(capsys) -> None:
     assert exit_code == 0
     assert [item["name"] for item in payload["schemas"]] == [
         "prepared-feature-table",
+        "prepared-feature-table-v2",
         "result",
+        "result-v2",
         "task",
+        "task-v2",
     ]
     assert all(
         item["schema_id"].startswith("https://edgefault-bench.org/")

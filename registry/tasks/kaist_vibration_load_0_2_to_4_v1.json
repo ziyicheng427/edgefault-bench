@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "task_id": "kaist-vibration-load-0-2-to-4-v1",
+  "dataset_id": "kaist-rotating-vibration-v6",
+  "domain_field": "load_nm",
+  "evaluation_group_field": "fault_family",
+  "partitions": {
+    "train": [
+      0
+    ],
+    "validation": [
+      2
+    ],
+    "test": [
+      4
+    ]
+  },
+  "labels": [
+    "normal",
+    "bpfi",
+    "bpfo",
+    "misalign",
+    "unbalance"
+  ],
+  "window": {
+    "length": 4096,
+    "stride": 4096,
+    "normalization": "per_window_zscore"
+  },
+  "seeds": [
+    17,
+    29,
+    43
+  ],
+  "primary": true,
+  "description": "Train at 0 Nm, select at 2 Nm, and evaluate once at unseen 4 Nm load across all five machine-condition families."
+}

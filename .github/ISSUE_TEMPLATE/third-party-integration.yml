@@ -1,0 +1,55 @@
+name: Third-party plugin integration (T17 evidence)
+description: Integrate an external dataset or model as a non-author to provide RQ2 adoption evidence
+labels: ["integration", "research-evidence"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue type records an **independent** integration of EdgeFault-Bench:
+        performed by someone who is not a project author, in a separate
+        environment, against a dataset or model of the integrator's choosing.
+        The result feeds RQ2 of the SEN paper. Guides:
+        [`docs/dataset-adapters.md`](../blob/main/docs/dataset-adapters.md),
+        [`docs/model-plugins.md`](../blob/main/docs/model-plugins.md).
+
+  - type: input
+    id: integrator
+    attributes:
+      label: Integrator name / affiliation
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you integrating?
+      options:
+        - Dataset adapter (new public dataset)
+        - Model plugin (sklearn)
+        - Model plugin (PyTorch)
+        - Both dataset and model
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, how the package was installed
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: acceptance
+    attributes:
+      label: Acceptance checklist (maintainers verify)
+      options:
+        - label: Adapter/plugin lives in a repository outside edgefault-bench
+        - label: Installed into a virtual environment separate from the authors'
+        - label: Source licence verified and recorded in a data card (datasets)
+        - label: Registry manifest pins byte sizes and SHA-256 values
+        - label: `edgefault task audit` / `plugin validate` passes fail-closed
+        - label: Full lifecycle executed via the unified CLI (audit → run →
+            `results validate --check-hashes`)
+        - label: Integration time and any friction recorded honestly
+        - label: No benchmark-kernel modifications were needed (or debt documented)

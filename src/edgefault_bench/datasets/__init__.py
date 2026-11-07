@@ -1,15 +1,35 @@
 """Public dataset adapters."""
 
+from edgefault_bench.datasets.gearbox import (
+    GearboxFile,
+    GearboxSignalStream,
+    GearboxV1Adapter,
+    load_gearbox_manifest,
+)
 from edgefault_bench.datasets.hust import (
     HustFile,
+    HustSignalStream,
     HustV3Adapter,
     WindowRecord,
     build_window_records,
     load_hust_signal,
     parse_hust_filename,
+    verify_hust_file,
+)
+from edgefault_bench.datasets.kaist import (
+    KaistAcousticFile,
+    KaistAcousticSignalStream,
+    KaistAcousticV6Adapter,
+    KaistVibrationFile,
+    KaistVibrationSignalStream,
+    KaistVibrationV6Adapter,
+    load_kaist_acoustic_signal,
+    load_kaist_manifest,
+    load_kaist_vibration_manifest,
 )
 from edgefault_bench.datasets.mehran import (
     MehranFile,
+    MehranSignalStream,
     MehranV2Adapter,
     MehranWindowRecord,
     build_mehran_window_records,
@@ -19,14 +39,32 @@ from edgefault_bench.datasets.mehran import (
     preprocess_mehran_windows,
     verify_mehran_file,
 )
+from edgefault_bench.datasets.raw import resolve_raw_dir
 
 __all__ = [
+    "GearboxFile",
+    "GearboxSignalStream",
+    "GearboxV1Adapter",
+    "load_gearbox_manifest",
     "HustFile",
+    "HustSignalStream",
     "HustV3Adapter",
     "WindowRecord",
     "build_window_records",
     "load_hust_signal",
+    "parse_hust_filename",
+    "verify_hust_file",
+    "KaistAcousticFile",
+    "KaistAcousticSignalStream",
+    "KaistAcousticV6Adapter",
+    "KaistVibrationFile",
+    "KaistVibrationSignalStream",
+    "KaistVibrationV6Adapter",
+    "load_kaist_acoustic_signal",
+    "load_kaist_manifest",
+    "load_kaist_vibration_manifest",
     "MehranFile",
+    "MehranSignalStream",
     "MehranV2Adapter",
     "MehranWindowRecord",
     "build_mehran_window_records",
@@ -34,6 +72,6 @@ __all__ = [
     "load_mehran_signal",
     "parse_mehran_filename",
     "preprocess_mehran_windows",
-    "parse_hust_filename",
     "verify_mehran_file",
+    "resolve_raw_dir",
 ]

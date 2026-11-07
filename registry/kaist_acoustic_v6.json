@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "dataset_id": "kaist-rotating-acoustic-v6",
+  "title": "Vibration, Acoustic, Temperature, and Motor Current Dataset of Rotating Machine Under Varying Load Conditions for Fault Diagnosis (acoustic subset)",
+  "repository": "Mendeley Data",
+  "landing_page": "https://data.mendeley.com/datasets/ztmf3m7h5x/6",
+  "api_url": "https://data.mendeley.com/public-api/datasets/ztmf3m7h5x/files",
+  "doi": "10.17632/ztmf3m7h5x.6",
+  "version": 6,
+  "protocol_status": "accepted",
+  "published": "2023-02-08",
+  "license": {
+    "spdx": "CC-BY-4.0",
+    "source_statement": "Mendeley dataset page"
+  },
+  "sampling_rate_hz": 51200,
+  "sampling_rate_note": "Derived per file from the Test.Lab x_values increment (1/51200 s).",
+  "channels": [
+    "acoustic_pa"
+  ],
+  "selection": {
+    "selected_count": 5,
+    "excluded_count": 0,
+    "scope": "acoustic modality only for this first integration; vibration (2.7 GB) and current/temperature TDMS (1.5 GB) archives remain future work"
+  },
+  "archive": {
+    "filename": "acoustic.zip",
+    "size_bytes": 47205730,
+    "sha256": "5dd1371ccec00729498e2d151df13593f6400fdced8895481ff6a8a945a5962f",
+    "url": "https://data.mendeley.com/public-files/datasets/ztmf3m7h5x/files/99f03ffd-04f9-4676-932a-4312284cbc18/file_downloaded"
+  },
+  "files": [
+    {
+      "id": "0Nm_BPFI_03",
+      "recording_id": "0Nm_BPFI_03",
+      "filename": "0Nm_BPFI_03.mat",
+      "size_bytes": 24583048,
+      "sha256": "d5bdb08a3ca0e4d05d670ad3dce2cda22a67beebd6548b7fe332929ae9c30f24",
+      "sample_count": 3072000,
+      "label": "bpfi_03",
+      "fault_family": "Inner",
+      "severity_mm": 3,
+      "load_nm": 0,
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "id": "0Nm_BPFI_10",
+      "recording_id": "0Nm_BPFI_10",
+      "filename": "0Nm_BPFI_10.mat",
+      "size_bytes": 24583048,
+      "sha256": "15f62152a69011ceaec4f518d287b67a5f15d0198be5d65076b38618db5184a7",
+      "sample_count": 3072000,
+      "label": "bpfi_10",
+      "fault_family": "Inner",
+      "severity_mm": 10,
+      "load_nm": 0,
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "id": "0Nm_BPFO_03",
+      "recording_id": "0Nm_BPFO_03",
+      "filename": "0Nm_BPFO_03.mat",
+      "size_bytes": 24583048,
+      "sha256": "30c769bda061f714b01f51e2e8e7d876e4c5d311480335bb9d97876cc6eb106b",
+      "sample_count": 3072000,
+      "label": "bpfo_03",
+      "fault_family": "Outer",
+      "severity_mm": 3,
+      "load_nm": 0,
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "id": "0Nm_BPFO_10",
+      "recording_id": "0Nm_BPFO_10",
+      "filename": "0Nm_BPFO_10.mat",
+      "size_bytes": 24583048,
+      "sha256": "db846869053997bacd23773a8a077251183b2ebae0cc3844d1fde8cfe9f97849",
+      "sample_count": 3072000,
+      "label": "bpfo_10",
+      "fault_family": "Outer",
+      "severity_mm": 10,
+      "load_nm": 0,
+      "selected": true,
+      "exclusion_reason": null
+    },
+    {
+      "id": "0Nm_Normal",
+      "recording_id": "0Nm_Normal",
+      "filename": "0Nm_Normal.mat",
+      "size_bytes": 24583048,
+      "sha256": "2b3ff16a9fb43fa929988484e1e390d31e1da0241c90b0d1279eb8ef29010066",
+      "sample_count": 3072000,
+      "label": "normal",
+      "fault_family": "Normal",
+      "severity_mm": null,
+      "load_nm": 0,
+      "selected": true,
+      "exclusion_reason": null
+    }
+  ]
+}

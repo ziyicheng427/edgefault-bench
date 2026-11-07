@@ -1,0 +1,24 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+EdgeFault-Bench reframes the credibility problem of cross-condition fault
+diagnosis as a software-engineering problem and answers it the way software
+engineering answers such questions: with a specification, an architecture
+that enforces it, and evidence that the enforcement works. The experiment
+lifecycle is a guarded state machine whose six integrity invariants are
+model-checked clean over all reachable states, exercised by oracle-based
+property tests, and attacked by a fault-injection catalogue that every
+guard survives fail-closed. Heterogeneous datasets---bearings, a gearbox,
+acoustic and vibration archives with formats, rates, and quirks that
+include an unstated sampling rate and an upstream misspelling---integrate
+as plugins while the kernel stays free of dataset logic, asserted by test.
+Results carry content-hashed provenance, complete seed bookkeeping with
+failures retained, and recording-level bootstrap uncertainty; reproduction
+holds exactly across Python versions and is gated across operating systems
+in CI. The costs are measured, and the boundaries are stated where evidence
+ends: the formal layer certifies the design, third-party adoption evidence
+is solicited rather than claimed, and non-protocol demonstration runs are
+labelled as such. We believe the wider lesson generalizes beyond fault
+diagnosis: when an empirical field's conclusions are fragile, the benchmark
+infrastructure itself deserves specification, enforcement, and adversarial
+verification---not just standardization of datasets and metrics.

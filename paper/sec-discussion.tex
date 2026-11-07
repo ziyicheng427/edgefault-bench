@@ -1,0 +1,50 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{What the approach buys.}
+The value of pushing integrity into architecture rather than documentation
+shows up in three places. Extension becomes safe by default: a new dataset
+or model arrives as data plus a contract-checked adapter, and the invariants
+do not need to be re-explained to it because it cannot reach around them.
+Verification becomes possible at all: an invariant that exists as a guard in
+a state machine can be model-checked, generated against, and attacked with
+injected faults, which a convention in a script cannot. And results become
+contestable in a productive way: because bundles hash their inputs and
+retain predictions, a sceptical reader can recompute rather than re-trust.
+
+\paragraph{Where the boundary of the guarantee lies.}
+The formal layer certifies the design's guard logic, not the Python
+program; a bug in a guard's implementation is caught only by the
+implementation-level layers (property tests, injection, real incidents such
+as the registry row-count catch). The catalogue covers twelve violation
+families---the ones the invariants name---and honest reporting means
+admitting that a thirteenth kind of fault, if conceived, must first be added
+to the catalogue before its detection can be claimed. Likewise, test
+isolation is structural with respect to the framework's APIs; a plugin that
+exfiltrates test data through side channels outside the kernel's view is
+outside this threat model, as is malicious third-party code at install time
+(a standing, documented caveat of entry-point discovery).
+
+\paragraph{Limitations.}
+The framework has one author; every integration, audit, and reproduction to
+date is author-performed, and the strongest missing evidence is a
+third-party integration with recorded friction. Cross-environment
+reproduction currently spans Python versions and (via CI) operating systems,
+not physical machines and investigators. One integrated archive awaits a
+larger machine for its full run; the temperature/current modality needs a
+TDMS reader. The statistical layer addresses non-independence across
+recordings, but deeper dependence structures (shared test rigs, shared
+campaigns) are dataset knowledge the framework can express only through
+user-declared grouping fields. Finally, the reduced-policy demonstration
+runs must never be quoted as benchmark scores; the artefacts carry that
+warning on every file.
+
+\paragraph{Future work.}
+Near-term: execute the vibration task on suitable hardware; pluginize the
+fetch dispatcher (the last dataset-identifying kernel debt); add the
+temperature/current modality; and run the full RQ1--RQ4 evidence matrix at
+protocol scale, including cross-machine reproduction. Medium-term: streaming
+windowing to remove the memory ceiling, seeding the statistics layer from
+bundle-retained predictions for automatic CI checks of published results,
+and exploring Alloy-style small-scope checks of the partition structures
+themselves.

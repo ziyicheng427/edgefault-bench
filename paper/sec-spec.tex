@@ -1,0 +1,103 @@
+\section{Requirements and Formal Specification}
+\label{sec:spec}
+
+\subsection{Users and requirements}
+
+Three user roles drive the requirements. \emph{Model researchers} add and
+compare estimators without rebuilding dataset parsing, splits, metrics, or
+provenance capture. \emph{Dataset maintainers} publish adapters for their
+archives with source identity, licence, checksums, and recording boundaries
+intact. \emph{Reviewers and reproducibility researchers} must be able to
+verify---without trusting the authors---that recordings do not cross
+partitions, that held-out conditions did not select models, that every
+registered seed is accounted for, and that results map to specific data,
+code, and environment artefacts. All three roles interact with the framework
+only through its public contracts; the requirements therefore reduce to one
+sentence: \emph{extensions must be expressive enough for heterogeneous
+datasets and models, yet structurally incapable of violating experiment
+integrity}.
+
+\subsection{Experiment lifecycle}
+
+We model one (task, model-plugin) experiment as a guarded state machine over
+the states
+\textsc{Empty} $\rightarrow$ \textsc{SourcesVerified} $\rightarrow$
+\textsc{TaskAudited} $\rightarrow$ \textsc{DataPrepared} $\rightarrow$
+\textsc{ModelConstructed} $\rightarrow$ \textsc{Trained}$_s$ $\rightarrow$
+\textsc{Evaluated}$_s$ $\rightarrow$ \textsc{ResultValidated} $\rightarrow$
+\textsc{Published}, plus a terminal \textsc{Rejected} state. Each transition
+$t_1$\,--\,$t_8$ carries a guard; a guard that fails sends the experiment to
+\textsc{Rejected} with a machine-readable reason, and nothing partial
+survives: the discipline is fail-closed. Table~\ref{tab:transitions} lists
+the transitions with their guards and the runtime mechanism that enforces
+each.
+
+\begin{table}[t]
+\centering\small
+\caption{Lifecycle transitions, guards, and enforcing mechanisms.}
+\label{tab:transitions}
+\begin{tabular}{@{}llp{0.42\linewidth}@{}}
+\toprule
+Transition & Guard (invariant) & Runtime mechanism \\
+\midrule
+$t_1$ acquire & INV-1 & checksum-verified download; re-verification at every stream open \\
+$t_2$ audit & INV-2 (recordings) & fail-closed recording audit \\
+$t_3$ prepare & INV-2 (windows), INV-3 & window-inheritance check; kernel-restricted fit scope \\
+$t_4$ construct & INV-6 & plugin registry and contract validation \\
+$t_5$ train & INV-3, INV-4 & partition-restricted data views; versioned training policy \\
+$t_6$ evaluate & INV-3, INV-4 & test view materialized only here, once per seed \\
+$t_7$ validate & INV-4, INV-5 & seed-bijection and provenance validation; input-hash recompute \\
+$t_8$ publish & INV-1, INV-5 & immutable release with checksums \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Integrity invariants}
+
+Six invariants hold in every committed state:
+
+\begin{description}
+\item[INV-1 (Source integrity).] Every data file matches its registered byte
+size and SHA-256, and every result references its input artefacts by content
+hash.
+\item[INV-2 (Partition exclusivity).] The partition assignment is a total
+function over recordings; every window inherits its recording's partition;
+no recording or window appears in two partitions.
+\item[INV-3 (Test isolation).] Test data is read only in $t_6$; preprocessing
+statistics are fitted on train/validation only; model selection and early
+stopping use validation only. Enforced structurally: training plugins never
+receive test rows.
+\item[INV-4 (Seed completeness).] Result runs biject with the task's
+registered seeds, in the frozen order; failures are retained as explicit
+placeholders.
+\item[INV-5 (Provenance completeness).] A valid result names its task,
+dataset, plugin, code commit, environment, and training policy, and its
+input hashes recompute.
+\item[INV-6 (Plugin contract).] External plugins satisfy interface, identity,
+and version constraints; collisions and mismatches fail closed.
+\end{description}
+
+\subsection{Model checking}
+
+The lifecycle and invariants are written in TLA\textsuperscript{+}
+(\texttt{formal/ExperimentLifecycle.tla}). Bad candidates---tampered
+partitions, windows claiming a foreign partition, fits that attempt test
+data, contract-less plugins, incomplete bundles---are explored
+non-deterministically, so every guard's rejection path is exercised, not
+assumed. TLC checks nine properties (type safety, the six invariants, and
+the fail-closed discipline) over a small finite model (three recordings,
+three windows, two seeds). The result: \emph{model checking completed with
+no errors}---89{,}476 states generated, 46{,}686 distinct states, search
+depth 11, no deadlocks. Two modelling defects were found and fixed by TLC
+during development (an invariant scoped to a state where its variables are
+not yet meaningful, and an underspecified rejecting branch), which is
+evidence the check has teeth. The archived log and a reproduction script
+ship with the repository, and CI re-runs the check on every push.
+
+\paragraph{Scope of the formal claim.}
+This is bounded model checking of an \emph{abstract} lifecycle: it verifies
+the guard logic of the design. It is not a proof about the Python
+implementation. Implementation-level coverage comes from the runtime
+contract checks (\S\ref{sec:impl}), the property-based tests, and the
+fault-injection catalogue (\S\ref{sec:eval}); we keep these layers explicit
+rather than letting the phrase ``formally specified'' absorb them.

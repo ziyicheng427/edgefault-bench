@@ -1,0 +1,59 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Fault-diagnosis benchmarks and standardization.}
+The closest domain work is the application-oriented benchmark of Zhao, Zio,
+and Shen~\cite{zhao2024dgbenchmark}, which unifies public rotating-machinery
+datasets under a common domain-generalization protocol with open code
+(\texttt{DG\_benchmark}~\cite{dgbenchmarkrepo}), and a 2025 standardization
+framework in IEEE Access that formalizes fault-level and operating-condition
+factors for controlled evaluation~\cite{ieeeaccess2025standard}. Both respond
+to documented comparability failures of ad hoc setups, and both standardize
+the \emph{content} of evaluation: datasets, shift factors, partitions,
+metrics. Neither prescribes, enforces, or verifies the \emph{validity
+mechanisms} of the experiments built on top---recording-level leakage
+control, test isolation, seed completeness, or provenance chains. That layer
+is the subject of this paper, and the two lines are complementary: the
+protocols those works define could be expressed as EdgeFault-Bench task
+manifests and would then inherit the kernel's enforcement.
+
+\paragraph{Domain-generalization evaluation practice.}
+DomainBed~\cite{gulrajani2021domainbed} established rigorous
+model-selection discipline for domain generalization in vision, showing that
+fair selection changes algorithm rankings. Its concern---that evaluation
+protocol, not algorithm, often drives conclusions---is the same concern we
+transport into industrial experimentation; DomainBed, however, distributes
+datasets and training scripts rather than installable integrity contracts,
+and its machine-readable artefacts do not model machinery-specific notions
+such as the recording as the unit of independence. General time-series
+ecosystems such as aeon~\cite{middlehurst2025aeon} provide algorithm
+breadth; EdgeFault-Bench deliberately reuses such ecosystems for estimators
+where possible and concentrates on what they do not provide:
+condition-held-out task semantics, source-verified streaming, and audit
+artefacts.
+
+\paragraph{Experiment infrastructure and reproducibility.}
+MLflow~\cite{mlflow} and similar trackers log whatever an experiment emits;
+they neither define partitions nor reject a bundle with a missing seed.
+Recent reproducibility analyses argue that releasing code and dependency
+lists alone does not make ML benchmarks runnable or
+trustworthy~\cite{lyu2026reproducibility}, and infrastructure benchmarking
+has begun treating the experimental platform itself as the object of
+study~\cite{kramer2025mlops}; benchmark suites for autonomous research
+systems evaluate whether agents can replicate results~\cite{mlreplicate2026}.
+These works share our diagnosis that the platform layer decides
+reproducibility. Our contribution to that conversation is a platform whose
+integrity properties are \emph{specified formally and attacked deliberately}
+rather than asserted, with the fault-injection results to show for it.
+
+\paragraph{Formal methods in ML tooling.}
+TLA\textsuperscript{+} and TLC are established tools for specifying and
+model-checking concurrent and distributed systems~\cite{lamport2002specifying};
+property-based testing with Hypothesis~\cite{hypothesis} is an established
+implementation-level verification technique. To our knowledge, applying
+this stack---a guarded lifecycle state machine, model-checked invariants,
+oracle-based property tests, and a mutation catalogue---to the integrity of
+ML \emph{benchmark infrastructure} has not been done before; adjacent
+formal-methods work targets training systems and distributed learning, not
+the experiment lifecycle itself. A dedicated literature pass before
+submission will re-examine this positioning.

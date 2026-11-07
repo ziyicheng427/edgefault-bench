@@ -1,0 +1,195 @@
+\section{Evaluation}
+\label{sec:eval}
+
+The evaluation answers four research questions. \textbf{RQ1}: do the formal
+constraints guarantee experiment integrity, and does the verification detect
+injected violations? \textbf{RQ2}: does the plugin architecture support
+independent extension without kernel changes? \textbf{RQ3}: are experiments
+traceable and reproducible? \textbf{RQ4}: does the framework sustain
+heterogeneous data and acceptable overhead? Unless stated otherwise, all
+numbers come from artefacts committed with the repository (TLC log,
+detection-matrix JSON, result bundles, benchmark scripts).
+
+\subsection{RQ1: Integrity verification}
+
+\paragraph{Model checking.}
+TLC explores the lifecycle model exhaustively over the configured finite
+constants and reports no errors: 89{,}476 states generated, 46{,}686 distinct
+states, depth 11, no deadlocks, all nine properties (type safety, INV-1
+through INV-6, fail-closed discipline) holding in every reachable state.
+Every rejection path (tampered partitions, foreign-partition windows,
+test-scope fits, contract-less plugins, incomplete bundles) is exercised by
+construction, because the spec offers the bad candidate non-deterministically
+and TLC explores it.
+
+\paragraph{Property-based testing.}
+Eight oracle properties run in the default suite. Each pairs a generated
+input with an \emph{independently recomputed} expected outcome---for
+example, the recording audit must pass if and only if the generated set has
+unique identifiers, supported labels, and fully assigned conditions---so
+agreement with the oracle is asserted, not merely acceptance of valid cases.
+The properties cover task-partition validation, recording-audit agreement,
+window-partition totality and exclusivity under relabelling, prepared-table
+round trips, window-identity uniqueness, seed bijection, training-policy
+validation, and plugin-contract rejection.
+
+\paragraph{Fault injection.}
+Table~\ref{tab:mutation} shows the twelve-entry catalogue: every planted
+violation is rejected fail-closed by at least one mechanism, with the
+violated invariant named in the error. Nine distinct mechanisms participate.
+The matrix reporter itself is tested for honesty: a canary test disables one
+guard and requires the report to say \emph{undetected} rather than silently
+passing.
+
+\begin{table}[t]
+\centering\small
+\caption{Fault-injection detection matrix (all entries executed against the
+live kernel).}
+\label{tab:mutation}
+\begin{tabular}{@{}llp{0.46\linewidth}@{}}
+\toprule
+Mutation & Target & Detecting mechanism \\
+\midrule
+M-LEAK-01 & INV-2 & pre-training recording audit \\
+M-LEAK-02 & INV-2 & recording cross-audit vs.\ canonical metadata \\
+M-LEAK-03 & INV-3 & kernel fit-scope guard (state digest differs from all-rows fit) \\
+M-LEAK-04 & INV-3 & partition-restricted views (fit never sees test rows) \\
+M-HASH-01 & INV-1 & adapter checksum verification at open \\
+M-SEED-01 & INV-4 & result validator (bijection) \\
+M-SEED-02 & INV-4 & result validator (duplicate seed) \\
+M-PROV-01 & INV-5 & result validator (required fields) \\
+M-PROV-02 & INV-5 & input-artifact hash recheck after tampering \\
+M-PLUGIN-01 & INV-6 & plugin registry identity check \\
+M-PLUGIN-02 & INV-6 & plugin contract validation \\
+M-PLUGIN-03 & INV-6 & plugin registry collision rejection \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The enforcement is not decorative: during the gearbox integration, the
+length-consistency check at stream open rejected the first real extraction
+run because the registry's row counts---naively counted---overstated each
+file by two trailing blank lines. The registry was corrected before any
+result existed, and the incident is preserved in the integration decision
+record.
+
+\subsection{RQ2: Independent extension}
+
+Table~\ref{tab:integration} quantifies the two most recent integrations. All
+adapter-side code, tests, registries, task manifests, and documentation sum
+to 812 and 595 lines respectively; the lifecycle kernel gained no
+dataset-specific logic. A committed test enforces this structurally: no
+kernel module may contain a dataset identifier, with the two known debts
+(the fetch dispatcher and one frozen demonstration asset) declared in the
+test itself. Kernel touches that did occur were generic (an optional
+sampling-rate field for sources that state none) and are classified in the
+integration-effort audit.
+
+\begin{table}[t]
+\centering\small
+\caption{Integration effort for the two most recent datasets.}
+\label{tab:integration}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Integration & Adapter LOC & Test LOC & Files added (all artefacts) \\
+\midrule
+Gearbox (20 recordings) & 239 & 175 & 6 \\
+KAIST acoustic (5 recordings) & 261 & 158 & 5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Compared with the script-per-dataset tradition, the operations that used to
+require editing experiment code---adding a dataset, adding a model, changing
+the held-out conditions, checking leakage, reproducing a result---now live
+in, respectively, an adapter package, a model plugin, a task manifest, an
+automated audit, and a result bundle with hash recheck. The boundary is
+candid: both audited integrations were performed by the author; soliciting
+one non-author integration is an open item, and the repository ships an
+issue template with an acceptance checklist for exactly that purpose.
+
+\subsection{RQ3: Traceability and reproduction}
+
+Traceability is content-addressed: every result bundle hashes its task
+manifest, feature source (table or dataset manifest), and training policy,
+and \texttt{results validate -{}-check-hashes} recomputes them; tampering
+with an input after the fact is detected as a mismatch (M-PROV-02). The
+strongest reproduction evidence to date is same-commit, cross-Python: the
+development environment (3.11) and an independent virtual environment (3.12,
+package and external plugin installed from source) produce identical
+per-seed test Macro-F1 and worst-condition scores on a frozen task. A CI
+gate extends this across operating systems---the same task runs on Ubuntu
+and macOS runners and the comparison job fails on any divergence in
+canonical metrics; its first executed run accompanies the public push of
+this repository. Full multi-machine, multi-investigator reproduction
+remains future work.
+
+\subsection{RQ4: Heterogeneity, scale, and overhead}
+
+\paragraph{Heterogeneous tasks, executed on real data.}
+Three task families newly enabled by the v1.2 architecture were executed on
+real archives end to end (streaming from checksum-verified sources, three
+frozen seeds each, group-bootstrap intervals over test recordings). Under a
+deliberately reduced two-epoch \emph{audit policy}---chosen to validate
+mechanism, not to claim scores---the gearbox cross-load task yields
+window-level Macro-F1 of $0.333$ with a recording-level 95\% CI of
+$[0.11, 0.47]$ over eight test recordings; the combined-condition
+load$\times$defect-size task yields $0.330$--$0.337$ with CIs around
+$[0.14, 0.46]$ over six test recordings. The five-fold leave-one-device-out
+family on the bearing archive produces fold means of
+$0.565/0.377/0.597/0.472/0.268$ (outer mean $0.456$) with large per-seed
+variance---consistent with, and sharper than, the frozen v1.0 finding that
+device hold-out fails badly while load hold-out looks deceptively good.
+These runs demonstrate what the framework now makes routine---combined
+shifts, device rotation, and recording-level uncertainty on real,
+hash-verified archives---and are labelled non-protocol in the artefacts; the
+full-protocol v1.0/v1.1 matrices (3 tasks $\times$ 4 models and 2 tasks
+$\times$ 4 models, with negative results retained) were produced by earlier
+versions of the same pipeline and remain the benchmark claims of record.
+
+\paragraph{Framework overhead.}
+Table~\ref{tab:overhead} measures the kernel's cost on synthetic tables.
+Loading plus schema-validating a 100{,}000-row v2 table costs 8.4\,s against
+0.55\,s for bare JSON parsing ($15\times$)---the price of constructing
+immutable, identity-carrying rows and validating them; the optional Parquet
+backend addresses exactly this cost for large matrices. Result validation is
+0.5\,ms per bundle. Streaming extraction plus audit of the 36-file triaxial
+archive (1{,}154 windows) completes in 1.4\,s.
+
+\begin{table}[t]
+\centering\small
+\caption{Kernel load-and-validate cost versus bare \texttt{json.loads}
+(median of five repeats).}
+\label{tab:overhead}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+Rows & Kernel (s) & Bare JSON (s) & Ratio \\
+\midrule
+1{,}000 & 0.077 & 0.0028 & 27.3 \\
+10{,}000 & 0.767 & 0.0292 & 26.2 \\
+100{,}000 & 8.370 & 0.5519 & 15.2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Modality and format coverage.}
+The signal layer presently streams four source formats (MAT v5, Siemens
+Test.Lab MAT, CSV, tab-separated text) across vibration, acoustic pressure,
+and gearbox accelerometers, with per-file rates from 25.6\,kHz to 51.2\,kHz
+and one archive whose rate is honestly \texttt{None}. One archive (the
+multimodal vibration set, 45 files) is integrated and audit-verified but its
+full end-to-end run awaits a machine with more memory than the development
+host (8\,GB); the data card records this boundary.
+
+\subsection{Threats to validity}
+
+\emph{Internal.} The fault catalogue plants artefact-level violations by
+hand; it is not exhaustive source-code mutation, and a guard outside the
+catalogue's reach is untested until a property or real incident exercises
+it. \emph{External.} Verification uses many synthetic fixtures; real-archive
+coverage exists for four of six integrations, and the audit-policy training
+runs are not comparable to the frozen protocol results. \emph{Construct.}
+``Formally specified'' covers the abstract lifecycle; implementation claims
+rest on tests, runtime checks, and injection results, and the paper keeps
+the two layers separate. \emph{Adoption.} All integrations and audits to
+date are author-performed; third-party evidence is solicited but absent.

@@ -1,0 +1,70 @@
+\section{Implementation}
+\label{sec:impl}
+
+EdgeFault-Bench is a Python package (v1.2.0) with a single \texttt{edgefault}
+CLI and an extensive audit-trail culture inherited from its research-software
+phase: every design decision is recorded in numbered decision records, every
+dataset in a data card, and every executed workflow in dated audit documents.
+The test suite currently stands at 198 passing tests, including the
+verification artefacts described below.
+
+\paragraph{Contracts and plugins.}
+Immutable dataclasses validate at construction (partition disjointness,
+domain coverage, seed uniqueness, window-identity completeness). Dataset
+plugins register through the \texttt{edgefault\_bench.datasets} entry-point
+group; model plugins declare a backend (\texttt{sklearn} or
+\texttt{pytorch}) and are built per seed with class count and channel count
+from the kernel; preprocessing plugins register separately and declare
+whether they emit windows or feature vectors. Built-in adapters are
+registered exactly like external ones---there is no privileged internal
+path---and a test asserts that no lifecycle kernel module contains any
+dataset identifier, with the two known debts (the fetch dispatcher and a
+frozen demonstration asset) listed explicitly.
+
+\paragraph{Versioned schemas.}
+Task, prepared-table, and result documents are governed by versioned JSON
+Schemas; validation dispatches on \texttt{schema\_version}, so v1 artefacts
+remain valid and v2 artefacts are never forced through their predecessors.
+Prepared tables v2 require window identity on every row; result bundles v2
+add hashed inputs, per-seed status, retained predictions, and framework
+overhead timings.
+
+\paragraph{Verification stack.}
+Beyond the model-checked specification, the repository carries three
+implementation-level verification layers. \emph{Property-based tests}
+(Hypothesis) pair generated artefacts---valid and invalid task partitions,
+recording sets with planted duplicates, unassigned conditions, or foreign
+labels; prepared tables with duplicate or partial window identity; bundles
+with dropped, duplicated, or reordered seeds---with independently recomputed
+accept/reject oracles, so agreement is checked, not just acceptance.
+\emph{Fault injection} packages twelve integrity violations
+(\S\ref{sec:eval}) behind one command, \texttt{edgefault mutation audit},
+which renders the detection matrix and reports honestly: a test deliberately
+sabotages one mechanism and requires the matrix to say \emph{undetected}.
+\emph{Provenance recheck} recomputes every input artefact's SHA-256 against
+the hashes recorded in a result bundle.
+
+\paragraph{Datasets integrated.}
+Six integrations exist at the time of writing: the HUST bearing archive (60
+files)~\cite{hustbearing}, a triaxial bearing dataset (36
+files)~\cite{mehranbearing}, a two-stage gearbox archive (20 files,
+healthy vs.\ broken tooth across ten loads)~\cite{gearboxdata}, the acoustic
+(five files) and vibration (45 files) subsets of a multimodal rotating-machine
+dataset~\cite{jung2023kaist}, and one synthetic example plugin used in CI.
+All raw data remain unredistributed under CC BY 4.0; registries pin byte
+sizes and SHA-256 values per file, and archive hashes are verified against
+the values published by the sources where available. Source quirks are
+handled explicitly rather than silently: an unstated sampling rate becomes
+\texttt{None} with fail-closed consumers, and an upstream filename
+misspelling is normalized for labels while the original filename stays
+pinned for hashing.
+
+\paragraph{Statistics and CI.}
+The statistics module implements group bootstrap and paired comparisons over
+recording or evaluation-group units. Continuous integration runs the test
+suite and lint on Python 3.10/3.12 (Ubuntu), schema-validates every
+registered artefact, executes an independently packaged plugin end to end,
+re-runs the fault-injection matrix, model-checks the TLA\textsuperscript{+}
+specification on a Java runner, and---for reproduction evidence---executes
+the same frozen task on Ubuntu and macOS runners and fails if the canonical
+per-seed metrics differ.

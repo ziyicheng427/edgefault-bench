@@ -1,0 +1,95 @@
+\section{Introduction}
+\label{sec:intro}
+
+Industrial fault-diagnosis research increasingly claims generalization:
+models are praised for surviving \emph{operating-condition shift}---a bearing
+trained at one load or on one test rig and evaluated on another. The claim is
+only as good as the experiment that produces it, and those experiments are
+fragile in specific, recurring ways. Vibration records are typically cut into
+overlapping windows; unless windows of one recording are kept in a single
+partition, near-duplicate samples straddle the train/test boundary and inflate
+scores. Normalization statistics fitted over the whole dataset quietly fold
+held-out conditions into training. Model selection peeks at the test
+condition. A seed that crashed is dropped, leaving three reported runs of an
+experiment registered with four. And when a result is challenged, the chain
+from numbers back to data files, code, and configuration no longer exists.
+Recent standardization work in the domain makes exactly this complaint: ad hoc
+partitions and evaluation setups make cross-condition results incomparable
+across papers~\cite{zhao2024dgbenchmark,ieeeaccess2025standard}.
+
+A natural first reaction is to standardize the benchmark: fix the datasets,
+the splits, and the metrics, as domain-generalization research did for vision
+(DomainBed~\cite{gulrajani2021domainbed}) and as fault-diagnosis benchmark
+studies have begun to do~\cite{zhao2024dgbenchmark,dgbenchmarkrepo}. This
+standardizes \emph{what} is evaluated. It does not, however, guarantee
+\emph{that the evaluation is valid}: leakage controls, test-set isolation,
+seed completeness, and provenance remain conventions living in scripts, to be
+re-implemented---and re-broken---by every extension. The complementary
+reaction is infrastructure: experiment trackers such as MLflow~\cite{mlflow}
+record parameters, code versions, and artefacts. But trackers are
+record-keepers; they enforce nothing about partition exclusivity or seed
+completeness, and integrity remains voluntary and after the fact.
+
+This paper takes a third position: \emph{the benchmark itself should be a
+software system under formal specification}, in which experiment integrity is
+not a convention but a property enforced by architecture and checked by
+tools. Concretely, we ask whether the validity of an industrial ML experiment
+can be guaranteed by a small set of kernel-enforced invariants, whether
+third-party datasets and models can be integrated without any ability to
+violate those invariants, and whether the guarantee itself can be verified
+rather than asserted.
+
+Making that position real raises three challenges. First,
+\emph{heterogeneity against integrity}: real datasets span file formats,
+sampling rates (sometimes unstated by the source), sensor modalities, and
+condition taxonomies, while model code spans classical estimators and deep
+frameworks; every extension point is an opportunity to break an invariant.
+Second, \emph{enforcement must be verifiable, not declared}: invariants that
+live only in documentation are indistinguishable from absent ones; the guards
+must be explicit, machine-checkable, and demonstrably effective against
+injected violations. Third, \emph{validity must survive scale and
+distribution}: hashing, streaming, and result bundles must work on
+multi-gigabyte archives, and the framework's own cost must be measured and
+acceptable.
+
+EdgeFault-Bench answers these with a four-module design. A
+\emph{data-and-protocol} module fixes canonical recording and window identity
+and expresses tasks---including combined-condition and
+leave-one-device-out designs---as versioned manifests rather than code. An
+\emph{extensible execution} module streams signals from checksum-verified
+sources through dataset, preprocessing, and model plugins; training plugins
+receive partition-restricted views and are architecturally unable to read the
+test partition, which is materialized only inside the evaluation step. A
+\emph{formal integrity} module specifies the experiment lifecycle as a guarded
+state machine over six invariants, checked exhaustively with
+TLA\textsuperscript{+}/TLC~\cite{lamport2002specifying} at the design level
+and continuously by property-based tests~\cite{hypothesis} and a
+fault-injection catalogue at the implementation level. A
+\emph{reproducibility} module emits result bundles whose inputs are
+content-hashed, whose seeds biject with the registered task seeds, and whose
+group-bootstrap confidence intervals resample recordings rather than windows.
+
+This article contributes:
+\begin{enumerate}
+\item a formalized specification of reproducible industrial ML experiments:
+an eight-state lifecycle with guarded transitions and six integrity
+invariants (\S\ref{sec:spec});
+\item an end-to-end extensible architecture that enforces the specification
+at its kernel boundary for heterogeneous datasets and both classical and deep
+model backends (\S\ref{sec:arch}, \S\ref{sec:impl});
+\item an automated integrity-verification and provenance stack---model
+checking, oracle-based property tests, a twelve-entry fault-injection
+catalogue, and hash-recheckable result bundles (\S\ref{sec:impl},
+\S\ref{sec:eval});
+\item an empirical evaluation across heterogeneous datasets (bearings,
+a gearbox, acoustic and vibration modalities), independent plugin packaging,
+and execution environments, including measurements of the framework's own
+overhead (\S\ref{sec:eval}).
+\end{enumerate}
+
+We are deliberate about two boundaries. The formal model verifies the
+\emph{abstract guard logic} of the design, not the Python implementation; the
+implementation is covered by the runtime checks, property tests, and mutation
+results, and we say so wherever the distinction matters. And the framework
+has, so far, one author; evidence from third-party integrators is being
+solicited but is not part of this article's claims.

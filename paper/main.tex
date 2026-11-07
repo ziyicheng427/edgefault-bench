@@ -1,0 +1,80 @@
+\documentclass[review,number]{elsarticle}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\lstdefinestyle{inl}{
+  basicstyle=\ttfamily\small, keywordstyle=\color{blue!60!black},
+  breaklines=true, frame=single, framesep=4pt
+}
+
+\journal{Software Engineering Nexus}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{EdgeFault-Bench: A Formally Specified and Extensible Software Framework
+for Auditable Industrial Fault-Diagnosis Experiments}
+
+\author[aff1]{Ziyi Cheng}
+\affiliation[aff1]{organization={Independent Researcher},
+            city={}, country={}}
+
+\begin{abstract}
+Cross-condition fault-diagnosis experiments are unusually exposed to
+experiment-integrity failures: windows cut from one recording leak across
+train/test partitions, held-out conditions silently participate in
+preprocessing and model selection, seeds disappear from reported results, and
+provenance is unrecoverable. Existing fault-diagnosis benchmarks standardize
+\emph{what} is evaluated, and experiment trackers record \emph{whatever is
+logged}, but neither enforces the validity of the experiment itself. We treat
+the benchmark as a software system under formal specification. EdgeFault-Bench
+specifies the experiment lifecycle as a guarded state machine with six
+integrity invariants (source integrity, partition exclusivity, test isolation,
+seed completeness, provenance completeness, plugin contract), enforces them at
+the kernel boundary of an extensible plugin architecture, and verifies the
+design at three levels: exhaustive model checking of the abstract lifecycle
+(46{,}686 reachable states, no invariant violations), property-based testing
+with independently recomputed oracles, and a twelve-entry fault-injection
+catalogue in which every planted integrity violation is rejected fail-closed.
+The framework carries six dataset integrations---including a gearbox and a
+multimodal acoustic/vibration pair integrated without dataset-specific kernel
+code---versioned combined-condition and leave-one-device-out task manifests,
+group-bootstrap confidence intervals over recording-level resampling units,
+and result bundles whose input artefacts are content-hashed and re-verifiable.
+Framework overhead is measured (15--27$\times$ bare JSON parsing for
+load-and-validate; 0.5\,ms result validation), and cross-Python and cross-OS
+executions reproduce metrics exactly. We report the design, the verification
+stack, and honest boundaries: the formal model covers the abstract guard
+logic, not the Python implementation, and third-party adoption evidence is
+not yet available.
+\end{abstract}
+
+\begin{keyword}
+experiment integrity \sep formal specification \sep model checking \sep
+benchmark frameworks \sep fault diagnosis \sep reproducibility \sep
+plugin architectures
+
+\end{keyword}
+
+\end{frontmatter}
+
+\input{sec-intro}
+\input{sec-related}
+\input{sec-spec}
+\input{sec-arch}
+\input{sec-impl}
+\input{sec-eval}
+\input{sec-discussion}
+\input{sec-conclusion}
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+
+\end{document}

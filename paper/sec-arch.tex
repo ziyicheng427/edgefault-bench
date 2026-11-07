@@ -1,0 +1,80 @@
+\section{System Architecture}
+\label{sec:arch}
+
+The kernel is organized in four modules, each owning one concern of the
+lifecycle; the formal guards of \S\ref{sec:spec} sit at the module
+boundaries.
+
+\subsection{Data and protocol management}
+
+The unit of independence is the \emph{recording}: one independently acquired
+sensor file with a stable identifier, label, condition domains (load, device,
+fault family, severity, \dots), sampling rate where the source states one,
+and a source hash. Windows cut from a recording carry
+$(\textit{window\_id}, \textit{recording\_id}, \textit{start\_sample},
+\textit{end\_sample})$, which is what makes INV-2 checkable at window
+granularity: a window claiming a foreign partition is detectable both within
+a table and against the adapter's canonical metadata.
+
+Tasks are data, not code. A task manifest names the held-out condition
+field(s), the partition assignment, labels, window rule, and the frozen seed
+list. Two partition modes exist: single-field hold-out (one domain field's
+values split across train/validation/test), and \emph{combined-condition}
+hold-out, where partitions are assigned over tuples of several condition
+fields---for example (load, defect size) pairs---so that a task can hold out
+a \emph{combination} never seen in training. Leave-one-device-out families
+are simply sets of single-field manifests in which each device takes a turn
+as the unseen test device.
+
+Honest metadata is a design rule: when a dataset's source does not state a
+sampling rate, the adapter records \texttt{None}; consumers that need
+physical frequencies (spectral features) then fail closed instead of
+assuming a value.
+
+\subsection{Extensible execution}
+
+Dataset, preprocessing, and model plugins are discovered through standard
+Python entry points and validated fail-closed (identity match, method
+presence, collision rejection). The dataset contract separates a
+metadata-only tier from a \emph{signal capability}: an adapter that can
+\texttt{open} a recording returns a stream with channel layout, declared
+rate (possibly \texttt{None}), and total length, re-verifying the source
+checksum at open time. Window extraction streams each registered recording
+through this interface---kernel code never parses a dataset-specific format.
+
+Test isolation is architectural. The kernel constructs partition-restricted
+data views; an estimator's \texttt{fit} receives train and validation views
+only, and the test view is materialized exclusively inside the evaluation
+step. A plugin cannot ask for test data because no API path carries it.
+Training itself is governed by a kernel-owned, versioned \emph{training
+policy} manifest (optimizer, learning rate, budget, early stopping on
+validation Macro-F1, determinism flags): scikit-learn~\cite{pedregosa2011scikit}
+and PyTorch~\cite{paszke2019pytorch} backends execute under the same policy
+object through one command, so backend choice cannot smuggle in a different
+model-selection regime.
+
+\subsection{Formal integrity layer}
+
+The TLA\textsuperscript{+} specification of \S\ref{sec:spec} is the
+reference for the runtime guards: each transition of
+Table~\ref{tab:transitions} names the invariant it enforces and the code
+that enforces it, and that mapping is kept in the repository as part of the
+specification document. The runtime layer consists of the recording audit
+(identity, domain coverage, partition totality and exclusivity), the window
+inheritance check, the fit-scope guard, the plugin validators, and the
+result validator; each fails closed with a structured, machine-readable
+error.
+
+\subsection{Reproducibility and evaluation}
+
+Result bundles are versioned JSON documents whose inputs are content-hashed
+(task manifest, prepared table or dataset manifest, training policy), whose
+runs biject with registered seeds including explicit failures, and which
+retain per-sample test predictions (truth, prediction, evaluation group,
+recording id) for downstream statistics. Because windows of one recording
+are not independent samples, the statistics layer reports window-level
+scores alongside group-bootstrap percentile intervals that resample whole
+recordings, and compares two models with paired per-seed group-level
+bootstrap. Storage is layered: JSON as the auditable interchange, optional
+Parquet for large feature matrices, raw signals never copied but streamed
+from checksum-verified sources.

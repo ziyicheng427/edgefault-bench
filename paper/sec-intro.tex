@@ -21,14 +21,17 @@ across papers~\cite{zhao2024dgbenchmark,ieeeaccess2025standard}.
 \centering
 % Replace with your artwork: \includegraphics[width=\linewidth]{figures/figure1.pdf}
 \fbox{\parbox[c][5.2cm][c]{0.96\linewidth}{\centering artwork placeholder}}
-\caption{The same experiment under two regimes. Left: in a conventional
-script pipeline, windows cut from one vibration recording straddle the
-train/test boundary, normalization statistics are fitted on all data, and a
-dropped seed silently disappears, yielding an inflated yet unreproducible
-score. Right: EdgeFault-Bench rejects the identical artefact at the
-\textsc{TaskAudited} transition with a machine-readable invariant violation
-(\emph{recording R spans partitions train/test}, INV-2); nothing partial
-survives.}
+\caption{The same experiment under two regimes, measured on the real bearing
+archive with identical model, policy, and seeds (audit policy; artefact:
+\texttt{results/verification/leakage-motivated-example-2026-11-07.json}).
+Left: a conventional window-level random split lets windows of one recording
+straddle the train/test boundary (all 36 recordings shared across partitions
+in every seed) and inflates mean test Macro-F1 to $0.449$ against $0.293$
+under a recording-grouped split with zero shared recordings. Right: rather
+than executing such an experiment, EdgeFault-Bench rejects the identical
+artefact at the \textsc{TaskAudited} transition with a machine-readable
+invariant violation (\emph{recording R spans partitions train/test}, INV-2);
+nothing partial survives.}
 \label{fig:motivated}
 \end{figure}
 

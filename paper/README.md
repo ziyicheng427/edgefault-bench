@@ -13,6 +13,7 @@ Every number in the manuscript traces to a repository artefact:
 | Six invariants, eight states, transition guards | `docs/formal-spec-draft.md` §3–4, `formal/ExperimentLifecycle.tla` |
 | Mutation matrix 12/12 detected, 9 mechanisms, honest canary | `results/verification/mutation-matrix-2026-11-06.json`, `tests/test_mutation_catalogue.py` |
 | Oracle property tests (8) | `tests/test_properties.py` |
+| Figure 1 leakage numbers (0.449 vs 0.293, 36 vs 0 shared recordings) | `results/verification/leakage-motivated-example-2026-11-07.json` (`paper/figures/leakage_experiment.py`) |
 | Registry row-count catch during gearbox integration | `docs/decisions/0007-gearbox-v1-integration.md` |
 | Integration effort (239/175/6 and 261/158/5 LOC) | `docs/integration-effort-2026-11-06.md` |
 | Cross-Python identical metrics | `results/verification/reproduction-3.11-vs-3.12.json` |

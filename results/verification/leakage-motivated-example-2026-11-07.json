@@ -1,0 +1,69 @@
+{
+  "claim": "Window-level random splitting lets windows of one recording straddle the train/test boundary; recording-grouped splitting with the same model, policy, and seeds does not.",
+  "dataset": "mehran-triaxial-bearing-v2",
+  "generated": "2026-11-07",
+  "inflation": 0.15674140731852398,
+  "mean_macro_f1_grouped": 0.29273366340426704,
+  "mean_macro_f1_leaky": 0.449475070722791,
+  "model": "compact_depthwise_cnn_1d",
+  "policy": {
+    "batch_size": 64,
+    "deterministic": true,
+    "early_stopping_metric": "validation_macro_f1",
+    "extra": {},
+    "learning_rate": 0.001,
+    "max_epochs": 2,
+    "optimizer": "adam",
+    "patience": 1,
+    "policy_version": "audit-1"
+  },
+  "recording_grouped_split": [
+    {
+      "recordings_shared_between_train_and_test": 0,
+      "seed": 17,
+      "test_macro_f1": 0.3324607329842932,
+      "test_windows": 255,
+      "train_windows": 673
+    },
+    {
+      "recordings_shared_between_train_and_test": 0,
+      "seed": 29,
+      "test_macro_f1": 0.34203655352480417,
+      "test_windows": 252,
+      "train_windows": 676
+    },
+    {
+      "recordings_shared_between_train_and_test": 0,
+      "seed": 43,
+      "test_macro_f1": 0.2037037037037037,
+      "test_windows": 258,
+      "train_windows": 666
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Audit-policy demonstration for the motivated example; both splits draw train and test from the same operating conditions, so the score gap isolates the leakage effect. Not a benchmark result.",
+  "task_id": "mehran-load-100-to-300-v1",
+  "window_level_random_split": [
+    {
+      "recordings_shared_between_train_and_test": 36,
+      "seed": 17,
+      "test_macro_f1": 0.3446327683615819,
+      "test_windows": 232,
+      "train_windows": 692
+    },
+    {
+      "recordings_shared_between_train_and_test": 36,
+      "seed": 29,
+      "test_macro_f1": 0.47186991869918704,
+      "test_windows": 232,
+      "train_windows": 692
+    },
+    {
+      "recordings_shared_between_train_and_test": 35,
+      "seed": 43,
+      "test_macro_f1": 0.5319225251076041,
+      "test_windows": 232,
+      "train_windows": 692
+    }
+  ]
+}

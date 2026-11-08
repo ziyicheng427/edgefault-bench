@@ -1,7 +1,8 @@
 {
-  "claim_scope": "Mechanism-validation runs under a reduced audit policy; NOT comparable to the frozen v1.0 protocol results and not a benchmark claim.",
+  "claim_scope": "Mechanism-validation runs under a reduced audit policy; NOT comparable to the frozen v1.0 protocol results and not a benchmark claim. Per-seed bundles are committed alongside this summary; every bundle passes 'results validate --check-hashes' with in-repo inputs.",
   "folds": {
     "6204": {
+      "bundle": "results/verification/audit-runs/hust-lodo-6204-v1__compact_depthwise_cnn_1d__audit-1.json",
       "mean_macro_f1": 0.5645220481437412,
       "seed_scores": [
         {
@@ -19,6 +20,7 @@
       ]
     },
     "6205": {
+      "bundle": "results/verification/audit-runs/hust-lodo-6205-v1__compact_depthwise_cnn_1d__audit-1.json",
       "mean_macro_f1": 0.37690080581903124,
       "seed_scores": [
         {
@@ -36,6 +38,7 @@
       ]
     },
     "6206": {
+      "bundle": "results/verification/audit-runs/hust-lodo-6206-v1__compact_depthwise_cnn_1d__audit-1.json",
       "mean_macro_f1": 0.5974269522146844,
       "seed_scores": [
         {
@@ -53,6 +56,7 @@
       ]
     },
     "6207": {
+      "bundle": "results/verification/audit-runs/hust-lodo-6207-v1__compact_depthwise_cnn_1d__audit-1.json",
       "mean_macro_f1": 0.47216498056203043,
       "seed_scores": [
         {
@@ -70,6 +74,7 @@
       ]
     },
     "6208": {
+      "bundle": "results/verification/audit-runs/hust-lodo-6208-v1__compact_depthwise_cnn_1d__audit-1.json",
       "mean_macro_f1": 0.2684780719946077,
       "seed_scores": [
         {
@@ -87,9 +92,10 @@
       ]
     }
   },
+  "generated": "2026-11-07",
   "model": "compact_depthwise_cnn_1d",
   "outer_mean_of_fold_means": 0.45589857174681897,
-  "policy": "audit-1 (2 epochs, adam 1e-3, batch 64)",
-  "schema_version": 1,
+  "policy": "audit-1 (see audit-runs/policy-audit-1.json)",
+  "schema_version": 2,
   "task_family": "hust-lodo-{device}-v1"
 }

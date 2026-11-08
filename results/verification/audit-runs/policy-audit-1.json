@@ -1,0 +1,11 @@
+{
+  "policy_version": "audit-1",
+  "optimizer": "adam",
+  "learning_rate": 0.001,
+  "max_epochs": 2,
+  "batch_size": 64,
+  "early_stopping_metric": "validation_macro_f1",
+  "patience": 1,
+  "deterministic": true,
+  "extra": {"purpose": "audit-policy mechanism runs; not comparable to the frozen v1.0/v1.1 protocol results and not a benchmark claim"}
+}

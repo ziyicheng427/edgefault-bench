@@ -19,8 +19,8 @@ Every number in the manuscript traces to a repository artefact:
 | Cross-Python identical metrics | `results/verification/reproduction-3.11-vs-3.12.json` |
 | Cross-OS reproduction gate | `.github/workflows/ci.yml` (`reproduce`, `reproduce-compare`) |
 | Overhead table (30.1/27.1/15.6×, 8.81 s, 0.66 ms) | `results/verification/framework-overhead-2026-11-07.json` (`scripts/framework_overhead.sh`; the 2026-11-06 run is also archived) |
-| Gearbox / combined-condition audit-policy scores + CIs | committed run bundles (2026-11-06/07), policy `audit-1` |
-| LODO fold means 0.565/0.377/0.597/0.472/0.268, outer 0.456 | `results/verification/hust-lodo-outer-2026-11-07.json` |
+| Gearbox / combined-condition audit-policy scores + CIs | `results/verification/audit-runs/{gearbox-load-low-to-high-v1, mehran-load-size-combined-v1}__compact_depthwise_cnn_1d__audit-1.json` + `policy-audit-1.json` (hash-verified) |
+| LODO fold means 0.565/0.377/0.597/0.472/0.268, outer 0.456 | `results/verification/hust-lodo-outer-2026-11-07.json`; per-fold bundles in `results/verification/audit-runs/` |
 | v1.0/v1.1 protocol matrices and negative results | `results/v1`, `results/v1.1`, `docs/technical-report.md` |
 | 198 tests, six dataset integrations, 13 frozen tasks | `pytest`, `registry/` |
 | Honest-metadata rules (unstated rate, misspelling) | `docs/datasets/gearbox-two-stage-v1.md`, `docs/datasets/kaist-rotating-vibration-v6.md` |

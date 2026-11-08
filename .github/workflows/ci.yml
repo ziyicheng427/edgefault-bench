@@ -34,7 +34,10 @@ jobs:
             examples/edgefault-example-plugin/prepared_features.json
           uv run edgefault schema validate --kind result \
             results/v1/*.json \
-            results/v1.1/mehran/*.json
+            results/v1.1/mehran/*.json \
+            results/verification/audit-runs/*__audit-1.json
+          uv run edgefault results validate --check-hashes \
+            results/verification/audit-runs/*__audit-1.json
       - name: Install independent example plugin
         run: uv pip install --python .venv/bin/python --no-deps ./examples/edgefault-example-plugin
       - name: Audit installed plugin entry points

@@ -1,0 +1,50 @@
+{
+  "mean_group_bootstrap_point": 0.3333333333333333,
+  "model_id": "compact_depthwise_cnn_1d",
+  "per_seed": [
+    {
+      "group_bootstrap": {
+        "ci_high": 0.43503078137332213,
+        "ci_low": 0.11554277286135693,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3333333333333333,
+        "unit": "recording",
+        "unit_count": 8
+      },
+      "seed": 17,
+      "window_level_macro_f1": 0.3333333333333333
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.4656120895846923,
+        "ci_low": 0.11009174311926606,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3333333333333333,
+        "unit": "recording",
+        "unit_count": 8
+      },
+      "seed": 29,
+      "window_level_macro_f1": 0.3333333333333333
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.46613374310686806,
+        "ci_low": 0.1095890410958904,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3333333333333333,
+        "unit": "recording",
+        "unit_count": 8
+      },
+      "seed": 43,
+      "window_level_macro_f1": 0.3333333333333333
+    }
+  ],
+  "task_id": "gearbox-load-low-to-high-v1",
+  "unit": "recording"
+}

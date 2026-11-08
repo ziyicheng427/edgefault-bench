@@ -19,6 +19,8 @@ Every number in the manuscript traces to a repository artefact:
 | Cross-Python identical metrics | `results/verification/reproduction-3.11-vs-3.12.json` |
 | Cross-OS reproduction gate | `.github/workflows/ci.yml` (`reproduce`, `reproduce-compare`) |
 | Overhead table (30.1/27.1/15.6×, 8.81 s, 0.66 ms) | `results/verification/framework-overhead-2026-11-07.json` (`scripts/framework_overhead.sh`; the 2026-11-06 run is also archived) |
+| Bootstrap CI exports (gearbox [0.110,0.466]; combined [0.138,0.457]; all folds) | `results/verification/audit-runs/*.bootstrap.json` (`edgefault statistics bootstrap --resamples 1000`) |
+| Mehran window-path audit run (0.341/0.325/0.325; 1,154 windows; ~1.5 s) | `results/verification/audit-runs/mehran-load-100-to-300-v1__compact_depthwise_cnn_1d__audit-1.json` |
 | Gearbox / combined-condition audit-policy scores + CIs | `results/verification/audit-runs/{gearbox-load-low-to-high-v1, mehran-load-size-combined-v1}__compact_depthwise_cnn_1d__audit-1.json` + `policy-audit-1.json` (hash-verified) |
 | LODO fold means 0.565/0.377/0.597/0.472/0.268, outer 0.456 | `results/verification/hust-lodo-outer-2026-11-07.json`; per-fold bundles in `results/verification/audit-runs/` |
 | v1.0/v1.1 protocol matrices and negative results | `results/v1`, `results/v1.1`, `docs/technical-report.md` |

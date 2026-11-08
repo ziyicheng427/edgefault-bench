@@ -13,6 +13,8 @@ Outputs paper/figures/figure3.pdf (vector).
 from __future__ import annotations
 
 import json
+
+import numpy as np
 from pathlib import Path
 
 import matplotlib
@@ -86,6 +88,8 @@ folds = lodo["folds"]
 order = sorted(folds)
 means = [folds[fold]["mean_macro_f1"] for fold in order]
 positions = range(len(order))
+bootstrap_dir = ROOT / "results/verification/audit-runs"
+ci_low, ci_high = [], []
 for position, fold in enumerate(order):
     seed_scores = [entry["macro_f1"] for entry in folds[fold]["seed_scores"]]
     ax_right.scatter(
@@ -93,9 +97,17 @@ for position, fold in enumerate(order):
         s=22, color="#8da0cb", edgecolors="#333333", linewidths=0.5, zorder=3,
         label="seed runs" if position == 0 else None,
     )
-ax_right.plot(
-    positions, means, "o--", color="#fc8d62", markersize=7, linewidth=1.2,
-    label="fold mean", zorder=4,
+    boot = json.loads(
+        (bootstrap_dir / f"hust-lodo-{fold}-v1__compact_depthwise_cnn_1d__audit-1.bootstrap.json").read_text()
+    )
+    intervals = [entry["group_bootstrap"] for entry in boot["per_seed"]]
+    ci_low.append(min(interval["ci_low"] for interval in intervals))
+    ci_high.append(max(interval["ci_high"] for interval in intervals))
+ax_right.errorbar(
+    positions, means,
+    yerr=[np.asarray(means) - np.asarray(ci_low), np.asarray(ci_high) - np.asarray(means)],
+    fmt="o--", color="#fc8d62", markersize=7, linewidth=1.2, capsize=3,
+    elinewidth=1.0, label="fold mean ± seed CIs", zorder=4,
 )
 outer = lodo["outer_mean_of_fold_means"]
 ax_right.axhline(outer, color="#333333", linestyle=":", linewidth=1.0)

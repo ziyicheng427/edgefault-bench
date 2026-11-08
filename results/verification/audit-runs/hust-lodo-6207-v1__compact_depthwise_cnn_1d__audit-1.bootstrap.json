@@ -1,0 +1,50 @@
+{
+  "mean_group_bootstrap_point": 0.47216498056203043,
+  "model_id": "compact_depthwise_cnn_1d",
+  "per_seed": [
+    {
+      "group_bootstrap": {
+        "ci_high": 0.39871205733558174,
+        "ci_low": 0.15084166972555202,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3039254559873117,
+        "unit": "recording",
+        "unit_count": 12
+      },
+      "seed": 17,
+      "window_level_macro_f1": 0.3039254559873117
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.6619952449463749,
+        "ci_low": 0.3024776938760547,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.5663406404504623,
+        "unit": "recording",
+        "unit_count": 12
+      },
+      "seed": 29,
+      "window_level_macro_f1": 0.5663406404504623
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.6435764994156178,
+        "ci_low": 0.3079298526128963,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.5462288452483173,
+        "unit": "recording",
+        "unit_count": 12
+      },
+      "seed": 43,
+      "window_level_macro_f1": 0.5462288452483173
+    }
+  ],
+  "task_id": "hust-lodo-6207-v1",
+  "unit": "recording"
+}

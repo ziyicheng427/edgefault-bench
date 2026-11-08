@@ -1,0 +1,50 @@
+{
+  "mean_group_bootstrap_point": 0.33215155945419106,
+  "model_id": "compact_depthwise_cnn_1d",
+  "per_seed": [
+    {
+      "group_bootstrap": {
+        "ci_high": 0.45507246376811594,
+        "ci_low": 0.13774743024963293,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3298245614035088,
+        "unit": "recording",
+        "unit_count": 6
+      },
+      "seed": 17,
+      "window_level_macro_f1": 0.3298245614035088
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.45706371191135736,
+        "ci_low": 0.1415525114155251,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3368055555555556,
+        "unit": "recording",
+        "unit_count": 6
+      },
+      "seed": 29,
+      "window_level_macro_f1": 0.3368055555555556
+    },
+    {
+      "group_bootstrap": {
+        "ci_high": 0.45507246376811594,
+        "ci_low": 0.13774743024963293,
+        "confidence": 0.95,
+        "metric": "macro_f1",
+        "n_resamples": 1000,
+        "point": 0.3298245614035088,
+        "unit": "recording",
+        "unit_count": 6
+      },
+      "seed": 43,
+      "window_level_macro_f1": 0.3298245614035088
+    }
+  ],
+  "task_id": "mehran-load-size-combined-v1",
+  "unit": "recording"
+}

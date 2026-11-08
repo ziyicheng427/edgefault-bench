@@ -74,9 +74,10 @@ M-PLUGIN-03 & INV-6 & plugin registry collision rejection \\
 Left: the fault-injection catalogue---every one of the twelve planted
 violations (grouped by target invariant) is detected fail-closed by at least
 one of the nine kernel mechanisms. Right: leave-one-device-out folds on the
-bearing archive (audit policy): per-seed test Macro-F1 with
-recording-bootstrap 95\% CIs, fold means, and the outer mean of $0.456$;
-device identity, not load shift, dominates the failure mode.}
+bearing archive (audit policy): per-seed test Macro-F1 points, fold means
+with bars spanning the per-seed recording-bootstrap 95\% CIs (exported as
+committed bootstrap files), and the outer mean of $0.456$; device identity,
+not load shift, dominates the failure mode.}
 \label{fig:results}
 \end{figure}
 
@@ -168,7 +169,7 @@ Loading plus schema-validating a 100{,}000-row v2 table costs 8.8\,s against
 immutable, identity-carrying rows and validating them; the optional Parquet
 backend addresses exactly this cost for large matrices. Result validation is
 0.7\,ms per bundle. Streaming extraction plus audit of the 36-file triaxial
-archive (1{,}154 windows) completes in 1.4\,s.
+archive (1{,}154 windows) completes in about 1.5\,s.
 
 \begin{table}[t]
 \centering\small
